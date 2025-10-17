@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "label": "Отдел рекламы",
+      "value": "advertising"
+    },
+    {
+      "id": 2,
+      "label": "PR отдел",
+      "value": "pr"
+    },
+    {
+      "id": 3,
+      "label": "Интернет маркетинг",
+      "value": "marketing"
+    },
+    {
+      "id": 4,
+      "label": "Отдел дизайна",
+      "value": "design"
+    }
+  ]
+
+}

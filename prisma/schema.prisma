@@ -15,15 +15,29 @@ datasource db {
 }
 
 
-model Task {
+
+
+
+model TaskPr {
   id Int @id @default(autoincrement())
-  ygId String @unique
+  ygId String
   department String
+  product String
+  event String? 
+  name String
+  subdivision String
   tgId String
-  title String
-  description String
-  status String
-  deadline DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
+  branch String
+  title String?
+  description String?
+  target String?
+  build String?
+  leader String?
+  place String?
+  site String?
+  participants String?
+  date  String?
+  status String 
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now())
 }

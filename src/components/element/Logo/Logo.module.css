@@ -1,0 +1,36 @@
+.logo_container {
+  text-align: center;
+
+}
+
+/*  */
+
+.logo_wrapper {
+  max-width: 100%;
+}
+
+
+.logo_text_wrapper {
+  width: 100%;
+  height: max-content;
+  color: #000000;
+
+  /*  */
+
+  margin-top: 20px;
+
+
+
+}
+
+.logo_text {
+  font-size: 26px;
+  font-weight: 600;
+  color: #434343
+}
+
+.logo_subtitle {
+  font-size: 16px;
+  font-weight: 200;
+  color: #434343
+}

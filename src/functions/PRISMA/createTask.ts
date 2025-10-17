@@ -2,22 +2,26 @@ import { PrismaClient } from "../../../generated/prisma";
 
 const prisma = new PrismaClient();
 
-interface FormData {
-  ygId: string;
-  department: string;
-  tgId: string;
-  title: string;
-  description: string;
-  status: string;
-  deadline: Date | string;
-}
 
 
-export const createTask = async (formData: FormData) => {
+export const createTask = async (ygId: string, slug: string, data: any) => {
   try {
 
-    const task = await prisma.task.create({
-      data: formData
+
+    const databaseCard = {
+      ygId: ygId,
+      department: slug,
+      ...data,
+      status: 'Входящие'
+    }
+
+
+    console.log(databaseCard)
+
+
+    const task = await prisma.taskPr.create({
+      data: databaseCard
+ 
     })
     
 

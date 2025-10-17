@@ -94,35 +94,18 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       return NextResponse.json({ message: `Задача с ID ${id} не найдена` }, { status: 404 });
     }
 
+     const yougileKey = process.env.YOGILE_KEY_INSTANCE as string
 
-    const companys = await getYGCompany();
-        const company = companys.content.find((company: {id: string, name: string, isAdmin: string}) => {
-          return company.name == 'UFANET'
-        })
-    
-        if (!company) {
-          return NextResponse.json({ message: `Компания ${getTask.department} не найдена в YouGile` }, { status: 404 });
-        }
-    
-        const companyKey = await getYGKeys(company.id);
+    const projects = await getYGProjects(yougileKey);
+    const currentProject = projects.content.find((project: {title: string}) => {
+      return project.title === getTask.department
+    })
 
-        if (!companyKey) {
-          return NextResponse.json({ message: `Ошибка получения ключей для компании ${getTask.department} в YouGile` }, { status: 500 });
-        }
-    
-    
-        console.log(companyKey[0].key)
-    
-        const projects = await getYGProjects(companyKey[0].key);
-        const currentProject = projects.content.find((project: {title: string}) => {
-          return project.title === getTask.department
-        })
-    
-    
-        // 
-    
-        const board = await getBoardCompany(companyKey[0].key, currentProject.id);
-        const columns = await getYGColumns(companyKey[0].key, board.content[0].id)
+
+    // 
+
+    const board = await getBoardCompany(yougileKey, currentProject.id);
+    const columns = await getYGColumns(yougileKey, board.content[0].id)
 
 
         // TG
@@ -151,7 +134,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
           }
 
 
-          const moveTask = await MoveTaskFromId(companyKey[0].key, getTask.ygId, correctColumns)
+          const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
           const sendAnswerMessage = await bot.sendMessage(
             335412211,
             `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Согласовано`,
@@ -178,7 +161,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
           }
 
 
-          const moveTask = await MoveTaskFromId(companyKey[0].key, getTask.ygId, correctColumns)
+          const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
           const sendAnswerMessage = await bot.sendMessage(
             335412211,
             `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,
@@ -202,7 +185,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
             )
           }
 
-          const moveTask = await MoveTaskFromId(companyKey[0].key, getTask.ygId, correctColumns)
+          const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
           const sendAnswerMessage = await bot.sendMessage(
             335412211,
             `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,

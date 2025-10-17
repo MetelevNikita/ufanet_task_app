@@ -1,0 +1,21 @@
+import { FC } from 'react'
+
+interface IconProps {
+  color: string,
+  width: number,
+  height: number
+}
+
+const IconCommersial: FC<IconProps> = ({ color, width, height }) => {
+
+  return (
+    <svg width={width} height={height} viewBox="0 0 148 134" fill={color} xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M0 16.7188C0 7.48331 7.52782 0 16.8182 0H131.182C140.472 0 148 7.48331 148 16.7188V90.2812C148 99.5167 140.472 107 131.182 107H16.8182C7.52782 107 0 99.5167 0 90.2812V16.7188ZM16.8182 6.6875C11.248 6.6875 6.72727 11.1815 6.72727 16.7188V90.2812C6.72727 95.8185 11.248 100.312 16.8182 100.312H131.182C136.752 100.312 141.273 95.8185 141.273 90.2812V16.7188C141.273 11.1815 136.752 6.6875 131.182 6.6875H16.8182Z" fill=""/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M115 134H34V128H115V134Z" fill=""/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M145 84H4V77H145V84Z" fill=""/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M51 103.4C51 101.523 52.504 100 54.3571 100H94.6429C96.496 100 98 101.523 98 103.4V130.6C98 132.477 96.496 134 94.6429 134H54.3571C52.504 134 51 132.477 51 130.6V103.4ZM57.7143 106.8V127.2H91.2857V106.8H57.7143Z" fill=""/>
+    </svg>
+  )
+}
+
+export default IconCommersial

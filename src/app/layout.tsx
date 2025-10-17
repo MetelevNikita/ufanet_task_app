@@ -1,5 +1,6 @@
+
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 
 // 
@@ -7,15 +8,20 @@ import "./globals.css";
 import { Container } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// context
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+import RootContext from "@/utils/RootContext";
+
+// 
+
+import Header from "@/components/element/Header/Header";
+
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
-});
+})
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,9 +35,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Container>
+      <body className={`${montserrat.variable}`}>
+        <Container className="mt-3">
+          <RootContext>
+          <Header />
         {children}
+        </RootContext>
         </Container>
       </body>
     </html>
