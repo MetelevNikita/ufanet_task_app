@@ -72,20 +72,32 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
 
 
 
-export const PATCH = async (req: Request, { params }: { params: { id: string } }): Promise<NextResponse<TaskType | {message: string}>> => {
+export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
   try {
 
     const { id } = await params;
 
     // 
 
-    const { status } = await req.json();
+    const {status, department} = await req.json();
+
+    console.log(status, department)
+
+
+    let getTask
+
 
     //  get TASK from ID
 
-    const getTask = await prisma.task.findUnique({
-      where: { id: Number(id) }
-    })
+    if (department === 'PR отдел') {
+      getTask = await prisma.taskPr.findUnique({
+        where: {
+          id: Number(id)
+        }
+      })
+
+      console.log('getTask from if', getTask)
+    }
 
 
     console.log('getTask', getTask)
@@ -94,7 +106,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       return NextResponse.json({ message: `Задача с ID ${id} не найдена` }, { status: 404 });
     }
 
-     const yougileKey = process.env.YOGILE_KEY_INSTANCE as string
+    const yougileKey = process.env.YOGILE_KEY_INSTANCE as string
 
     const projects = await getYGProjects(yougileKey);
     const currentProject = projects.content.find((project: {title: string}) => {
@@ -116,10 +128,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
             { message: 'Ошибка создания бота' },
           )
         }
-
-
-
-
 
 
         if (status === 'approve') {
@@ -210,19 +218,37 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
         console.log('status', status)
 
-        const changeTaskStatus = await prisma.task.update({
-          where: { id: Number(id) },
-          data: { status }
-        })
+        if (department === 'PR отдел') {
+          const changeTaskStatus = await prisma.taskPr.update({
+            where: { id: Number(id) },
+            data: { status }
+          })
 
-        if (!changeTaskStatus) {
-          return NextResponse.json(
-            { message: 'Ошибка обновления статуса задачи' },
-            { status: 500 }
+          if (!changeTaskStatus) {
+            return NextResponse.json(
+              { message: 'Ошибка обновления статуса задачи' },
+              { status: 500 }
+            );
+          }
+
+          return NextResponse.json({message: 'Status pr change'}, { status: 200 });
+        } else if (department === 'design') {
+          console.log('design')
+          return NextResponse.json({message: 'Status design change'}, { status: 200 });
+        } else if (department === 'marketing') {
+          console.log('merketing')
+          return NextResponse.json({message: 'Status merketing change'}, { status: 200 });
+        } else if (department === 'advertising') {
+          console.log('advertising')
+          return NextResponse.json({message: 'Status advertising change'}, { status: 200 });
+        } else {
+          NextResponse.json(
+            { message: 'Отдел не найден' },
+            { status: 404 }
           );
         }
 
-        return NextResponse.json({message: 'Status change'}, { status: 200 });
+
 
 
     

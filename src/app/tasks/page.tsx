@@ -106,6 +106,7 @@ const page: FC = () => {
 
     const getAllTasks = async () => {
       const dataPr = await getTask('pr')
+      console.log(dataPr)
 
       let filter = dataPr
 
@@ -135,9 +136,7 @@ const page: FC = () => {
     const current = tasks.filter((task: TaskType) => {
       return task.name.toLowerCase() === name.toLowerCase()
     })
-
     setCurrentTasks(current)
-
   }
 
 

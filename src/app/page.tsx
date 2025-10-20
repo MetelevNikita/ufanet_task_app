@@ -154,12 +154,12 @@ const page: FC = () => {
 
   const priorityData = selectorDataStickers(stickers, 'Приоритет')
 
-  console.log(priorityData)
+  console.log(stickers, 'stickers')
 
 
-  if (priorityData.length < 1) {
-    return <Row><Col><div>LOADING</div></Col></Row>
-  }
+  // if (priorityData.length < 1) {
+  //   return <Row><Col><div>LOADING</div></Col></Row>
+  // }
 
 
   return (

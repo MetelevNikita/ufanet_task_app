@@ -7,6 +7,10 @@ import { getBoardCompany } from "@/functions/getBoardCompany";
 import { getYGColumns } from "@/functions/getYGColumns";
 import { getYGStickers } from "@/functions/getYGStickers";
 
+// 
+
+import { getYGtaskFromProject } from "@/functions/getYGtaskFromProject";
+
 // TG
 
 import { getBot } from "@/telegramBot/telegramBot";
@@ -24,31 +28,31 @@ import derections from '@/database/direction.json'
 
 import { PrismaClient } from "@/../generated/prisma/client";
 
+// 
+
 const prisma = new PrismaClient();
 
+// 
 
 
-const createDBdata = async (ygId: string, slug: string, data: any) => {
+
+
+
+const createDBdata = async (ygId: string, department: string, data: any) => {
   try {
 
 
     const databaseCard = {
       ygId: ygId,
-      department: slug,
+      department: department,
       ...data,
       status: 'Входящие'
     }
 
-
-    console.log(databaseCard)
-
-
     const task = await prisma.taskPr.create({
       data: databaseCard
- 
     })
     
-
     if (!task) {
       throw new Error('Ошибка создания задачи в базе данных');
     }
@@ -68,11 +72,6 @@ const createDBdata = async (ygId: string, slug: string, data: any) => {
 
 const createYGData = async (department: string, data: any, descriptionTask: string) => {
   try {
-
-
-    console.log(descriptionTask)
-
-    // key
 
     const yougileKey = process.env.YOGILE_KEY_INSTANCE as string
 
@@ -101,7 +100,10 @@ const createYGData = async (department: string, data: any, descriptionTask: stri
       return NextResponse.json({ message: `Столбец Входящие не найден в доске ${department}` }, { status: 404 });
     }
 
-    //
+    // stecker
+
+    const getAllSteackers = await getYGStickers(yougileKey)
+
 
     const respoonceYouGile = await fetch(`https://ru.yougile.com/api-v2/tasks`, {
       method: 'POST',
@@ -114,6 +116,7 @@ const createYGData = async (department: string, data: any, descriptionTask: stri
         columnId: inboxColumn.id,
         description: descriptionTask,
         deadline: {deadline: new Date(data.date).getTime()},
+        stickers: {[process.env.YG_AUTHOR_STICKER_ID as string]: data.name.toString(), [process.env.YG_TYPE_STICKER_ID as string]: data.product.toString()}
       })
     })
 
@@ -126,8 +129,6 @@ const createYGData = async (department: string, data: any, descriptionTask: stri
     const dataYougile = await respoonceYouGile.json()
     return dataYougile
 
-
-    
   } catch (error) {
     console.log(error)
   }
@@ -135,15 +136,15 @@ const createYGData = async (department: string, data: any, descriptionTask: stri
 
 
 const createTGData = async (department: string, data: any, descriptionTask: string, taskDB: any) => {
+
+
+  const buildCB = (status: string, department: string, cardId: any) => `${status}|${department}|${cardId}`
+
+
   try {
 
 
     const id = taskDB.id as number
-
-    console.log(id)
-
-    console.log(process.env.TG_ID_BOSS)
-
     const bot = await getBot();
     
     if (!process.env.TG_ID_BOSS) {
@@ -157,9 +158,9 @@ const createTGData = async (department: string, data: any, descriptionTask: stri
         reply_markup: {
           inline_keyboard: [
             [
-              { text: 'Согласовать', callback_data: JSON.stringify({message: `approve`, cardId: id.toString()})},
-              { text: 'Отклонить', callback_data: JSON.stringify({message: `reject`, cardId: id.toString()})},
-              { text: 'Согласовать с замечаниями', callback_data: JSON.stringify({message: `comment`, cardId: id.toString})}
+              { text: 'Согласовать', callback_data: buildCB('approve', department, id.toString())},
+              { text: 'Отклонить', callback_data: buildCB('reject', department, id.toString())},
+              { text: 'Согласовать с замечаниями', callback_data: buildCB('comment', department, id.toString())}
             ]
           ]
         }
@@ -177,17 +178,17 @@ const createTGData = async (department: string, data: any, descriptionTask: stri
 }
 
 
+// 
+
+
+
 
 export const POST = async (req: Request, context: {params: {slug: string}}) => {
   try {
 
     const { slug } = await context.params;
 
-    console.log(slug)
-
     const currentDepartment = derections.data.find((item: MenuType): Boolean => item.value === slug)
-
-    console.log(currentDepartment)
 
     if (!currentDepartment) {
       return NextResponse.json({
@@ -196,8 +197,6 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
     }
 
     const department = currentDepartment.label
-
-
 
     const body = await req.formData();
     const data = Object.fromEntries(body);
@@ -214,7 +213,6 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
       
 
     } else if (data.product === 'Мероприятие') {
-      console.log('Data for event:', data);
 
       if (data.event === 'Внешнее мероприятие (Сторонние мероприятия)' || data.event === 'Внутреннее мероприятие (Для сотрудников)') {
 
@@ -234,7 +232,6 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
 
 
     } else if (data.product === 'Прочее') {
-      console.log('Data for other:', data);
 
       messageYG = `Отдел - ${department}<br><br>Имя - ${data.name}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Цель - ${data.target}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
 
@@ -246,7 +243,6 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
 
 
     const newTaskYougile = await createYGData(department, data, messageYG)
-    console.log('newTaskYougile:', newTaskYougile)
     const ygId = newTaskYougile.id
 
     if (!newTaskYougile) {
@@ -259,10 +255,7 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
       return NextResponse.json({ message: `Ошибка создания задачи в базе данных` }, { status: 500 });
     }
 
-    console.log(newTaskDatabase)
-
     const TelegramRes = await createTGData(department, data, messageTG, newTaskDatabase)
-    console.log('TelegramRes:', TelegramRes)
 
     if (!TelegramRes) {
       return NextResponse.json({ message: `Ошибка создания задачи в телеграмм` }, { status: 500 });
@@ -270,6 +263,7 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
 
     return NextResponse.json({message: `Сообщение в отдел ${slug} отправлено на согласование`}, { status: 200 });
     
+
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       return NextResponse.json(
@@ -302,28 +296,48 @@ export const GET = async (req: Request) => {
       );
     }
 
-    const getTasks = await prisma.taskPr.findMany()
+    if (department === 'pr') {
 
-    if (!getTasks) {
+      const prData = await prisma.taskPr.findMany()
+
+      if (!prData) {
+        return NextResponse.json(
+          { message: 'Ошибка получения данных' },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json(prData, { status: 200 });
+    } else if (department === 'advertising') {
+      return NextResponse.json({
+        message: 'API advertising migration работает',
+        status: 200
+      })
+    } else if (department === 'marketing') {
+      return NextResponse.json({
+        message: 'API marketing migration работает',
+        status: 200
+      })
+    } else if (department === 'design') {
+      return NextResponse.json({
+        message: 'API design migration работает',
+        status: 200
+      })
+    } else {
       return NextResponse.json(
-        { message: 'Ошибка получения задач из базы данных' },
-        { status: 500 }
+        { message: 'Отдел не найден' },
+        { status: 404 }
       );
     }
-
-    return NextResponse.json(getTasks)
-
+    
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       return NextResponse.json(
         { message: error.message },
         { status: 500 }
       );
+    } else {
+      return NextResponse.json(error)
     }
-    return NextResponse.json(
-      { message: 'Неизвестная ошибка' },
-      { status: 500 }
-    );
-    
   }
 }

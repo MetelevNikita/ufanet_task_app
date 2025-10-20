@@ -259,13 +259,7 @@ const page: FC = () => {
   const participantsField = new MyField('Список участников', 'текст', 'text', 'participants')
   const dateField = new MyField('Дата проведения', 'Выберите дату проведения', 'date', 'date')
 
-
-
-
-
-
-
-
+  // 
 
   const promotionBlock = () => {
     return (
@@ -280,7 +274,7 @@ const page: FC = () => {
       
       </Col>
     )
-}
+  }
 
   const eventsBlock = () => {
 
@@ -343,9 +337,7 @@ const page: FC = () => {
     )
   }
 
-
   // 
-
 
   const firstCurrentSelect = (data: string) => {
     switch (data) {

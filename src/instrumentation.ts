@@ -24,20 +24,12 @@ export const getYouGileWebHook = async () => {
 
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
 
-  const { getYGCompany } = await import('@/functions/getYGCompany')
-  const { getYGKeys} = await import('@/functions/getYGKeys')
+  const youGileKey = process.env.YOGILE_KEY_INSTANCE as string;
+  console.log(youGileKey)
+
   const { createYGWebhook } = await import('@/functions/createYGWebhook')
 
-
-  const company = await getYGCompany();
-  const currentCompany = company.content.find((company: {id: string, name: string, isAdmin: string}) => {
-    return company.name == 'UFANET'
-  })
-
-  const companyKey = await getYGKeys(currentCompany.id);
-
-
-  const webhook = await createYGWebhook(companyKey[0].key)
+  const webhook = await createYGWebhook(youGileKey)
   console.log(webhook)
 }
 
@@ -91,9 +83,9 @@ export const getYGData = async () => {
 export const register = async () => {
   try {
     await Promise.all([
-      registerBot(),
-      getYouGileWebHook(),
-      getYGData()
+      await registerBot(),
+      await getYGData(),
+      await getYouGileWebHook()
     ])
   } catch (error) {
     console.error(`Ошибка запуска функций при старте программы`)

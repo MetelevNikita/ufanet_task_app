@@ -3,8 +3,6 @@ import { PrismaClient } from "../../../../../generated/prisma";
 
 // yougile
 
-import { getYGCompany } from "@/functions/getYGCompany";
-import { getYGKeys } from "@/functions/getYGKeys";
 import { getYGProjects } from "@/functions/getYGProjects";
 import { getBoardCompany } from "@/functions/getBoardCompany";
 import { getYGColumns } from "@/functions/getYGColumns";
@@ -27,14 +25,10 @@ export const POST = async (req: Request) => {
     const description = event.payload.description
     const columnId = event.payload.columnId
 
-    console.log(event)
-
 
     const tgId = description.split('<br /><br />').find((item: string) => {
-      return item.includes('TgId')
+      return item.includes('Телеграм id')
     })
-
-
 
     const department = description.split('<br /><br />').find((item: string) => {
       if (item.includes('Отдел')) {
@@ -42,30 +36,15 @@ export const POST = async (req: Request) => {
       }
     })
 
-
     // yougile
 
-    const company = await getYGCompany()
-
-    const currentCompany = company.content.find((company: { id: string, name: string, isAdmin: string }) => {
-      if (company.name == 'UFANET') {
-        return company
-      }
-    })
-
-    const companyKey = await getYGKeys(currentCompany.id)
-
-    if (!companyKey) {
-      return NextResponse.json({
-        message: `Ошибка получения ключей для компании ${currentCompany.name} в YouGile`,
-      }, { status: 500 })
-    }
+    const YouGileKey = process.env.YOGILE_KEY_INSTANCE as string
 
 
     const departmentName = department.split(' ')[2] + ' ' + department.split(' ')[3]
 
 
-    const projects = await getYGProjects(companyKey[0].key)
+    const projects = await getYGProjects(YouGileKey)
     const currentProjects = projects.content.find((project: any) => {
       if (project.title == departmentName) {
         return project
@@ -73,12 +52,12 @@ export const POST = async (req: Request) => {
     })
 
 
-    const boards = await getBoardCompany(companyKey[0].key, currentProjects.id)
+    const boards = await getBoardCompany(YouGileKey, currentProjects.id)
  
-    const columns = await getYGColumns(companyKey[0].key, boards.content[0].id)
+    const columns = await getYGColumns(YouGileKey, boards.content[0].id)
     if (!columns) {
       return NextResponse.json({
-        message: `Ошибка получения колонок для компании ${currentCompany.name} в YouGile`,
+        message: `Ошибка получения колонок для компании в YouGile`,
       }, { status: 500 })
     }
 
@@ -92,31 +71,25 @@ export const POST = async (req: Request) => {
     console.log(findColumn)
 
 
-console.log(findColumn)
-
-    const findTask = await prisma.task.findFirst({
+      
+      const findTask = await prisma.taskPr.findFirst({
       where: {
         title: title,
       }
     })
 
-    console.log(findTask)
 
-    if (!findTask) {
-      return NextResponse.json({
-        message: `Задача ${title} не найдена в базе данных`,
-      }, { status: 500 })
-    }
-
-
-    const changeTaskStatus = await prisma.task.update({
-      where: { id: Number(findTask.id) },
-      data: { status: findColumn.title },
-    })
-
-    console.log(changeTaskStatus)
+      if (!findTask) {
+        return NextResponse.json({
+          message: `Задача ${title} не найдена в базе данных`,
+        }, { status: 500 })
+      }
 
 
+      const changeTaskStatus = await prisma.taskPr.update({
+        where: { id: Number(findTask.id) },
+        data: { status: findColumn.title },
+      })
 
 
     let messageFromUser
@@ -134,8 +107,7 @@ console.log(findColumn)
 
 
     const bot = await getBot()
-    console.log(tgId)
-    bot.sendMessage(tgId.split(' ')[2], messageFromUser) 
+    bot.sendMessage(tgId.split('-')[1].trim(), messageFromUser) 
 
 
     return NextResponse.json({

@@ -11,25 +11,23 @@ dotenv.config({
 
 // sendAnswerMessage
 
-const sendAnswerMessage = async (message: string) => {
+const sendAnswerMessage = async (status: string, department: string, id: any) => {
   try {
 
-    const cardId = JSON.parse(message).cardId
-    const status = JSON.parse(message).message
 
-    console.log('cardId', cardId)
+    console.log('cardId', id)
     console.log('status', status)
 
     if (!process.env.API_URL) {
       throw new Error('API_URL не задан в переменных окружения');
     }
 
-    const responce = await fetch(`${process.env.API_URL}/${cardId}` as string, {
+    const responce = await fetch(`${process.env.API_URL}/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status, department }),
     })
 
     if (!responce.ok) {
@@ -109,35 +107,41 @@ export const getBot = async () => {
 
         bot.on('callback_query', async (query) => {
 
+
+
+  
           const chatId = query.message?.chat.id as number;
           const messageId = query.message?.message_id as number;
 
           if (!query.data) return;
 
-          const data = JSON.parse(query.data);
-          console.log('data', data)
+          const data = query.data.split('|')
 
-          if (data.message === 'approve') {
+          const status = data[0]
+          const department = data[1]
+          const id = data[2]
+
+
+          if (status === 'approve') {
 
               console.log('query', query.data)
 
-
-              await sendAnswerMessage(query.data)
+              await sendAnswerMessage(status, department, id)
               await bot.editMessageText(`Заявка #${query.id}: ✅ согласовано`, {
                 chat_id: chatId,
                 message_id: messageId
               });
 
-          } else if (data.message === 'reject') {
+          } else if (status === 'reject') {
 
-              await sendAnswerMessage(query.data)
+              await sendAnswerMessage(status, department, id)
               await bot.editMessageText(`Заявка #${query.id}: ❌ отклонено`, {
                 chat_id: chatId,
                 message_id: messageId
               });
 
-          } else if (data.message === 'comment') {
-              await sendAnswerMessage(query.data)
+          } else if (status === 'comment') {
+              await sendAnswerMessage(status, department, id)
               await bot.editMessageText(`Заявка #${query.id}: ❓ ЗАМЕЧАНИЯ!!!!`, {
                 chat_id: chatId,
                 message_id: messageId

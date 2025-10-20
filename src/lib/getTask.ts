@@ -19,6 +19,7 @@ export const getTask = async (endpoint: string) => {
     }
 
     const data = await responce.json()
+    console.log(data)
     return data
     
   } catch (error: Error | unknown) {
