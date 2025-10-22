@@ -3,8 +3,8 @@
   min-height: 50px;
   max-height: max-content;
   border-radius: 10px;
-  border: 1px solid black;
-  background: rgb(255, 255, 255);
+  border: 1px solid #d3d7d9;
+  background: #F4F7F9;
   overflow: hidden;
   /*  */
 }

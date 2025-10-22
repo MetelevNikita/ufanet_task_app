@@ -26,11 +26,23 @@
 .logo_text {
   font-size: 26px;
   font-weight: 600;
-  color: #434343
+  color: #434343;
+
+  /*  */
+
+  text-align: left;
+
+  /*  */
+
+  margin-bottom: 10px;
 }
 
 .logo_subtitle {
   font-size: 16px;
   font-weight: 200;
-  color: #434343
+  color: #434343;
+
+  /*  */
+
+  text-align: left;
 }

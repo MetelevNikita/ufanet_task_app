@@ -7,17 +7,12 @@ import { getBoardCompany } from "@/functions/getBoardCompany";
 import { getYGColumns } from "@/functions/getYGColumns";
 import { getYGStickers } from "@/functions/getYGStickers";
 
-// 
-
-import { getYGtaskFromProject } from "@/functions/getYGtaskFromProject";
-
 // TG
 
 import { getBot } from "@/telegramBot/telegramBot";
 
 // types
 
-import { TaskType } from "@/types/types";
 import { MenuType } from "@/types/types";
 
 // db
@@ -140,7 +135,6 @@ const createTGData = async (department: string, data: any, descriptionTask: stri
 
   const buildCB = (status: string, department: string, cardId: any) => `${status}|${department}|${cardId}`
 
-
   try {
 
 
@@ -186,9 +180,11 @@ const createTGData = async (department: string, data: any, descriptionTask: stri
 export const POST = async (req: Request, context: {params: {slug: string}}) => {
   try {
 
-    const { slug } = await context.params;
+    const splitUrl = req.url.split('/')
+    const endPoint = splitUrl[splitUrl.length - 1]
+    console.log(endPoint)
 
-    const currentDepartment = derections.data.find((item: MenuType): Boolean => item.value === slug)
+    const currentDepartment = derections.data.find((item: MenuType): Boolean => item.value === endPoint)
 
     if (!currentDepartment) {
       return NextResponse.json({
@@ -261,7 +257,7 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
       return NextResponse.json({ message: `Ошибка создания задачи в телеграмм` }, { status: 500 });
     }
 
-    return NextResponse.json({message: `Сообщение в отдел ${slug} отправлено на согласование`}, { status: 200 });
+    return NextResponse.json({message: `Сообщение в отдел ${endPoint} отправлено на согласование`}, { status: 200 });
     
 
   } catch (error: Error | unknown) {

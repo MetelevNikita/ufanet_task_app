@@ -9,3 +9,12 @@ body {
   height: 100vh;
   background: #F0FAFF;
 }
+
+
+/* inputs */
+
+input[type="date"] {
+  color: #6c757d
+}
+
+

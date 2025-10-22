@@ -9,25 +9,12 @@ import { Container, Row, Col } from 'react-bootstrap'
 // components
 
 import Logo from '@/components/element/Logo/Logo'
-
-// 
-
-import MySelect from '@/components/UI/MySelectMulti/MySelect'
-import MyButton from '@/components/UI/MyButton/MyButton'
 import MyInput from '@/components/UI/MyInput/MyInput'
 
-// db
-
-import directions from '@/database/direction.json'
 
 // types
 
-import { SelectType } from '@/types/types'
 import { MenuType } from '@/types/types'
-
-// BD types
-
-import { TaskType } from '@/types/types'
 
 // image
 
@@ -42,83 +29,71 @@ import directionsData from '@/database/direction.json'
 
 import { Context } from '@/utils/RootContext'
 
-// lib/functions
-
-import { postTask } from '@/lib/postTask'
-
 
 // menu
 
 
 const menu: MenuType[] = directionsData.data
 
-// 
+// field Class
+
+class MyField {
+
+    title: string
+    placeholder: string
+    type: string
+    name: string
+
+
+    constructor( title: string, placeholder: string, type: string, name: string ) {
+      this.title = title
+      this.placeholder = placeholder
+      this.type = type
+      this.name = name
+
+    }
+
+
+    createFiled(data: string, setData: any) {
+
+      return  <Col md={12}>
+                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={(e: any) => setData(e.target.value)} value={data}/>
+              </Col>
+    }
+}
+
+
+
+
 
 const page: FC = () => {
 
   const [stickers, setStickers] = useState<any>([])
-
-
   const {path, setPath} = useContext(Context)
+
+  // 
+
+  const [fio, setFio] = useState('')
+  const [subdivision, setSubdivision] = useState('')
+  const [tgId, setTgId] = useState('')
+  const [branch, setBranch] = useState('')
+  const [leader, setLeader] = useState('')
+
+
+  const fioField = new MyField('ФИО', 'Введите ФИО', 'text', 'fio')
+  const subdivisionField = new MyField('Подразделение', 'Введите подразделение', 'text', 'subdivision')
+  const tgIdField = new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId')
+  const branchField = new MyField('Филиал', 'Выберите филиал', 'select', 'branch')
+  const leaderField = new MyField('Лидер мероприятия', 'Введите лидера мероприятия', 'text', 'leader')
+
+
+  // 
+
 
   useEffect(() => {
     setPath('/')
   }, [])
 
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-
-
-      const cached = sessionStorage.getItem('cached')
-
-      if (cached) {
-        setStickers(JSON.parse(cached))
-        return
-      }
-
-      const steackersPack = async () => {
-        const stickers = await getSteackers()
-        setStickers(stickers.data)
-        sessionStorage.setItem('cached', JSON.stringify(stickers.data))
-      }
-      steackersPack()
-    }
-
-  }, [])
-
-
-
-  // getStickers
-
-
-  const getSteackers = async () => {
-    try {
-
-      const responce = await fetch('/api/stickers', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-
-      if (!responce.ok) {
-        throw new Error(
-          JSON.stringify({
-            status: 'error',
-            message: `Ошибка получения стикеров: ${responce.statusText} - ${responce.status}`
-          })
-        )
-      }
-
-      const data = await responce.json()
-      return data
-
-      
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
 
   const selectorDataStickers = (stickers: any, name: string) => {
@@ -152,31 +127,40 @@ const page: FC = () => {
   }
 
 
-  const priorityData = selectorDataStickers(stickers, 'Приоритет')
 
-  console.log(stickers, 'stickers')
-
-
-  // if (priorityData.length < 1) {
-  //   return <Row><Col><div>LOADING</div></Col></Row>
-  // }
 
 
   return (
 
     <Container>
       <Row className='d-flex justify-content-center align-items-center mt-3 mb-3'>
-        <Col md={6} className='d-flex justify-content-center align-items-center'>
+        <Col md={5} className='d-flex justify-content-center align-items-center'>
         
               <Logo image={logo} title={'СЕРВИС ЗАЯВОК НА РАЗРАБОТКУ ПРОЕКТА'} subtitle={'При заполнении заявки необходимо заполнять все поля,в случаи их не заполнения заявка не будет отправленна исполнителю'}/>
 
         </Col>
+
+        <Col md={5}>
+
+            {fioField.createFiled(fio, setFio)}
+            {subdivisionField.createFiled(subdivision, setSubdivision)}
+            {tgIdField.createFiled(tgId, setTgId)}
+            {branchField.createFiled(branch, setBranch)}
+            {leaderField.createFiled(leader, setLeader)}
+            
+        </Col>
+
+
+
       </Row>
 
 
-      <Row className='d-flex justify-content-center align-items-center'>
-        <Col md={6} className='d-grid flex-wrap justify-content-center align-items-center' style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 2fr))',
+
+
+
+      <Row className='d-flex justify-content-center align-items-center mt-3 mb-3'>
+        <Col md={10} className='d-grid flex-wrap justify-content-center align-items-center' style={{
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 2fr))',
             justifyItems: 'center',
             alignItems: 'center',
             gap: '1rem'
@@ -192,7 +176,6 @@ const page: FC = () => {
 
         </Col>
       </Row>
-
 
     </Container>
 

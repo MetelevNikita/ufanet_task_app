@@ -1,17 +1,13 @@
 .menu_element_container {
-  width: 100%;
-  min-height: 167px;
+  width: 250px;
+  min-height: 160px;
   height: max-content;
-  border: 1px solid black;
+  border: 1px solid #d3d7d9;
   border-radius: 10px;
   margin: 10px;
-  background-color: rgb(255, 255, 255);
+  background-color: #F4F7F9;
 
   /*  */
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: black
 }
 
@@ -19,10 +15,14 @@
   width: 100%;
   min-height: 167px;
   height: max-content;
+
+  padding: 20px;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+
+
 
 }
 
@@ -32,7 +32,10 @@
 }
 
 .menu_element_text {
+
   text-transform: uppercase;
   font-size: 16px;
-  padding: 10px;
+  width: 100%;
+  height: max-content;
+  text-align: left;
 }

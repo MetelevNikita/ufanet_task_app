@@ -14,10 +14,10 @@
   /*  */
 
   border: 1px solid;
-  border-color: #5E5E5E;
+  border-color: #d3d7d9;
   border-radius: 10px;
   color: #000000;
-  background-color: white;
+  background-color: #F4F7F9;
 
   /* text */
 
@@ -29,3 +29,14 @@
 
   
 }
+
+
+
+.input_text::-webkit-calendar-picker-indicator {
+
+ padding-right: 10px;
+
+}
+
+
+

@@ -34,13 +34,13 @@ const MenuElement: FC<MenuElementProps> = ({ text, onClick, link }) => {
       }} onMouseOut={() => {setActive(false)}}>
 
         {
-            (text === 'Интернет маркетинг') && (<IconMarketing width={50} height={50} color={(active) ? 'white' : '#80298D'}/>) 
+            (text === 'Интернет маркетинг') && (<IconMarketing width={32} height={32} color={(active) ? 'white' : '#80298D'}/>) 
           
-          || (text === 'PR отдел') && (<IconPR width={50} height={50} color={(active) ? 'white' : '#80298D'}/>)
+          || (text === 'PR отдел') && (<IconPR width={32} height={32} color={(active) ? 'white' : '#80298D'}/>)
           
-          || (text === 'Отдел дизайна') && (<IconDesign width={50} height={50} color={(active) ? 'white' : '#80298D'}/>)
+          || (text === 'Отдел дизайна') && (<IconDesign width={32} height={50} color={(active) ? 'white' : '#80298D'}/>)
 
-          || (text === 'Отдел рекламы') && (<IconCommersial width={50} height={50} color={(active) ? 'white' : '#80298D'}/>)
+          || (text === 'Отдел рекламы') && (<IconCommersial width={32} height={50} color={(active) ? 'white' : '#80298D'}/>)
         }
 
 

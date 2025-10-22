@@ -15,6 +15,7 @@ import RootContext from "@/utils/RootContext";
 // 
 
 import Header from "@/components/element/Header/Header";
+import Footer from "@/components/element/Footer/Footer";
 
 
 const montserrat = Montserrat({
@@ -40,6 +41,7 @@ export default function RootLayout({
           <RootContext>
           <Header />
         {children}
+          <Footer />
         </RootContext>
         </Container>
       </body>

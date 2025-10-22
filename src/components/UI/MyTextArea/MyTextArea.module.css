@@ -1,0 +1,41 @@
+.textarea_container {}
+
+.textarea_title {
+  font-size: 14px;
+  color: #000000;
+}
+
+.textarea_input {
+    width: 100%;
+
+    /*  */
+
+    border: 1px solid;
+    border-color: #d3d7d9;
+    border-radius: 10px;
+    color: #000000;
+    background-color: #F4F7F9;
+
+    /* text */
+
+    padding: 10px;
+
+    /*  */
+
+    margin-top: 5px;
+
+    /*  */
+
+    resize: none
+}
+
+
+textarea:focus {
+  outline: none;
+}
+
+
+textarea::placeholder {
+  color: #6c757d;
+  opacity: 0.7;
+}
