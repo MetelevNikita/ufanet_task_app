@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, useState } from 'react'
-import Image from 'next/image'
+import { BiListCheck } from "react-icons/bi";
 
 // style
 
@@ -17,7 +17,7 @@ import { SelectType } from '@/types/types'
 interface MySelectProps {
   title: string
   name: string,
-  options: SelectType[]
+  options: SelectType[] | any
   onChange: (e: any) => void
   value: any
 }
@@ -37,7 +37,6 @@ const MySelect: FC<MySelectProps> = ({title, options, name, value, onChange }) =
               return <option key={index} value={item.label}>{item.label}</option>
           })
         }
-
 
       </select>
     </div>

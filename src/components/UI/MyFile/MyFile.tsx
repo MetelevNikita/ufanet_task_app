@@ -30,11 +30,10 @@ const MyFile: FC<MyFileProps> = ({ title, placeholder, onChange, name, data }) =
 
   
 
-  const file = (data === null) ?  [] : data
+  const file = (data === null) ?  '' : data
   console.log(file)
 
   const image = (file) ? URL.createObjectURL(file as any) : ''
-
   console.log(image)
   
 
@@ -45,8 +44,8 @@ const MyFile: FC<MyFileProps> = ({ title, placeholder, onChange, name, data }) =
         <motion.div className={styles.file_input} whileHover={{background: '#4f01ae', border: '1px solid #4f01ae00', color: 'white'}} whileTap={{scale: 1.05}}>
           
           <label htmlFor={'file'} className={styles.file_input_wrapper}>
-          <div>{placeholder}</div>
-          <Image src={icon} alt={'icon'} />
+          {placeholder}
+          <Image className={styles.input_file_icon} src={icon} alt={'icon'} />
         </label></motion.div>
         <input
           className={styles.file}

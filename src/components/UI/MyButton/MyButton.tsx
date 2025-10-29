@@ -2,7 +2,17 @@
 
 import { FC } from 'react'
 import { motion } from "motion/react"
+import Image from 'next/image'
 import Link from 'next/link'
+
+// icon
+
+import { CgArrowLongRight } from "react-icons/cg";
+
+
+// img
+
+import icon from '@/../public/inputs_icon/Arrow_right_long_light.svg'
 
 // styles
 
@@ -17,38 +27,19 @@ interface MyButtonProps {
 
 const MyButton: FC<MyButtonProps> = ({ text, onClick, type, link }) => {
 
-
-
-  if (!link) {
     return (
       <motion.button
-      className={styles.btn}
+      className={styles.btn_container}
       type={type}
       onClick={onClick}
-      whileHover={{background: '#4f01ae', border: '1px solid #4f01ae00', color: 'white'}}
+      whileHover={{background: 'linear-gradient(90deg,rgba(252, 155, 50, 1) 0%, rgba(255, 102, 0, 1) 99%)', border: '1px solid #4f01ae00', color: 'white'}}
       whileTap={{scale: 1.1}}>
 
-            {text}
+        <span className={styles.btn_text}>{text}</span>
+        <CgArrowLongRight className={styles.btn_icon}/>
 
-    </motion.button>
+      </motion.button>
     )
   }
-
-
-  return (
-
-    <Link href={link} style={{width: '100%',   height: '56px'}}><motion.button
-      className={styles.btn}
-      type={type}
-      onClick={onClick}
-      whileHover={{background: '#4f01ae', border: '1px solid #4f01ae00', color: 'white'}}
-      whileTap={{scale: 1.1}}>
-
-            {text}
-
-    </motion.button></Link>
- 
-  )
-}
 
 export default MyButton

@@ -1,0 +1,25 @@
+.footer_wrapper {
+  display: flex;
+
+  /*  */
+
+  cursor: pointer;
+}
+
+.footer_icon {
+    margin-right: 10px;
+}
+
+.footer_title {
+  font-size: 14px;
+  font-weight: 200;
+  text-align: center;
+  /*  */
+}
+
+.footer_line {
+  width: 40%;
+  height: 2px;
+  background-color: #FF6600;
+  border-radius: 20px;
+}

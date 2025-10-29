@@ -6,8 +6,32 @@
 
 body {
   width: 100%;
-  height: 100vh;
-  background: #F0FAFF;
+  background: #F8F8F8;
+  background: linear-gradient(90deg,rgba(248, 248, 248, 1) 0%, rgba(251, 251, 251, 1) 99%);
+}
+
+
+/* app block */
+
+.app_container {
+  width: 100%;
+  height: 700px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 30px;
+
+  /*  */
+
+  overflow-y: scroll;
+
+  /*  */
+}
+
+.app_wrapper {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 20px;
+
 }
 
 
@@ -18,3 +42,28 @@ input[type="date"] {
 }
 
 
+
+/* scroll */
+
+::-webkit-scrollbar {
+    width: 8px; /* Ширина вертикальной полосы */
+    height: 8px; /* Высота горизонтальной полосы */
+}
+
+/* Стиль дорожки прокрутки */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Цвет фона дорожки */
+    border-radius: 10px; /* Радиус скругления */
+}
+
+/* Стиль ползунка прокрутки */
+::-webkit-scrollbar-thumb {
+    background: #888; /* Цвет ползунка */
+    border-radius: 10px; /* Радиус скругления */
+}
+
+/* Стиль ползунка при наведении */
+::-webkit-scrollbar-thumb {
+    background: #FF6600; 
+    height: 40px;/* Цвет ползунка при наведении */
+}

@@ -24,7 +24,7 @@ model TaskPr {
   department String
   product String
   event String? 
-  name String
+  fio String
   subdivision String
   tgId String
   branch String
@@ -36,8 +36,38 @@ model TaskPr {
   place String?
   site String?
   participants String?
-  date  String?
+  deadline  String?
   status String 
   createAt DateTime @default(now())
   updateAt DateTime @default(now())
+}
+
+model TaskDesign {
+  id Int @id @default(autoincrement())
+  ygId String
+  department String
+  fio String
+  subdivision String
+  tgId String
+  branch String
+  leader String
+  type String
+  title String?
+  description String?
+  date String?
+  target String?
+  audience String?
+  build String?
+  size String?
+  orientation String?
+  future String?
+  place String?
+  file String?
+  change String?
+  deadline String?
+  other String?
+  status String 
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now())
+
 }

@@ -4,6 +4,7 @@
 
 .input_title {
   font-size: 14px;
+  font-weight: 200;
   color: #000000;
 }
 
@@ -14,20 +15,31 @@
   /*  */
 
   border: 1px solid;
-  border-color: #d3d7d9;
-  border-radius: 10px;
+  border-color: #000000;
+  border-radius: 20px;
   color: #000000;
-  background-color: #F4F7F9;
+  background-color: #ffffff;
+  
 
   /* text */
 
-  padding-left: 10px;
+  padding-left: 20px;
+      color: #000000;
+    opacity: 0.7;
+    font-weight: 400;
+
+    font-size: 14px;
 
   /*  */
 
   margin-top: 5px;
 
   
+}
+
+.input_text:focus {
+  border: 1px solid;
+  border-color: #80298D;
 }
 
 

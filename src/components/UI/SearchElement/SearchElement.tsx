@@ -55,17 +55,15 @@ const SearchElement: FC<SearchElementProps> = ({ status, title, date, department
   
       <Col className='d-flex flex-md-row flex-column justify-md-center justify-between' style={{marginLeft: '10px', marginRight: '10px'}}>
 
-        <Col md={3} className='d-flex flex-row justify-center justify-md-between align-items-center mt-3 mb-3'>
+        <Col md={2} className='d-flex flex-row justify-center justify-md-between align-items-center mt-3 mb-3'>
             <div className={styles.search_status_circle} style={{backgroundColor: statusColor}}></div>
-            <div className={styles.search_status_text}>Статус:</div>
             <div className={styles.search_status_subtext} style={{borderColor: statusColor, color: statusColor, borderWidth: '2px'}}>{statusText}</div>
         </Col>
 
-        <Col md={8} className='d-flex flex-md-row flex-column mt-3 mb-3'>
+        <Col md={10} className='d-flex flex-md-row flex-column mt-3 mb-3'>
           <Col className={styles.search_status_author}>Автор: {author}</Col>
           <Col className={styles.search_status_title}>Задача: {title}</Col>
-          <Col className={styles.search_status_project}>Направление: {department}</Col>
-          <Col className={styles.search_status_date}>Дата создания: {newDate}</Col>
+          <Col className={styles.search_status_date}>Дата: {newDate}</Col>
         </Col>
 
       </Col>

@@ -2,7 +2,7 @@ export const createYGWebhook = async (key: string) => {
   try {
 
 
-    console.log(process.env.YG_WEBHOOK_URL)
+    console.log(process.env.WEBHOOK_URL)
 
     const responce = await fetch('https://yougile.com/api-v2/webhooks', {
       method: 'POST',
@@ -11,8 +11,8 @@ export const createYGWebhook = async (key: string) => {
         'Authorization': `Bearer ${key}`
       },
       body: JSON.stringify({
-        url: `${process.env.YG_WEBHOOK_URL}/api/webhook/${key}`,
-        event: 'task-moved'
+        url: `${process.env.WEBHOOK_URL}/api/webhook/${key}`,
+        event: 'task-*'
       })
       
     })

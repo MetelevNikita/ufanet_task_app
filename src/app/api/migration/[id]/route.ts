@@ -26,56 +26,14 @@ const prisma = new PrismaClient();
 
 // 
 
-import { deleteTask } from "@/functions/PRISMA/deleteTask";
-
-export const DELETE = async (req: Request, { params }: { params: { id: string } }) => {
-  try {
-
-    const { id } = await params;
-
-    if (!id) {
-      return NextResponse.json(
-        { message: 'ID задачи не указан' },
-        { status: 400 }
-      );
-    }
-
-
-    const deleteCurrentTask = await deleteTask(id);
-
-      if (!deleteCurrentTask) {
-        return NextResponse.json(
-          { message: 'Ошибка удаления задачи' },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json(deleteCurrentTask, { status: 200 });
-
-
-  } catch (error: Error | unknown) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: error.message },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(
-      { message: 'Неизвестная ошибка' },
-      { status: 500 }
-    );
-    
-  }
-}
-
-
-
 
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
   try {
 
+    console.log('Передача карточки')
+
     const { id } = await params;
+    console.log(id)
 
     // 
 
@@ -97,6 +55,18 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       })
 
       console.log('getTask from if', getTask)
+    } else if (department === 'Отдел дизайна') {
+      getTask = await prisma.taskDesign.findUnique({
+        where: {
+          id: Number(id)
+        }
+      })
+    } else {
+      getTask = ''
+      return NextResponse.json(
+        { message: 'Отдел не указан' },
+        { status: 400 }
+      );
     }
 
 
@@ -144,7 +114,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
           const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
           const sendAnswerMessage = await bot.sendMessage(
-            335412211,
+            getTask.tgId,
             `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Согласовано`,
           )
 
@@ -232,13 +202,24 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
           }
 
           return NextResponse.json({message: 'Status pr change'}, { status: 200 });
-        } else if (department === 'design') {
+        } else if (department === 'Отдел дизайна') {
           console.log('design')
+          const changeTaskStatus = await prisma.taskDesign.update({
+            where: { id: Number(id) },
+            data: { status }
+          })
+
+          if (!changeTaskStatus) {
+            return NextResponse.json(
+              { message: 'Ошибка обновления статуса задачи' },
+              { status: 500 }
+            );
+          }
           return NextResponse.json({message: 'Status design change'}, { status: 200 });
-        } else if (department === 'marketing') {
+        } else if (department === 'Интернет маркетинг') {
           console.log('merketing')
           return NextResponse.json({message: 'Status merketing change'}, { status: 200 });
-        } else if (department === 'advertising') {
+        } else if (department === 'Отдел рекламы') {
           console.log('advertising')
           return NextResponse.json({message: 'Status advertising change'}, { status: 200 });
         } else {

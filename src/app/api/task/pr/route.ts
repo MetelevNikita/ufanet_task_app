@@ -1,16 +1,5 @@
 import { NextResponse } from "next/server";
 
-// 
-
-import { getYGProjects } from "@/functions/getYGProjects";
-import { getBoardCompany } from "@/functions/getBoardCompany";
-import { getYGColumns } from "@/functions/getYGColumns";
-import { getYGStickers } from "@/functions/getYGStickers";
-
-// TG
-
-import { getBot } from "@/telegramBot/telegramBot";
-
 // types
 
 import { MenuType } from "@/types/types";
@@ -23,158 +12,18 @@ import derections from '@/database/direction.json'
 
 import { PrismaClient } from "@/../generated/prisma/client";
 
-// 
+// lib
 
-const prisma = new PrismaClient();
-
-// 
-
-
-
-
-
-const createDBdata = async (ygId: string, department: string, data: any) => {
-  try {
-
-
-    const databaseCard = {
-      ygId: ygId,
-      department: department,
-      ...data,
-      status: 'Входящие'
-    }
-
-    const task = await prisma.taskPr.create({
-      data: databaseCard
-    })
-    
-    if (!task) {
-      throw new Error('Ошибка создания задачи в базе данных');
-    }
-
-    return task;
-    
-  } catch (error: Error | unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    throw new Error('Неизвестная ошибка');
-  }
-}
-
-
-// creteYGTask
-
-const createYGData = async (department: string, data: any, descriptionTask: string) => {
-  try {
-
-    const yougileKey = process.env.YOGILE_KEY_INSTANCE as string
-
-    //
-
-    if (!yougileKey) {
-      return NextResponse.json({ message: 'Yougile key not found' }, { status: 500 });
-    }
-
-    const projects = await getYGProjects(yougileKey);
-    const currentProject = projects.content.find((project: {title: string}) => {
-      return project.title === department
-    })
-
-    // 
-
-    const board = await getBoardCompany(yougileKey, currentProject.id);
-    const columns = await getYGColumns(yougileKey, board.content[0].id)
-    const inboxColumn = columns.content.find((column: {title: string}) => {
-      return column.title === 'Входящие'
-    })
-
-    // 
-
-    if (!inboxColumn) {
-      return NextResponse.json({ message: `Столбец Входящие не найден в доске ${department}` }, { status: 404 });
-    }
-
-    // stecker
-
-    const getAllSteackers = await getYGStickers(yougileKey)
-
-
-    const respoonceYouGile = await fetch(`https://ru.yougile.com/api-v2/tasks`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${yougileKey}`
-      },
-      body: JSON.stringify({
-        title: (!data.title) ? 'Прочее' : data.title,
-        columnId: inboxColumn.id,
-        description: descriptionTask,
-        deadline: {deadline: new Date(data.date).getTime()},
-        stickers: {[process.env.YG_AUTHOR_STICKER_ID as string]: data.name.toString(), [process.env.YG_TYPE_STICKER_ID as string]: data.product.toString()}
-      })
-    })
-
-    if (!respoonceYouGile.ok) {
-      if (respoonceYouGile.status === 400) {
-        throw new Error(`Ошибка создания задачи в YG ${respoonceYouGile.statusText} - ${respoonceYouGile.status}`);
-      }
-    }
-
-    const dataYougile = await respoonceYouGile.json()
-    return dataYougile
-
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-
-const createTGData = async (department: string, data: any, descriptionTask: string, taskDB: any) => {
-
-
-  const buildCB = (status: string, department: string, cardId: any) => `${status}|${department}|${cardId}`
-
-  try {
-
-
-    const id = taskDB.id as number
-    const bot = await getBot();
-    
-    if (!process.env.TG_ID_BOSS) {
-      return NextResponse.json({ message: `Не задан TG_ID_BOSS в переменных окружения` }, { status: 500 });
-    }
-
-    const sendTgBot = bot.sendMessage(
-      process.env.TG_ID_BOSS as string,
-      `Новое сообщение с доски - ${department}\n\n\n${descriptionTask}`,
-      {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              { text: 'Согласовать', callback_data: buildCB('approve', department, id.toString())},
-              { text: 'Отклонить', callback_data: buildCB('reject', department, id.toString())},
-              { text: 'Согласовать с замечаниями', callback_data: buildCB('comment', department, id.toString())}
-            ]
-          ]
-        }
-      }
-    )
-
-    return sendTgBot
-    
-  } catch (error: Error | unknown) {
-    if (error instanceof Error) {
-      console.log(error.message)
-      throw new Error(error.message);
-    }
-  }
-}
+import { createYGTask } from "@/lib/createYGTask";
+import { createTGTask } from "@/lib/createTGTask";
+import { createDBTask } from "@/lib/createDBTask";
 
 
 // 
 
+const prisma = new PrismaClient()
 
+// 
 
 
 export const POST = async (req: Request, context: {params: {slug: string}}) => {
@@ -193,9 +42,11 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
     }
 
     const department = currentDepartment.label
+    console.log(department)
 
     const body = await req.formData();
     const data = Object.fromEntries(body);
+    console.log(data)
     
     let messageYG: string = '';
     let messageTG: string = '';
@@ -203,24 +54,24 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
 
     if (data.product === 'Проекты и продвижение услуг') {
 
-      messageYG = `Отдел - ${department}<br><br>Имя - ${data.name}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Цель - ${data.target}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
+      messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Цель - ${data.target}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
 
-      messageTG = `Отдел - ${department}\n\nИмя - ${data.name}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nЦель - ${data.target}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
+      messageTG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nЦель - ${data.target}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
       
 
     } else if (data.product === 'Мероприятие') {
 
       if (data.event === 'Внешнее мероприятие (Сторонние мероприятия)' || data.event === 'Внутреннее мероприятие (Для сотрудников)') {
 
-        messageYG = `Отдел - ${department}<br><br>Имя - ${data.name}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Тип мероприятия - ${data.event}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Место проведения - ${data.place}<br><br>Цель - ${data.target}<br><br>Лидер - ${data.leader}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
+        messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Тип мероприятия - ${data.event}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Место проведения - ${data.place}<br><br>Цель - ${data.target}<br><br>Лидер - ${data.leader}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
 
-        messageYG = `Отдел - ${department}\n\nИмя - ${data.name}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nТип мероприятия - ${data.event}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nМесто проведения - ${data.place}\n\nЦель - ${data.target}\n\nЛидер - ${data.leader}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
+        messageYG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nТип мероприятия - ${data.event}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nМесто проведения - ${data.place}\n\nЦель - ${data.target}\n\nЛидер - ${data.leader}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
 
       } else if (data.event === 'Выставки, выезды, конференции') {
 
-      messageYG = `Отдел - ${department}<br><br>Имя - ${data.name}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Тип мероприятия - ${data.event}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Сайт - ${data.site}<br><br>Место проведения - ${data.place}<br><br>Цель - ${data.target}<br><br>Лидер - ${data.leader}<br><br>Участники - ${data.participants}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
+      messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Тип мероприятия - ${data.event}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Сайт - ${data.site}<br><br>Место проведения - ${data.place}<br><br>Цель - ${data.target}<br><br>Лидер - ${data.leader}<br><br>Участники - ${data.participants}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
 
-       messageTG = `Отдел - ${department}\n\nИмя - ${data.name}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nТип мероприятия - ${data.event}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nСайт - ${data.site}<br><br>Место проведения - ${data.place}\n\nЦель - ${data.target}\n\nЛидер - ${data.leader}\n\nУчастники - ${data.participants}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
+       messageTG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nТип мероприятия - ${data.event}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nСайт - ${data.site}<br><br>Место проведения - ${data.place}\n\nЦель - ${data.target}\n\nЛидер - ${data.leader}\n\nУчастники - ${data.participants}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
 
       } else {
         return ''
@@ -229,29 +80,30 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
 
     } else if (data.product === 'Прочее') {
 
-      messageYG = `Отдел - ${department}<br><br>Имя - ${data.name}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Цель - ${data.target}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
+      messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Название услуги - ${data.title}<br><br>Цель - ${data.target}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
 
-      messageTG = `Отдел - ${department}\n\nИмя - ${data.name}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nЦель - ${data.target}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
+      messageTG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nНазвание услуги - ${data.title}\n\nЦель - ${data.target}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
 
     } else {
       return NextResponse.json({ message: 'Некорректный продукт' }, { status: 400 });
     }
 
 
-    const newTaskYougile = await createYGData(department, data, messageYG)
+    const newTaskYougile = await createYGTask(department, data, messageYG)
+    console.log(newTaskYougile)
     const ygId = newTaskYougile.id
 
     if (!newTaskYougile) {
       return NextResponse.json({ message: `Ошибка создания задачи в YouGile.ru` }, { status: 500 });
     }
 
-    const newTaskDatabase = await createDBdata(ygId, department, data)
+    const newTaskDatabase = await createDBTask(ygId, department, data)
 
     if (!newTaskDatabase) {
       return NextResponse.json({ message: `Ошибка создания задачи в базе данных` }, { status: 500 });
     }
 
-    const TelegramRes = await createTGData(department, data, messageTG, newTaskDatabase)
+    const TelegramRes = await createTGTask(department, data, messageTG, newTaskDatabase)
 
     if (!TelegramRes) {
       return NextResponse.json({ message: `Ошибка создания задачи в телеграмм` }, { status: 500 });
@@ -282,49 +134,17 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
 export const GET = async (req: Request) => {
   try {
 
-    const url = req.url.split('/')
-    const department = url.at(-1)
+    const prData = await prisma.taskPr.findMany()
 
-    if (!department) {
+    if (!prData) {
       return NextResponse.json(
-        { message: 'Отдел не указан' },
-        { status: 400 }
+        { message: 'Ошибка получения данных' },
+        { status: 500 }
       );
     }
 
-    if (department === 'pr') {
-
-      const prData = await prisma.taskPr.findMany()
-
-      if (!prData) {
-        return NextResponse.json(
-          { message: 'Ошибка получения данных' },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json(prData, { status: 200 });
-    } else if (department === 'advertising') {
-      return NextResponse.json({
-        message: 'API advertising migration работает',
-        status: 200
-      })
-    } else if (department === 'marketing') {
-      return NextResponse.json({
-        message: 'API marketing migration работает',
-        status: 200
-      })
-    } else if (department === 'design') {
-      return NextResponse.json({
-        message: 'API design migration работает',
-        status: 200
-      })
-    } else {
-      return NextResponse.json(
-        { message: 'Отдел не найден' },
-        { status: 404 }
-      );
-    }
+    return NextResponse.json(prData, { status: 200 });
+    
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {

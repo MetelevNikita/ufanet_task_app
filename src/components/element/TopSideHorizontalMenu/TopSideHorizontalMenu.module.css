@@ -1,0 +1,20 @@
+
+
+.top_menu_wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* menu icon */
+
+.menu_item_icon {
+  width: 25px;
+  height: 25px;
+  color: white
+}
+
+.menu_item_icon_active {
+  width: 25px;
+  height: 25px;
+  color: #F48120
+}

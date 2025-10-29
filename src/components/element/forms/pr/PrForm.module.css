@@ -1,0 +1,18 @@
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #80298D;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: #FF6600;
+}
+
+.type_product_title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

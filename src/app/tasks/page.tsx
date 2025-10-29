@@ -3,16 +3,21 @@
 import { FC, useContext, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
+// styles
+
+import styles from './page.module.css'
+
 // bootstrap
 
 import { Container, Row, Col } from 'react-bootstrap'
 
 // components
 
-import MyButton from '@/components/UI/MyButton/MyButton'
-import MyInput from '@/components/UI/MyInput/MyInput'
-import MySelect from '@/components/UI/MySelectMulti/MySelect'
 import SearchElement from '@/components/UI/SearchElement/SearchElement'
+
+// 
+
+import LeftSideMenu from '@/components/element/LeftSideMenu/LeftSideMenu'
 
 // lib
 
@@ -27,72 +32,29 @@ import { SelectType } from '@/types/types'
 
 import { Context } from '@/utils/RootContext'
 
+// directions
+
+import directions from '@/database/direction.json'
+
 
 
 const page: FC = () => {
 
-  const [name, setName] = useState<string>('')
-  const [tasks, setTasks] = useState<TaskType[]>([])
-  const [currentTasks, setCurrentTasks] = useState<TaskType[]>([])
+
+  const [tasks, setTasks] = useState<any[]>([])
+  const [allTasks, setAllTasks] = useState<any[]>([])
+  const [currentTasks, setCurrentTasks] = useState<any[]>([])
   const {path, setPath} = useContext(Context)
 
+
   // filter state
+  
+  const [status, setStatus] = useState<string>('')
+  const [department, setDepartment] = useState<string | null>(null)
+  const [name, setName] = useState<string | null>(null)
 
-  const [statusData, setStatusData] = useState<string>('')
-  const [departmentData, setDepartmentData] = useState<string>('')
 
-  // 
 
-  const optionStatus: SelectType[] = [
-    {
-      value: 'agree',
-      label: 'Согласовано'
-    },
-
-    {
-      value: 'reject',
-      label: 'Отклонено'
-    },
-
-    {
-      value: 'comment',
-      label: 'Замечания'
-    },
-
-    {
-      value: 'work',
-      label: 'В работе'
-    },
-
-    {
-      value: 'all',
-      label: 'Все'
-    }
-    
-  ]
-
-  const optionDepartment: SelectType[] = [
-    {
-      value: 'all',
-      label: 'Все'
-    },
-    {
-      value: 'commersial',
-      label: 'Отдел рекламы'
-    },
-    {
-      value: 'pr',
-      label: 'PR отдел'
-    },
-    {
-      value: 'marketing',
-      label: 'Интернет маркетинг'
-    },
-    {
-      value: 'design',
-      label: 'Отдел дизайна'
-    }
-  ]
 
   // 
 
@@ -102,30 +64,55 @@ const page: FC = () => {
     setPath(pathname)
   }, [])
 
+
+
   useEffect(() => {
 
-    const getAllTasks = async () => {
-      const dataPr = await getTask('pr')
-      console.log(dataPr)
+    const currentDepartment = directions.data.find((item: SelectType): Boolean => item.label === department)
 
-      let filter = dataPr
-
-      if (statusData !== "" && statusData !== "Все") {
-        filter = filter.filter((task: TaskType) => task.status === statusData)
-      }
-
-      if (departmentData !== "" && departmentData !== "Все") {
-        filter = filter.filter((task: TaskType) => task.department === departmentData)
-      }
-
-      setTasks(filter)
+    if (!currentDepartment) {
+      setTasks(allTasks)
+      setCurrentTasks([])
+      return
     }
 
-    getAllTasks()
-
-  }, [statusData, departmentData])
 
 
+
+    const getFilterTasks = async () => {
+
+      const data = await getTask(currentDepartment.value)
+
+      let filter = data
+
+      if (department) {
+        filter = data.filter((item: {department: string}) => {
+          return item.department === department
+        })
+      }
+
+      if (status) {
+        filter = filter.filter((item: {status: string}) => {
+          return item.status === status
+        })
+      }
+
+      if (name) {
+        filter = filter.filter((item: {fio: string}) => {
+          return item.fio.toLowerCase().includes(name.toLowerCase())
+        })
+      }
+
+
+      setTasks(filter)
+
+
+ 
+    }
+
+    getFilterTasks()
+
+  }, [status, department, name])
 
 
 
@@ -133,81 +120,81 @@ const page: FC = () => {
 
   const getCurrentTasks = (name: string): void => {
 
-    const current = tasks.filter((task: TaskType) => {
-      return task.name.toLowerCase() === name.toLowerCase()
+    const current = tasks.filter((task: any) => {
+      return task.name.toLowerCase() == name.toLowerCase()
     })
-    setCurrentTasks(current)
+
+    console.log(current)
+    setTasks(current)
   }
+
+
 
 
 
 
   return (
 
+
     <Container>
 
-      <Row className='d-flex align-items-center'>
+    <Row className='flex-row'>
 
-          <Col md={4} className='d-flex flex-row justify-content-between align-items-center'>
-            <div>Введите ваше имя</div>
-          </Col>
+    <Col md={3} className='mb-2'>
 
-          <Col md={8} className='d-flex flex-md-row flex-column justify-content-between align-items-center'>
-              <Col md={8} xs={12} className='d-flex flex-row justify-content-between align-items-center mb-3'>
-                <MyInput type={''} title={''} placeholder={''} onChange={(e) => { setName(e.target.value) } } value={name} name={''} />
-              </Col>
-
-              <Col md={3} xs={12} className='d-flex flex-row justify-content-between align-items-center mb-3'>
-                <MyButton text={'Найти'} onClick={() => {getCurrentTasks(name)}} type={'button'} />
-              </Col>
-          </Col>
-
-      </Row>
+      <LeftSideMenu statusData={{status, setStatus}} departmentData={{department, setDepartment}} nameData={{name, setName}}/>
       
-      <Row>
-        <Col>
-          <MySelect title={'Выберите статус задачи'} name={'status_data'} options={optionStatus} value={statusData} onChange={(e: any) => {setStatusData(e.target.value)}} />
-        </Col>
-
-        <Col>
-          <MySelect title={'Выберите отдел задачи'} name={'department_data'} options={optionDepartment} value={departmentData} onChange={(e: any) => {setDepartmentData(e.target.value)}} />
-        </Col>
-      </Row>
-
-      {/*  */}
-
-      <Row className='d-flex flex-column'>
+    </Col>
 
 
-        {
-          (tasks && currentTasks.length < 1) ? (
+    {/*  */}
 
+
+    <Col md={9} xs={12} className='mb-2 mt-2'>
+    
+      <div className={styles.right_side_container}>
+        <div className={styles.right_side_wrapper}>
+
+
+          {
+            (!department) ? (
+                <div className={styles.right_side_title}>
+                Выберите отдел для поиска
+                </div>
+            ) : (
+                <div className={styles.right_side_title}>
+                  Выбран
+                  <div className={styles.right_side_subtitle}>
+                    {department}
+                  </div>
+                </div>
+            )
+          }
+
+
+          {
               tasks.map((task: any, index: number): React.ReactNode => {
                 return (
                   <Col className='mb-2 mt-3' key={index+1}>
-                    <SearchElement status={task.status} title={task.title} date={task.date} department={task.department} author={task.name}/>
+                    <SearchElement status={task.status} title={task.title} date={task.deadline} department={task.department} author={task.fio}/>
                   </Col>
-                )
-              }
-            )
+                  )
+                }
+              )
+          } 
 
-          ) : (
-            (currentTasks.length >= 1) && (
-              currentTasks.map((task: TaskType, index: number): React.ReactNode => {
-                return (
-                  <Col className='mb-2 mt-3' key={index+1}>
-                    <SearchElement status={task.status} title={task.title} date={task.createdAt.toString()} department={task.department} author={task.name}/>
-                  </Col>
-                )
-              }
-            )
-          )
-          )
-        }
 
-      </Row>
+        </div>
+      </div>
+    
+    </Col>
+
+    </Row>
+
 
     </Container>
+
+
 
   )
 }

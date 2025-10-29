@@ -4,6 +4,7 @@ export const postTask = async (formData: FormData) => {
   try {
 
     const department = (typeof window !== "undefined") ? sessionStorage.getItem('department') : ''
+    console.log(department)
   
     const responce = await fetch (`/api/task/${department}`, {
       method: 'POST',
@@ -17,9 +18,8 @@ export const postTask = async (formData: FormData) => {
     }
 
     const data = await responce.json();
-
-
     console.log(data)
+    alert(`Задача добавлена в отдел ${department}!`)
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {

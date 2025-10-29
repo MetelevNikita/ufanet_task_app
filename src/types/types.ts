@@ -16,11 +16,40 @@ export type TaskType = {
 }
 
 
+export type DesignFormType = {
+  
+  fio: string;
+  subdivision: string;
+  tgId: string;
+  branch: string;
+  leader: string;
+  department: string | undefined;
+  type: string;
+  title: string | '';
+  description: string | '';
+  date: string | '';
+  target: string | '';
+  audience: string | '';
+  build: string | '';
+  size: string | '';
+  orientation: string | '';
+  future: string | '';
+  place: string | '';
+  file: any;
+  change: string | '';
+  deadline: string | '';
+  other: string | '';
+}
+
+
 // UI types
 
 export type SelectType = {
+  id: string | number
   value: string,
   label: string
+  icon: any
+  iconActive?: any
 }
 
 export type MenuType = {

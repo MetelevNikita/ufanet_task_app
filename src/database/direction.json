@@ -3,22 +3,26 @@
     {
       "id": 1,
       "label": "Отдел рекламы",
-      "value": "advertising"
+      "value": "advertising",
+      "icon": ""
     },
     {
       "id": 2,
       "label": "PR отдел",
-      "value": "pr"
+      "value": "pr",
+      "icon": ""
     },
     {
       "id": 3,
       "label": "Интернет маркетинг",
-      "value": "marketing"
+      "value": "marketing",
+      "icon": ""
     },
     {
       "id": 4,
       "label": "Отдел дизайна",
-      "value": "design"
+      "value": "design",
+      "icon": ""
     }
   ]
 

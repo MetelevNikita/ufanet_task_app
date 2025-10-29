@@ -2,17 +2,22 @@
   width: 100%;
   min-height: 50px;
   max-height: max-content;
-  border-radius: 10px;
-  border: 1px solid #d3d7d9;
-  background: #F4F7F9;
+  border-radius: 20px;
+  border: 1px solid #000000;
+  background: #ffffff;
   overflow: hidden;
+
   /*  */
+
+  box-shadow: 5px 5px 15px #88888857;
+
+
 }
 
 
 .search_status_line {
   width: 100%;
-  height: 8px;
+  height: 10px;
   background-color: black;
 }
 
@@ -34,7 +39,7 @@
 }
 
 .search_status_subtext {
-  font-size: 14px;
+  font-size: 12px;
   border: 1px solid black;
   padding: 4px;
   border-radius: 5px;
@@ -42,22 +47,23 @@
   /*  */
 
   margin-left: 10px;
+
 }
 
 /*  */
 
 .search_status_author {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .search_status_title {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .search_status_project {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .search_status_date {
-    font-size: 14px;
+    font-size: 12px;
 }

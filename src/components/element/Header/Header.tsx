@@ -2,7 +2,8 @@
 
 import { FC, useState, useContext } from 'react'
 import Image from 'next/image'
-
+import Link from 'next/link'
+import { motion } from 'motion/react'
 // styles
 
 import styles from './Header.module.css'
@@ -23,9 +24,25 @@ import MyButton from '@/components/UI/MyButton/MyButton'
 // img
 
 import logo from '@/../public/logo_ufanet/logo_full.svg'
-import { style } from 'motion/react-client'
+import tgIcon from '@/../public/social_icon/tg.svg'
+import waIcon from '@/../public/social_icon/wa.svg'
 
 
+const socialArr = [
+  {
+    id: 1,
+    title: 'telegram',
+    icon: tgIcon,
+    link: ''
+  },
+
+  {
+    id: 2,
+    title: 'whatsapp',
+    icon: waIcon,
+    link: ''
+  }
+]
 
 
 interface HeaderProps {
@@ -43,35 +60,32 @@ const Header: FC<HeaderProps>  = () => {
   return (
 
     <Container>
-      <Row className='d-flex flex-row align-items-center justify-content-between'>
+      <Row className='d-flex align-items-center justify-content-between mt-4 mb-4' md={4}>
 
-        <Col md={4} className='d-flex align-items-center'>
-        {
-          (path === '/tasks') ?
-          
-          <div className={styles.header_title_wrapper}>
+        <Col md={5} xs={6} className='d-flex justify-content-start align-items-center'>
+
+          <div className={styles.header_title_wrapper} onClick={() => {
+            (path === '/tasks') ? window.location.href = '/' : window.location.href = '/tasks'}}>
             <Image src={logo} alt={'logo'} width={120} height={120}/>
-            <div className={styles.header_title}>Вернуться на главную</div>
+
+            {(path === '/tasks') ? <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={styles.header_title}>Вернуться на главную</motion.div> : <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={styles.header_title}>Посмотреть история заявок</motion.div>}
           </div>
           
-          :
+        </Col>
+
+        <Col md={5} xs={6} className='d-flex justify-content-end align-items-center'>
+
+          {
           
-          <div className={styles.header_title}>Посмотреть состояние заявок</div>
-        }
+            socialArr.map((item: any, index: number): React.ReactNode => {
+              return <Link key={index+1} href={item.link}><Image className={styles.social_icon}  src={item.icon} alt='icon'/></Link>
+            })
+
+          }
+
         </Col>
 
-        <Col md={3} className='d-flex justify-content-center align-items-center'>
-          <MyButton text={(path === '/tasks') ? 'Назад' : 'Перейти'} onClick={() => {}} type={'button'} link={(path === '/tasks') ? '/' : '/tasks'}/>
-        </Col>
 
-
-      </Row>
-
-
-      <Row>
-        <Col>
-          <hr />
-        </Col>
       </Row>
     </Container>
 

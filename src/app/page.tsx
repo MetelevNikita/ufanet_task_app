@@ -1,6 +1,11 @@
 'use client'
 
 import { FC, useState, useContext, useEffect } from 'react'
+import Image from 'next/image'
+
+// styles
+
+import styles from './page.module.css'
 
 // bootstrap
 
@@ -20,6 +25,7 @@ import { MenuType } from '@/types/types'
 
 import logo from '@/../public/logo_ufanet/logo_full.svg'
 import MenuElement from '@/components/element/Menu/MenuElement'
+import bgImage from '@/../public/background/right_image.png'
 
 // db
 
@@ -28,6 +34,7 @@ import directionsData from '@/database/direction.json'
 // Context
 
 import { Context } from '@/utils/RootContext'
+import MyButton from '@/components/UI/MyButton/MyButton'
 
 
 // menu
@@ -68,27 +75,9 @@ class MyField {
 
 const page: FC = () => {
 
-  const [stickers, setStickers] = useState<any>([])
   const {path, setPath} = useContext(Context)
 
   // 
-
-  const [fio, setFio] = useState('')
-  const [subdivision, setSubdivision] = useState('')
-  const [tgId, setTgId] = useState('')
-  const [branch, setBranch] = useState('')
-  const [leader, setLeader] = useState('')
-
-
-  const fioField = new MyField('ФИО', 'Введите ФИО', 'text', 'fio')
-  const subdivisionField = new MyField('Подразделение', 'Введите подразделение', 'text', 'subdivision')
-  const tgIdField = new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId')
-  const branchField = new MyField('Филиал', 'Выберите филиал', 'select', 'branch')
-  const leaderField = new MyField('Лидер мероприятия', 'Введите лидера мероприятия', 'text', 'leader')
-
-
-  // 
-
 
   useEffect(() => {
     setPath('/')
@@ -132,52 +121,54 @@ const page: FC = () => {
 
   return (
 
+
     <Container>
-      <Row className='d-flex justify-content-center align-items-center mt-3 mb-3'>
-        <Col md={5} className='d-flex justify-content-center align-items-center'>
+
+      <Row md={8} className='d-flex justify-content-center'>
+
+        <Col md={4} style={{padding: '0'}}>
+
+        <div className={styles.bg_left_container}>
+
+          <div className={styles.bg_left_wrapper}>
+
+              <div className={styles.left_title}>СЕРВИС ЗАЯВОК НА РАЗРАБОТКУ ПРОЕКТА</div>
+              <div className={styles.left_subtitle}>При заполнении заявки необходимо заполнять все поля, в случаи их не заполнения заявка не будет отправлена исполнителю</div>
+
+              {
+                (menu.length > 1 ) && menu.map((item: MenuType, index: number) => {
+                  return <Col key={index+1} className='mb-2 mt-2'><MyButton text={item.label} onClick={() => {
+                      sessionStorage.setItem('department', item.value)
+                      window.location.href = `/app`
+                  }} type={'button'} /></Col>
+                })
+              }
+
+
+
+
+          </div>
+
+
+        </div>
         
-              <Logo image={logo} title={'СЕРВИС ЗАЯВОК НА РАЗРАБОТКУ ПРОЕКТА'} subtitle={'При заполнении заявки необходимо заполнять все поля,в случаи их не заполнения заявка не будет отправленна исполнителю'}/>
-
         </Col>
 
-        <Col md={5}>
 
-            {fioField.createFiled(fio, setFio)}
-            {subdivisionField.createFiled(subdivision, setSubdivision)}
-            {tgIdField.createFiled(tgId, setTgId)}
-            {branchField.createFiled(branch, setBranch)}
-            {leaderField.createFiled(leader, setLeader)}
-            
+        <Col md={4} style={{padding: '0'}} className='d-none d-md-block d-lg-block'>
+
+          <Image className={styles.bg_right} src={bgImage} alt={''} />
+        
         </Col>
 
 
 
       </Row>
 
-
-
-
-
-      <Row className='d-flex justify-content-center align-items-center mt-3 mb-3'>
-        <Col md={10} className='d-grid flex-wrap justify-content-center align-items-center' style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 2fr))',
-            justifyItems: 'center',
-            alignItems: 'center',
-            gap: '1rem'
-        }}>
-        {
-          (menu.length < 1) ? <></> : menu.map((item: MenuType, index: number): React.ReactNode => {
-            return <MenuElement link='' key={index} text={item.label} onClick={(e) => {
-              sessionStorage.setItem('department', item.value)
-              window.location.href = `/${item.value}`
-            }}/>
-          })
-        }
-
-        </Col>
-      </Row>
 
     </Container>
+
+    
 
   )
 }

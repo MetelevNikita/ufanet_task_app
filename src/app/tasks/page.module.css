@@ -1,0 +1,40 @@
+.right_side_container {
+  width: 100%;
+  height: 700px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 30px;
+
+  /*  */
+
+  overflow-y: scroll;
+}
+
+.right_side_wrapper {
+  padding: 25px;
+}
+
+/*  */
+
+.right_side_title {
+  height: 50px;
+  font-size: 32px;
+  font-weight: 800;
+  color: #691875;
+
+  /*  */
+
+  display: flex;
+  align-items: center;
+
+}
+
+.right_side_subtitle {
+  font-size: 32px;
+  font-weight: 800;
+  color: #F48120;
+
+  /*  */
+
+  margin-left: 7px;
+}

@@ -1,35 +1,22 @@
+'use client'
+
 import { FC } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+import { motion } from 'motion/react'
+
+// icon
+
+import { MdOutlineSettings } from "react-icons/md";
+
+// styles
+
+import styles from './Footer.module.css'
 
 // 
 
 import { Container, Row, Col } from 'react-bootstrap'
 
-// img
-
-import tg from '@/../public/social_icon/tg.svg'
-import wa from '@/../public/social_icon/wa.svg'
-
 // 
-
-
-const socialLogoArr = [
-  {
-    id: 1,
-    logo: tg,
-    link: ''
-  },
-
-  {
-    id: 2,
-    logo: wa,
-    link: ''
-  }
-]
-
-
-
 
 
 
@@ -38,42 +25,38 @@ const Footer: FC = () => {
 
 
 
-    <Container style={{width: '100%', height: 100, backgroundColor: 'white'}}>
-      <Row>
-
-      </Row>
+    <Container style={{width: '100%', height: 100}} className=''>
 
 
+      <Row className='d-flex flex-column align-items-center justify-content-center mb-3 mt-4'>
 
-      <Row>
-        <Col>
-        <hr />
-        </Col>
-      </Row>
+        <Col md={6} className='d-flex align-items-center justify-content-center mb-2'>
 
+          <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={styles.footer_wrapper}>
 
+            <div className={styles.footer_title}>Что бы подписаться на события ваших карточек вам необходимо добавить бота @UfanetTaskBot и начать работы с ним</div>
 
-
-      <Row className='d-flex flex-row align-items-center justify-content-center mb-3'>
-
-        <Col md={5} className='d-flex flex-row align-items-center justify-content-between'>
-
-          <div>Есть вопросы по приложению ?</div>
+          </motion.div>
+  
 
         </Col>
 
+        <Col className='d-flex flex-row align-items-center justify-content-center mb-2'>
+          <div className={styles.footer_line}></div>
+        </Col>
 
-        <Col md={5} className='d-flex flex-row align-items-center justify-content-end'>
+        <Col md={8} className='d-flex flex-row align-items-center justify-content-center'>
 
-            {
-              (socialLogoArr.length < 1) ? <></> : socialLogoArr.map((item, index: number) => {
-                return (
-                  <Link key={index+1} style={{marginLeft: 5, marginRight: 5}} href={item.link}><Image src={item.logo} width={35} alt={'logo'} /></Link>
-                )
-              })
-            }
+          <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={styles.footer_wrapper}>
+
+            <MdOutlineSettings className={styles.footer_icon}/>
+            <div className={styles.footer_title}>Есть вопросы по приложению ?</div>
+
+          </motion.div>
+  
 
         </Col>
+
 
       </Row>
     </Container>
