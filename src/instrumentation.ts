@@ -1,4 +1,3 @@
-import { deleteAllYouGileWebhook } from './functions/deleteAllYouGileWebhook';
 
 export const registerBot = async () => {
 
@@ -26,13 +25,9 @@ export const getAllWebHooks = async () => {
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
 
   const youGileKey = process.env.YOGILE_KEY_INSTANCE as string;
-  console.log(youGileKey)
-
 
   const { deleteAllYouGileWebhook } = await import('@/functions/deleteAllYouGileWebhook')
-
   const webhook = await deleteAllYouGileWebhook(youGileKey)
-  console.log(webhook)
 }
 
 
@@ -45,12 +40,12 @@ export const getYouGileWebHook = async () => {
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
 
   const youGileKey = process.env.YOGILE_KEY_INSTANCE as string;
-  console.log(youGileKey)
 
   const { createYGWebhook } = await import('@/functions/createYGWebhook')
 
   const webhook = await createYGWebhook(youGileKey)
   console.log(webhook)
+
 }
 
 
@@ -82,19 +77,21 @@ export const getYGData = async () => {
     }
 
     const key = companyKey[0].key
+    if (!key) {
+      console.error(`Ключ для компании ${currentCompany.name} не найден в YouGile`)
+      throw new Error(
+        `Ключ для компании ${currentCompany.name} не найден в YouGile`
+      )
+    }
+
+
     process.env.YOGILE_KEY_INSTANCE = key
     console.log('Переменная серверная определена')
     process.env.NEXT_PUBLIC_YOGILE_KEY = key
     console.log('Переменная публичная определена')
 
-    if (!key) {
-      console.error(`Ключ для компании ${currentCompany.name} не найден в YouGile`)
-    }
-
-    console.log('Ключ получен')
-
   } catch (error) {
-    console.error(error)
+    console.error(`Ошибка получения ключа Ypugile ${error}`)
   }
 }
 
@@ -110,6 +107,8 @@ export const register = async () => {
       await getAllWebHooks(),
       await getYouGileWebHook()
     ])
+
+    console.log('Приложение запущено')
   } catch (error) {
     console.error(`Ошибка запуска функций при старте программы`)
   }

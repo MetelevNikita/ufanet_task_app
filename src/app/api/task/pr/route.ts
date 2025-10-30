@@ -63,15 +63,15 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
 
       if (data.event === 'Внешнее мероприятие (Сторонние мероприятия)' || data.event === 'Внутреннее мероприятие (Для сотрудников)') {
 
-        messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Тип мероприятия - ${data.event}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Место проведения - ${data.place}<br><br>Цель - ${data.target}<br><br>Лидер - ${data.leader}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
+        messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Тип мероприятия - ${data.event}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Место проведения - ${data.place}<br><br>Цель - ${data.target}<br><br>Лидер - ${data.leader}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.deadline}`
 
-        messageYG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nТип мероприятия - ${data.event}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nМесто проведения - ${data.place}\n\nЦель - ${data.target}\n\nЛидер - ${data.leader}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
+        messageTG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nТип мероприятия - ${data.event}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nМесто проведения - ${data.place}\n\nЦель - ${data.target}\n\nЛидер - ${data.leader}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.deadline}`
 
       } else if (data.event === 'Выставки, выезды, конференции') {
 
-      messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Тип мероприятия - ${data.event}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Сайт - ${data.site}<br><br>Место проведения - ${data.place}<br><br>Цель - ${data.target}<br><br>Лидер - ${data.leader}<br><br>Участники - ${data.participants}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
+      messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Тип мероприятия - ${data.event}<br><br>Название услуги - ${data.title}<br><br>Описание услуги - ${data.description}<br><br>Сайт - ${data.site}<br><br>Место проведения - ${data.place}<br><br>Цель - ${data.target}<br><br>Лидер - ${data.leader}<br><br>Участники - ${data.participants}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.deadline}`
 
-       messageTG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nТип мероприятия - ${data.event}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nСайт - ${data.site}<br><br>Место проведения - ${data.place}\n\nЦель - ${data.target}\n\nЛидер - ${data.leader}\n\nУчастники - ${data.participants}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
+       messageTG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nТип мероприятия - ${data.event}\n\nНазвание услуги - ${data.title}\n\nОписание услуги - ${data.description}\n\nСайт - ${data.site}<br><br>Место проведения - ${data.place}\n\nЦель - ${data.target}\n\nЛидер - ${data.leader}\n\nУчастники - ${data.participants}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.deadline}`
 
       } else {
         return ''
@@ -80,9 +80,9 @@ export const POST = async (req: Request, context: {params: {slug: string}}) => {
 
     } else if (data.product === 'Прочее') {
 
-      messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Название услуги - ${data.title}<br><br>Цель - ${data.target}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.date}`
+      messageYG = `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id  - ${data.tgId}<br><br>Тип услуги - ${data.product}<br><br>Название услуги - ${data.title}<br><br>Цель - ${data.target}<br><br>Что необходимо сделать - ${data.target}<br><br>Дата - ${data.deadline}`
 
-      messageTG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nНазвание услуги - ${data.title}\n\nЦель - ${data.target}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.date}`
+      messageTG = `Отдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.product}\n\nНазвание услуги - ${data.title}\n\nЦель - ${data.target}\n\nЧто необходимо сделать - ${data.target}\n\nДата - ${data.deadline}`
 
     } else {
       return NextResponse.json({ message: 'Некорректный продукт' }, { status: 400 });

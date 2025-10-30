@@ -17,9 +17,21 @@ export const postTask = async (formData: FormData) => {
       }
     }
 
-    const data = await responce.json();
-    console.log(data)
-    alert(`Задача добавлена в отдел ${department}!`)
+    if (responce.status === 200) {
+      const data = await responce.json();
+      console.log(data)
+      return {
+        status: 'success',
+        message: 'Задача успешно добавлена',
+      }
+    } else if (responce.status === 400) {
+      return {
+        status: 'abort',
+        message: 'Задача не добавлена',
+      }
+    }
+
+
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {

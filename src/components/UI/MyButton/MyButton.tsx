@@ -1,9 +1,8 @@
 'use client'
 
-import { FC } from 'react'
+import { CSSProperties, FC } from 'react'
 import { motion } from "motion/react"
-import Image from 'next/image'
-import Link from 'next/link'
+
 
 // icon
 
@@ -23,12 +22,14 @@ interface MyButtonProps {
   onClick: () => void,
   type: "submit" | "button" | "reset",
   link?: string
+  style?: CSSProperties
 }
 
-const MyButton: FC<MyButtonProps> = ({ text, onClick, type, link }) => {
+const MyButton: FC<MyButtonProps> = ({ text, onClick, type, link, style }) => {
 
     return (
       <motion.button
+      style={style}
       className={styles.btn_container}
       type={type}
       onClick={onClick}

@@ -22,8 +22,8 @@
   
 
   /*  */
-
-  width: 200px;
+  min-width: 100px;
+  width: max-content;
 
 }
 

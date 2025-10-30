@@ -171,11 +171,31 @@ interface PrFormProps {
     department: string,
     setDepartment: (department: string) => void
   }
+  modalSuccess: {
+    modalSubmitSuccess: boolean,
+    setModalSubmitSuccess: (e: boolean) => void
+  }
+  modalError: {
+    modalSubmitError: boolean,
+    setModalSubmitError: (e: boolean) => void
+  }
+  modalInfo:  {
+    modalBackInfo: boolean,
+    setModalBackInfo: (e: boolean) => void
+  }
+  
 }
 
 
-const PrForm: FC<PrFormProps> = ({ departmentData }) => {
+const PrForm: FC<PrFormProps> = ({ departmentData, modalSuccess, modalError, modalInfo }) => {
 
+  // modals
+
+  const { modalSubmitSuccess, setModalSubmitSuccess } = modalSuccess
+  const { modalSubmitError, setModalSubmitError } = modalError
+  const { modalBackInfo, setModalBackInfo } = modalInfo
+
+  // 
 
   const {department, setDepartment} = departmentData
 
@@ -278,12 +298,10 @@ const PrForm: FC<PrFormProps> = ({ departmentData }) => {
   })
 
 
-
   // BASE SELECT
 
   const productSelect = new MySelector('Тип заявки', 'product', prMenu)
   const eventSelect = new MySelector('Тип мероприятия', 'event', eventMenu)
-
 
 
   // BASE FIELDS
@@ -400,7 +418,39 @@ const PrForm: FC<PrFormProps> = ({ departmentData }) => {
   }
 
 
+  // POST FN
+
+
+  const submitMessage = async (formData: FormData) => {
+    try {
+
+
+
+      const data = await postTask(formData)
+      console.log(data)
+
+      if (data) {
+        if (data.status === 'success') return setModalSubmitSuccess(true)
+        if (data.status === 'abort') return setModalSubmitError(true)
+      }
+
+
+      
+    } catch (error: Error | unknown) {
+      if (error instanceof Error) {
+        console.error(error.message)
+        throw new Error(error.message);
+      }
+    }
+  }
+
+
   // RENDER FIELD
+
+
+
+
+  
 
 
 
@@ -424,7 +474,7 @@ const PrForm: FC<PrFormProps> = ({ departmentData }) => {
             </Row>
 
 
-            <form action={postTask}>
+            <form action={submitMessage}>
 
             <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-3'>
 
@@ -463,7 +513,7 @@ const PrForm: FC<PrFormProps> = ({ departmentData }) => {
                 <Col className='mb-3' md={6}>
                   <MyButton
                     text={'На главную'}
-                    onClick={() => {window.location.href = '/'}}
+                    onClick={() => {setModalBackInfo(true)}}
                     type={'button'}
                   />
                 </Col>

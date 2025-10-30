@@ -33,14 +33,10 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     console.log('Передача карточки')
 
     const { id } = await params;
-    console.log(id)
-
+  
     // 
 
     const {status, department} = await req.json();
-
-    console.log(status, department)
-
 
     let getTask
 
@@ -54,7 +50,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         }
       })
 
-      console.log('getTask from if', getTask)
     } else if (department === 'Отдел дизайна') {
       getTask = await prisma.taskDesign.findUnique({
         where: {
@@ -69,8 +64,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       );
     }
 
-
-    console.log('getTask', getTask)
 
     if (!getTask) {
       return NextResponse.json({ message: `Задача с ID ${id} не найдена` }, { status: 404 });
@@ -103,7 +96,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         if (status === 'approve') {
 
           const correctColumns = columns.content.find((column: {title: string}) => column.title === 'Согласовано').id
-
 
           if (!correctColumns) {
             NextResponse.json(

@@ -20,7 +20,36 @@ import TopSideHorizontalMenu from '@/components/element/TopSideHorizontalMenu/To
 import PrForm from '@/components/element/forms/pr/PrForm'
 import DesignForm from '@/components/element/forms/design/DesignForm'
 
+// MODALS
+
+import ModalSubmit from '@/components/modals/ModalSubmit/modalSubmit'
+import ModalInfo from '@/components/modals/ModalInfo/modalInfo'
+
+
+// MODALS ICON
+
+import { BsCheckCircle } from "react-icons/bs";
+import { BsInfoCircle } from "react-icons/bs";
+import { BsQuestionCircle } from "react-icons/bs";
+import { BsXCircle } from "react-icons/bs";
+
+
+// 
+
+
+
+
 const page = () => {
+
+  // modal state
+
+  const [modalSubmitSuccess, setModalSubmitSuccess] = useState<boolean>(false)
+  const [modalSubmitError, setModalSubmitError] = useState<boolean>(false)
+  const [modalBackInfo, setModalBackInfo] = useState<boolean>(false)
+
+  // 
+
+
 
   const [department, setDepartment] = useState<string>('')
 
@@ -51,7 +80,12 @@ const page = () => {
   const currentForm = (department: string) => {
     switch (department) {
       case 'PR отдел':
-        return <PrForm departmentData={{department, setDepartment}}/>
+        return <PrForm
+        departmentData={{department, setDepartment}}
+        modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+        modalError={{modalSubmitError, setModalSubmitError}}
+        modalInfo={{modalBackInfo, setModalBackInfo}}
+        />
       case 'Отдел дизайна':
         console.log('design')
         return <DesignForm departmentData={{department, setDepartment}}/>
@@ -62,6 +96,72 @@ const page = () => {
   return (
  <Container>
       <Row className='d-flex flex-row'>
+
+      
+        {/* Modal */}
+
+        <Row className='d-flex flex-row'>
+          <Col md={12} className='d-flex justify-content-center align-items-center'>
+
+
+          {
+            (modalBackInfo) && (
+              <ModalInfo
+                title={'Все данные будут потеряны... Продолжить?'}
+                btnTitleOne={'Продолжить'}
+                btnTitleTwo='Назад'
+                image={<BsInfoCircle style={{width: '60px', color: '#FC9B32'}}/>}
+                onClickOne={() => {
+                  setModalBackInfo(false),
+                  window.location.href = '/'
+                }}
+                onClickTwo={
+                  () => {setModalBackInfo(false)
+
+                  }}
+                />
+            )
+          }
+
+
+
+
+          {
+            (modalSubmitSuccess) && (
+              <ModalSubmit
+                image={<BsCheckCircle
+                style={{width: '60px', color: '#51c947'}}/>}
+                title={`Заявка ${department} успешно отправлена`}
+                type={'success'}
+                modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+                modalError={{modalSubmitError, setModalSubmitError}}
+              />
+            )
+          }
+
+
+          {
+            (modalSubmitError) && (
+              <ModalSubmit
+                image={<BsXCircle
+                style={{width: '60px', color: '#a85632'}}/>}
+                title={`Ошибка отправки заявки`}
+                type='error'
+                modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+                modalError={{modalSubmitError, setModalSubmitError}}
+              />
+            )
+          }
+
+
+
+
+          </Col>
+        </Row>
+
+
+        {/*  */}
+
 
         <Col md={3} sm={1} xs={1} className='d-none d-sm-block'>
           <LeftSideApplication departmentData={{department, setDepartment}}/>

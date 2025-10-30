@@ -181,30 +181,37 @@ export const POST = async (req: Request) => {
 
     // comparison steacker
 
-
+    let comprassionSteacker: boolean
     const statusSticker = await getYGStickers(YouGileKey)
+    console.log(statusSticker)
 
-    const statusName = statusSticker.content[0].id
-    const statusState = statusSticker.content[0].states
+    if (!statusSticker) return
 
+
+    console.log('получаем id статуса задачи')
+
+
+    const statusName = statusSticker.content[0].id || ''
+    const statusState = statusSticker.content[0].states || []
 
     const currentSteaker = findCurrentStiacker(event.payload.stickers, statusName, statusState)
     const prevSteaker = findCurrentStiacker(event.prevData.stickers, statusName, statusState)
 
-    console.log(currentSteaker.name)
-    console.log(prevSteaker.name)
 
-    const comprassionSteacker = (prevSteaker.id == currentSteaker.id) ? false : true
+    comprassionSteacker = (prevSteaker?.id == currentSteaker?.id) ? false : true
     
     if (!comprassionSteacker) {
       console.log(
-        `Статус задачи не изменился. Статус задачи - ${currentSteaker.name}`
+        `Статус задачи не изменился. Статус задачи - ${currentSteaker?.name || 'не определен'}`
       )
     } else {
       console.log(
-        `Статус задачи изменился. Статус задачи - ${currentSteaker.name}`
+        `Статус задачи изменился. Статус задачи - ${currentSteaker?.name || 'не определен'}`
       )
     }
+    
+
+    
 
     // 
 
@@ -245,40 +252,78 @@ export const POST = async (req: Request) => {
 
  
     let messageFromUser
-    
-    if (findColumn.title === 'Согласовано') {
-      messageFromUser = `Ваша задача - ${title} - была Согласована.\n\nДальше ваша задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`
-    } else if (findColumn.title === 'Не согласовано') {
-      messageFromUser = `Ваша задача - ${title} - была отклонена. Просьба связаться с руководителем направления для получения информации об отказе`
-    } else if (findColumn.title === 'Согласовано с замечаниями') {
-      messageFromUser = `Ваша задача - ${title} - была согласовано с замечаниями. Для получения информации по задаче, пожалуйста, связаться с руководителем направления\n\nПосле задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`
-    } else {
-
-      if (comprassionAssigned) {
 
 
-        console.log('Внимание! КАРТОЧКА НАЗНАЧЕНО НА ПОЛЬЗОВАТЕЛЯ!!!!!')
-        let usersArr: string[] = []
+    switch (findColumn.title) {
+      case 'Согласовано':
+        messageFromUser = `Ваша задача - ${title} - была Согласована.\n\nДальше ваша задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`
+        break
+      case 'Не согласовано':
+        messageFromUser = `Ваша задача - ${title} - была отклонена. Просьба связаться с руководителем направления для получения информации об отказе`
+        break
+      case 'Согласовано с замечаниями':
+        messageFromUser = `Ваша задача - ${title} - была согласовано с замечаниями. Для получения информации по задаче, пожалуйста, связаться с руководителем направления\n\nПосле задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`
+        break
+      default: if (comprassionAssigned) {
 
-        for (const user of assignedUsers) {
-          const users = await getYGUsersID(user, YouGileKey)
-          console.log(users.realName)
-          usersArr.push(users.realName)
+
+          console.log('Внимание! КАРТОЧКА НАЗНАЧЕНО НА ПОЛЬЗОВАТЕЛЯ!!!!!')
+          let usersArr: string[] = []
+
+          for (const user of assignedUsers) {
+            const users = await getYGUsersID(user, YouGileKey)
+            console.log(users.realName)
+            usersArr.push(users.realName)
+          }
+
+
+          messageFromUser = `НОВЫЙ ИСПОЛНИТЕЛЬ!!! \n\n Ваша задача - ${title} -  список исполнителей ${(assignedUsers.length < 1) ? 'ПУСТО' : assignedUsers.join(',')}.\n\nСледите за изменениями в БОТЕ`
+        } else if (comprassionSteacker) {
+          messageFromUser = `НОВЫЙ СТАТУС!!!!\n\nЗадаче - ${title} - в колонке ${findColumn.title} был присвоен новый статус ${currentSteaker.name}.\n\nСледите за изменениями в БОТЕ`
+        } else {
+          messageFromUser = `Ваша задача - ${title} - была перемещена в ${findColumn.title}.\n\nСледите за изменениями в БОТЕ`
         }
+      }
+    
 
-        messageFromUser = `НОВЫЙ ИСПОЛНИТЕЛЬ!!! \n\n Ваша задача - ${title} -  список исполнителей ${(usersArr.length < 1) ? 'ПУСТО' : usersArr.join(',')}.\n\nСледите за изменениями в БОТЕ`
+    //
+    
+    // if (findColumn.title === 'Согласовано') {
+    //   messageFromUser = `Ваша задача - ${title} - была Согласована.\n\nДальше ваша задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`
+    // } else if (findColumn.title === 'Не согласовано') {
+    //   messageFromUser = `Ваша задача - ${title} - была отклонена. Просьба связаться с руководителем направления для получения информации об отказе`
+    // } else if (findColumn.title === 'Согласовано с замечаниями') {
+    //   messageFromUser = `Ваша задача - ${title} - была согласовано с замечаниями. Для получения информации по задаче, пожалуйста, связаться с руководителем направления\n\nПосле задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`
+    // } else {
+
+    //   if (comprassionAssigned) {
+
+
+    //     console.log('Внимание! КАРТОЧКА НАЗНАЧЕНО НА ПОЛЬЗОВАТЕЛЯ!!!!!')
+    //     let usersArr: string[] = []
+
+    //     for (const user of assignedUsers) {
+    //       const users = await getYGUsersID(user, YouGileKey)
+    //       console.log(users.realName)
+    //       usersArr.push(users.realName)
+    //     }
+
+    //     messageFromUser = `НОВЫЙ ИСПОЛНИТЕЛЬ!!! \n\n Ваша задача - ${title} -  список исполнителей ${(usersArr.length < 1) ? 'ПУСТО' : usersArr.join(',')}.\n\nСледите за изменениями в БОТЕ`
           
       
       
-      } else if (comprassionSteacker) {
-          messageFromUser = `НОВЫЙ СТАТУС!!!!\n\nЗадаче - ${title} - в колонке ${findColumn.title} был присвоен новый статус ${currentSteaker.name}.\n\nСледите за изменениями в БОТЕ`
-      } else {
-          messageFromUser = `Ваша задача - ${title} - была перемещена в ${findColumn.title}.\n\nСледите за изменениями в БОТЕ`
-      }
+    //   } else if (comprassionSteacker) {
+    //       messageFromUser = `НОВЫЙ СТАТУС!!!!\n\nЗадаче - ${title} - в колонке ${findColumn.title} был присвоен новый статус ${currentSteaker.name}.\n\nСледите за изменениями в БОТЕ`
+    //   } else {
+    //       messageFromUser = `Ваша задача - ${title} - была перемещена в ${findColumn.title}.\n\nСледите за изменениями в БОТЕ`
+    //   }
 
-    }
+    // }
 
 
+
+
+    // 
 
 
     const bot = await getBot()

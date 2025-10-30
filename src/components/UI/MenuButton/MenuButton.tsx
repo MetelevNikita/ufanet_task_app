@@ -1,5 +1,6 @@
 import { FC } from 'react'
-import Image, { StaticImageData } from 'next/image'
+import { motion } from 'motion/react'
+
 
 // style
 
@@ -25,7 +26,7 @@ const MenuButton: FC<MenuButtonProps> = ({ title, image, onClick, menuActive }) 
 
 
   return (
-    <div className={styles.menu_button_container} onClick={onClick}>
+    <motion.div className={styles.menu_button_container} onClick={onClick} whileHover={{scale: 1.05}}>
       <div className={styles.menu_button_wrapper}>
 
       <div className={styles.menu_button_image_container}>
@@ -39,7 +40,7 @@ const MenuButton: FC<MenuButtonProps> = ({ title, image, onClick, menuActive }) 
       <Col className={[(department === title) ? styles.menu_button_title_acitve : styles.menu_button_title, 'd-none d-sm-block'].join(' ')}>{title}</Col>
 
       </div>
-    </div>
+    </motion.div>
   )
 }
 

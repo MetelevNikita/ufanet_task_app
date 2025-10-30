@@ -41,7 +41,7 @@ const MyFile: FC<MyFileProps> = ({ title, placeholder, onChange, name, data }) =
 
     <div >
         <span className={styles.file_title}>{title}</span>
-        <motion.div className={styles.file_input} whileHover={{background: '#4f01ae', border: '1px solid #4f01ae00', color: 'white'}} whileTap={{scale: 1.05}}>
+        <motion.div className={styles.file_input} whileHover={{background: '#4f01ae', border: '1px solid #4f01ae00', color: 'white'}} whileTap={{scale: 1.01}}>
           
           <label htmlFor={'file'} className={styles.file_input_wrapper}>
           {placeholder}
