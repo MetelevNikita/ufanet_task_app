@@ -1,8 +1,8 @@
-export const getTask = async (endpoint: string) => {
+export const getTask = async () => {
   try {
 
 
-    const responce = await fetch(`/api/task/${endpoint}`, {
+    const responce = await fetch(`/api/task/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

@@ -7,46 +7,75 @@ const prisma = new PrismaClient();
 export const createDBTask = async (ygId: string, department: string, data: any) => {
   try {
 
+    const messageData = Object.entries(data).slice(7)
+    const currentMessageOBJ = Object.fromEntries(messageData)
+
 
     const databaseCard = {
       ygId: ygId,
       department: department,
-      ...data,
-      status: 'Входящие'
+      fio: data.fio,
+      subdivision: data.subdivision,
+      tgId: data.tgId,
+      branch: data.branch,
+      leader: data.leader,
+      type: data.type,
+      title: data.title,
+      deadline: data.deadline,
+      message: JSON.stringify(currentMessageOBJ, null, 3),
+      status: 'Входящие',
+      stage: ''
     }
 
     console.log(databaseCard)
 
-    if (department === 'PR отдел') {
-      const task = await prisma.taskPr.create({
-        data: databaseCard
-      })
 
-      if (!task) {
-        throw new Error('Ошибка создания задачи в базе данных');
-      }
+    const task = await prisma.task.create({
+      data: databaseCard
+    })
+    
 
-      return task;
-    } else if (department === 'Отдел дизайна') {
-
-        const task = await prisma.taskDesign.create({
-          data: databaseCard
-        })
-
-        console.log(task)
-  
-        if (!task) {
-          throw new Error('Ошибка создания задачи в базе данных');
-        }
-
-        return task
-    } else if (department === 'Интернет маркетинг') {
-      return `Отдел маркетинга`
-    } else if (department === 'Отдел рекламы') {
-      return `Отдел рекламы`
-    } else {
-      return {message: 'Отдел не найден', status: 500}
+    if (!task) {
+      throw new Error('Ошибка создания задачи в базе данных');
     }
+
+    return task
+
+
+    // if (department === 'PR отдел') {
+    //   const task = await prisma.taskPr.create({
+    //     data: databaseCard
+    //   })
+
+    //   if (!task) {
+    //     throw new Error('Ошибка создания задачи в базе данных');
+    //   }
+
+    //   return task;
+    // } else if (department === 'Отдел дизайна') {
+
+    //     const task = await prisma.taskDesign.create({
+    //       data: databaseCard
+    //     })
+
+    //     console.log(task)
+  
+    //     if (!task) {
+    //       throw new Error('Ошибка создания задачи в базе данных');
+    //     }
+
+    //     return task
+    // } else if (department === 'Интернет маркетинг') {
+    //   return `Отдел маркетинга`
+    // } else if (department === 'Отдел рекламы') {
+      
+    //   const task = await prisma.taskAdvertising.create({
+    //     data: databaseCard
+    //   })
+
+    // } else {
+    //   return {message: 'Отдел не найден', status: 500}
+    // }
 
 
 

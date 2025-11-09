@@ -21,9 +21,7 @@ interface MenuButtonProps {
 
 const MenuButton: FC<MenuButtonProps> = ({ title, image, onClick, menuActive }) => {
 
-
   const {department, setDepartment} = menuActive
-
 
   return (
     <motion.div className={styles.menu_button_container} onClick={onClick} whileHover={{scale: 1.05}}>

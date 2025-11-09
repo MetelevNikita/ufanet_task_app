@@ -19,6 +19,8 @@ import TopSideHorizontalMenu from '@/components/element/TopSideHorizontalMenu/To
 
 import PrForm from '@/components/element/forms/pr/PrForm'
 import DesignForm from '@/components/element/forms/design/DesignForm'
+import AdvertisingForms from '@/components/element/forms/advertising/AdvertisingForms'
+import MarketingForms from '@/components/element/forms/marketing/MarketingForm'
 
 // MODALS
 
@@ -81,14 +83,34 @@ const page = () => {
     switch (department) {
       case 'PR отдел':
         return <PrForm
-        departmentData={{department, setDepartment}}
-        modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
-        modalError={{modalSubmitError, setModalSubmitError}}
-        modalInfo={{modalBackInfo, setModalBackInfo}}
+            departmentData={{department, setDepartment}}
+            modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+            modalError={{modalSubmitError, setModalSubmitError}}
+            modalInfo={{modalBackInfo, setModalBackInfo}}
         />
       case 'Отдел дизайна':
         console.log('design')
-        return <DesignForm departmentData={{department, setDepartment}}/>
+        return <DesignForm
+            departmentData={{department, setDepartment}}
+            modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+            modalError={{modalSubmitError, setModalSubmitError}}
+            modalInfo={{modalBackInfo, setModalBackInfo}}
+        />
+
+      case 'Отдел рекламы':
+        return <AdvertisingForms
+            departmentData={{department, setDepartment}}
+            modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+            modalError={{modalSubmitError, setModalSubmitError}}
+            modalInfo={{modalBackInfo, setModalBackInfo}}
+        />
+      case 'Интернет маркетинг':
+        return <MarketingForms
+            departmentData={{department, setDepartment}}
+            modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+            modalError={{modalSubmitError, setModalSubmitError}}
+            modalInfo={{modalBackInfo, setModalBackInfo}}
+            />
     }
   }
 

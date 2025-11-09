@@ -53,17 +53,43 @@
 /*  */
 
 .search_status_author {
+  width: 100%;
+  height: max-content;
   font-size: 12px;
 }
 
 .search_status_title {
-    font-size: 12px;
+  width: 100%;
+  height: max-content;
+  font-size: 12px;
+}
+
+.search_status_stage {
+
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 5px;
+  color: white;
+
+  /*  */
+  margin-right: 20px;
+
+  /*  */
+
+  text-align: center;
+
 }
 
 .search_status_project {
-    font-size: 12px;
+  width: max-content;
+  height: max-content;
+  font-size: 12px;
 }
 
+
+
 .search_status_date {
-    font-size: 12px;
+  width: 100%;
+  height: max-content;
+  font-size: 12px;
 }

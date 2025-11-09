@@ -138,6 +138,7 @@ const LeftSideMenu: FC<LeftSideMenuProps> = ({ statusData, departmentData, nameD
   const [activeMenuDepartment, setActiveMenuDepartment] = useState<string>('')
   const [activeMenuStatus, setActiveMenuStatus] = useState<string>('')
 
+
   // filter state
   
   const { status, setStatus } = statusData
@@ -178,7 +179,7 @@ const LeftSideMenu: FC<LeftSideMenuProps> = ({ statusData, departmentData, nameD
                             setDepartment(item.label)
                             setActiveMenuDepartment(item.label)
                             }}
-                          menuActive={{activeMenuDepartment, setActiveMenuDepartment}}/>
+                          menuActive={{department, setDepartment}}/>
                       </Col>
                     )
                   })

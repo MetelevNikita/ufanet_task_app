@@ -1,7 +1,4 @@
-'use client'
-
-import React, { FC, useState, useEffect } from 'react'
-import Image from 'next/image'
+import { FC, useState, useEffect, useMemo } from 'react'
 
 // styles
 
@@ -15,81 +12,141 @@ import { Container, Row, Col } from 'react-bootstrap'
 
 import MyButton from '@/components/UI/MyButton/MyButton'
 import MyInput from '@/components/UI/MyInput/MyInput'
-import MySelect from '@/components/UI/MySelectMulti/MySelect'
+import MySelect from '@/components/UI/MySelect/MySelect'
+import MySelectMulti from '@/components/UI/MySelectMulti/MySelectMulti'
 import MyTextArea from '@/components/UI/MyTextArea/MyTextArea'
 import MyFile from '@/components/UI/MyFile/MyFile'
 
-// img
-
-import logo from '@/../public/logo_ufanet/logo_full.svg'
-
-// lib
-
-import { postTask } from '@/lib/postTask'
-
-// directions
+// db
 
 import directions from '@/database/direction.json'
 
 // types
 
-import { DesignFormType } from "@/types/types";
-import { MenuType } from '@/types/types'
+import { departmentType, MenuType } from '@/types/types'
 
-// selectors
+// lib
 
-const typeSelectorsArr: MenuType[] = [
-  {
-    id: 1,
-    label: 'Выберите тип проекта',
-    value: '',
-  },
-  {
-    id: 2,
-    label: 'Разработка с нуля',
-    value: 'new project',
-  },
-  {
-    id: 3,
-    label: 'Адаптация и внесение изменений в макет',
-    value: 'adaptation project',
-  },
-  {
-    id: 4,
-    label: 'Другое',
-    value: 'other',
+import { postTask } from '@/lib/postTask'
+
+// data
+
+import { typeSelectorArr } from '@/data/designData'
+
+// class
+
+ class MyField {
+
+    title: string
+    placeholder: string
+    type: string
+    name: string
+
+
+    constructor( title: string, placeholder: string, type: string, name: string ) {
+      this.title = title
+      this.placeholder = placeholder
+      this.type = type
+      this.name = name
+
+    }
+
+
+    createFiled(data: string, setData: any): React.ReactNode {
+
+      return  <Col md={12} className='mt-2 mb-2'>
+                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data}/>
+              </Col>
+    }
   }
-]
 
-const orientationSelectorsArr: MenuType[] = [
-  {
-    id: 1,
-    label: 'Выберите ориентацию макета',
-    value: '',
-  },
-  {
-    id: 2,
-    label: 'Вертикальный',
-    value: 'vertical',
-  },
-  {
-    id: 3,
-    label: 'Горизонтальный',
-    value: 'horizontal',
-  },
-  {
-    id: 4,
-    label: 'Круг',
-    value: 'circle',
-  },
-  {
-    id: 5,
-    label: 'Квадрат',
-    value: 'box',
+  class MySelector {
+    title: string
+    name: string
+    options: { label: string, value: string }[]
+
+    constructor(title: string, name: string, options: { label: string, value: string }[]) {
+      this.title = title
+      this.name = name
+      this.options = options
+    }
+
+    createSelector(data: string, setData: any): React.ReactNode {
+      return(
+            <Col md={12} className='mt-2 mb-2'>
+              <MySelect title={this.title} name={this.name} options={this.options} value={data} onChange={setData} />
+            </Col>
+            )
+    }
+    
   }
-  
-]
 
+  class MySelectorMulti {
+    title: string
+    name: string
+    options: {id: string | number, label: string, value: string, icon: string }[]
+
+    constructor(title: string, name: string, options: {id: string | number, label: string, value: string, icon: string }[]) {
+      this.title = title
+      this.name = name
+      this.options = options
+    }
+
+    createMultiSelector(data: any[], setData: any, remove: any): any {
+
+        return(
+          <Col md={12} className='mt-2 mb-2'>
+            <MySelectMulti title={this.title} name={this.name} options={this.options} onChange={setData} data={data} remove={remove}/>
+          </Col>
+        )
+
+    }
+  }
+
+  class MyFileField {
+    title: string
+    placeholder: string
+    name: string
+
+    constructor(title: string, placeholder: string, name: string) {
+      this.title = title
+      this.placeholder = placeholder
+      this.name = name
+    }
+
+    uploadFile(data: File, setData: any): React.ReactNode {
+      return(
+              <Col md={12} className='mt-2 mb-2'>
+                <MyFile title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} data={data}/>
+              </Col>
+            )
+    }
+  }
+
+  class MyTextAreaField {
+    title: string
+    placeholder: string
+    name: string
+
+    constructor(title: string, placeholder: string, name: string) {
+      this.title = title
+      this.placeholder = placeholder
+      this.name = name
+  }
+
+  createTextArea(data: string, setData: any): React.ReactNode {
+
+    return (
+            <Col md={12} className='mt-2 mb-2'>
+              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} />
+            </Col>
+            )
+  }
+
+}
+
+
+// selector arr
 
 const branchSelectorsArr: MenuType[] = [
   {
@@ -149,287 +206,95 @@ const branchSelectorsArr: MenuType[] = [
   },
 ]
 
-// class
-
-  class MyField {
-
-    title: string
-    placeholder: string
-    type: string
-    name: string
-
-
-    constructor( title: string, placeholder: string, type: string, name: string ) {
-      this.title = title
-      this.placeholder = placeholder
-      this.type = type
-      this.name = name
-
-    }
-
-
-    createFiled(data: string, setData: any): React.ReactNode {
-
-      return  <Col md={12}>
-                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={(e: any) => setData(e.target.value)} value={data}/>
-              </Col>
-    }
-  }
-
-  class MySelector {
-    title: string
-    name: string
-    options: { label: string, value: string }[]
-
-    constructor(title: string, name: string, options: { label: string, value: string }[]) {
-      this.title = title
-      this.name = name
-      this.options = options
-    }
-
-    createSelector(data: string, setData: any): React.ReactNode {
-      return(
-            <Col md={12}>
-              <MySelect title={this.title} name={this.name} options={this.options} value={data} onChange={(e: any) => {setData(e.target.value)}} />
-            </Col>
-            )
-    }
-    
-  }
-
-  class MyFileField {
-    title: string
-    placeholder: string
-    name: string
-
-    constructor(title: string, placeholder: string, name: string) {
-      this.title = title
-      this.placeholder = placeholder
-      this.name = name
-    }
-
-    uploadFile(data: File, setData: any): React.ReactNode {
-      return(
-              <Col md={12}>
-                <MyFile title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={(e: any) => {setData(e.target.files[0])}} data={data}/>
-              </Col>
-            )
-    }
-  }
-
-  class MyTextAreaField {
-    title: string
-    placeholder: string
-    name: string
-
-    constructor(title: string, placeholder: string, name: string) {
-      this.title = title
-      this.placeholder = placeholder
-      this.name = name
-  }
-
-  createTextArea(data: string, setData: any): React.ReactNode {
-
-    return (
-            <Col md={12}>
-              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={(e: any) => {setData(e.target.value)}} />
-            </Col>
-            )
-  }
-
-}
-
-
 // 
 
-interface DesignFormProps {
+
+interface AdvertisingFormsProps {
   departmentData: {
     department: string,
     setDepartment: (department: string) => void
+  },
+  modalSuccess: {
+    modalSubmitSuccess: boolean,
+    setModalSubmitSuccess: (e: boolean) => void
+  }
+  modalError: {
+    modalSubmitError: boolean,
+    setModalSubmitError: (e: boolean) => void
+  }
+  modalInfo:  {
+    modalBackInfo: boolean,
+    setModalBackInfo: (e: boolean) => void
   }
 }
 
+const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo }) => {
 
-const DesignForm: FC<DesignFormProps> = ({ departmentData }) => {
 
-  const {department, setDepartment} = departmentData
-  console.log(department)
+  // modals
+
+  const { modalSubmitSuccess, setModalSubmitSuccess } = modalSuccess
+  const { modalSubmitError, setModalSubmitError } = modalError
+  const { modalBackInfo, setModalBackInfo } = modalInfo
+
+  // 
 
   const [activeOther, setActiveOther] = useState(false)
-
-
-
-  const currentDepartment = directions.data.find((item: MenuType): Boolean=> {
-    return item.label === department
+  const [design, setDesign] = useState<any>({
   })
+
+
+  const { department, setDepartment } = departmentData
+
+  // 
+
+  const currentDepartment = useMemo(() => {
+    if (department) {
+      return directions.data.find((item: departmentType) : boolean => item.label === department)
+    }
+  }, [department])
 
 
   console.log(currentDepartment)
 
 
+  // type field
 
-  // 
+  const typeSelector = new MySelector('Тип заявки', 'type', typeSelectorArr)
 
-  const [typeProject, setTypeProject] = useState<string>('')
-  const [designTask, setDesignTask] = useState<DesignFormType>({
-    fio: '',
-    subdivision: '',
-    tgId: '',
-    branch: '',
-    leader: '',
-    department: currentDepartment?.label,
-    type: typeProject,
-    title: '',
-    description: '',
-    date: '',
-    target: '',
-    audience: '',
-    build: '',
-    size: '',
-    orientation: '',
-    future: '',
-    place: '',
-    file: null,
-    change: '',
-    deadline: '',
-    other: ''
-  })
+  // primary
 
 
+  const data = typeSelectorArr.find((type: any) => type.label === design.type)
+  const currentField = (!data) ? [] : data.field
 
 
-
-  // 
-
-
-  useEffect(() => {
-    if (typeProject) {
-      setDesignTask((prev: any) => ({
-        ...prev,
-        type: typeProject
-      }))
-    }
-  }, [typeProject])
-
-  // base field
-
-  const fioField = new MyField('ФИО', 'Введите ФИО', 'text', 'fio')
-  const subdivisionField = new MyField('Подразделение', 'Введите подразделение', 'text', 'subdivision')
-  const tgIdField = new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId')
-  const branchSelector = new MySelector('Филиал', 'branch', branchSelectorsArr)
-  const leaderField = new MyField('Лидер мероприятия', 'Введите лидера мероприятия', 'text', 'leader')
-
-
-  // field
-
-
-  const typeSelector = new MySelector('Тип проекта', 'type', typeSelectorsArr)
-
-  // 
-
-  const titleField = new MyField('Название проекта / мероприятия/ услуги', 'Введите название проекта', 'text', 'title')
-  const descriptionField = new MyField('Описание проекта/ мероприятия/ услуги', 'Введите описание проекта', 'text', 'description')
-  const dateField = new MyField('Дата мероприятия', 'Введите дату начала проекта', 'date', 'date')
-  const targetField = new MyField('Цель проекта', 'Введите цель проекта', 'text', 'target')
-  const audienceField = new MyField('Целевая аудитория макета', 'Аудиторию проекта', 'text', 'audience')
-  const buildField = new MyField('Что необходимо сделать?', 'Введите что необходимо сделать', 'text', 'build')
-  const sizeField = new MyField('Размер макета', 'А4, А5 и тд Если размер нестандартный - укажите в формате ШИРИНА*ДЛИНА ', 'text', 'size')
-
-  // selector
-
-  const orientationSelector = new MySelector('Ориентация макета', 'orientation', orientationSelectorsArr)
-
-  //
+  // POST FN
   
-  const futureField = new MyField('Каким ты видишь будущий макет?', 'Где будет размещаться макет?', 'text', 'future')
-  const placeField = new MyField('Место размещения макета', 'Введите место размещения макета', 'text', 'place')
-  const fileField = new MyFileField('Прикрепите фотографию места размещения макета', 'Выбрать фото', 'file')
-  const changeField = new MyField('Что нужно исправить?', 'Введите изменения', 'text', 'change')
-  const deadlineField = new MyField('Сроки выполнения', 'Введите сроки выполнения', 'date', 'deadline')
-  const otherField = new MyTextAreaField('Другое', 'Введите другие данные', 'other')
-
-
-  // 
-
-
-  const newProject = () => {
-    return (
-      <Col md={12}>
-        {titleField.createFiled(designTask.title, (e: any) => {setDesignTask({...designTask, title: e})})}
-        {descriptionField.createFiled(designTask.description, (e: any) => {setDesignTask({...designTask, description: e})})}
-        {dateField.createFiled(designTask.date, (e: any) => {setDesignTask({...designTask, date: e})})}
-        {targetField.createFiled(designTask.target, (e: any) => {setDesignTask({...designTask, target: e})})}
-        {audienceField.createFiled(designTask.audience, (e: any) => {setDesignTask({...designTask, audience: e})})}
-        {buildField.createFiled(designTask.build, (e: any) => {setDesignTask({...designTask, build: e})})}
-        {sizeField.createFiled(designTask.size, (e: any) => {setDesignTask({...designTask, size: e})})}
-        {orientationSelector.createSelector(designTask.orientation, (e: any) => {setDesignTask({...designTask, orientation: e})})}
-        {futureField.createFiled(designTask.future, (e: any) => {setDesignTask({...designTask, future: e})})}
-        {placeField.createFiled(designTask.place, (e: any) => {setDesignTask({...designTask, place: e})})}
-        {fileField.uploadFile(designTask.file, (e: any) => {setDesignTask({...designTask, file: e})})}
-        {deadlineField.createFiled(designTask.deadline, (e: any) => {setDesignTask({...designTask, deadline: e})})}
-
-        <Col md={12} className='mt-3 mb-3'>
-
-          <MyButton text={'Добавить что то еще....'} onClick={() => {setActiveOther(prev => !prev)}} type={'button'}/>
-
-        </Col>
-
-        {
-          (activeOther) && otherField.createTextArea(designTask.other, (e: any) => {setDesignTask({...designTask, other: e})})
+  
+   const submitMessage = async (message: any) => {
+      try {
+  
+  
+  
+        const data = await postTask(message)
+        console.log(data)
+  
+        if (data) {
+          if (data.status === 'success') return setModalSubmitSuccess(true)
+          if (data.status === 'abort') return setModalSubmitError(true)
         }
-
-      </Col>
-    )
-  }
-
-  const adaptationProject = () => {
-    return (
-      <Col md={12}>
-        {titleField.createFiled(designTask.title, (e: any) => {setDesignTask({...designTask, title: e})})}
-        {fileField.uploadFile(designTask.file, (e: any) => {setDesignTask({...designTask, file: e})})}
-        {changeField.createFiled(designTask.change, (e: any) => {setDesignTask({...designTask, change: e})})}
-        {deadlineField.createFiled(designTask.deadline, (e: any) => {setDesignTask({...designTask, deadline: e})})}
-
-        <Col md={12} className='mt-3 mb-3'>
-
-          <MyButton text={'Добавить что то еще....'} onClick={() => {setActiveOther(prev => !prev)}} type={'button'}/>
-
-        </Col>
-
-        {
-          (activeOther) && otherField.createTextArea(designTask.other, (e: any) => {setDesignTask({...designTask, other: e})})
+  
+  
+        
+      } catch (error: Error | unknown) {
+        if (error instanceof Error) {
+          console.error(error.message)
+          throw new Error(error.message);
         }
-      </Col>
-    )
-  }
-
-  const otherProject = () => {
-    return (
-      <Col md={12}>
-        {titleField.createFiled(designTask.title, (e: any) => {setDesignTask({...designTask, title: e})})}
-        {sizeField.createFiled(designTask.size, (e: any) => {setDesignTask({...designTask, size: e})})}
-        {orientationSelector.createSelector(designTask.orientation, (e: any) => {setDesignTask({...designTask, orientation: e})})}
-        {futureField.createFiled(designTask.future, (e: any) => {setDesignTask({...designTask, future: e})})}
-        {placeField.createFiled(designTask.place, (e: any) => {setDesignTask({...designTask, place: e})})}
-        {fileField.uploadFile(designTask.file, (e: any) => {setDesignTask({...designTask, file: e})})}
-        {deadlineField.createFiled(designTask.deadline, (e: any) => {setDesignTask({...designTask, deadline: e})})}
-      </Col>
-    )
-  }
-
-  // end
-
-
-  const currentSelectorProject = (data: string) => {
-    switch (data) {
-      case 'Разработка с нуля':
-        return newProject()
-      case 'Адаптация и внесение изменений в макет':
-        return adaptationProject()
-      case 'Другое':
-        return otherProject()
+      }
     }
-  }
+
 
 
 
@@ -437,10 +302,11 @@ const DesignForm: FC<DesignFormProps> = ({ departmentData }) => {
 
     <Container>
       <Row>
+
         <div>
           <div>
-                <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-4'>
 
+                <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-4'>
                   <Col md={12}>
 
                     <div className={styles.title}>
@@ -452,75 +318,133 @@ const DesignForm: FC<DesignFormProps> = ({ departmentData }) => {
                 </Row>
 
 
-
-                <form action={postTask}>
-
-                  {/*  */}
+                {/*  */}
 
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {fioField.createFiled(designTask.fio, (e: any) => {setDesignTask({...designTask, fio: e})})}
-                      {subdivisionField.createFiled(designTask.subdivision, (e: any) => {setDesignTask({...designTask, subdivision: e})})}
-                      {tgIdField.createFiled(designTask.tgId, (e: any) => {setDesignTask({...designTask, tgId: e})})}
-                      {branchSelector.createSelector(designTask.branch, (e: any) => {setDesignTask({...designTask, branch: e})})}
-                      {leaderField.createFiled(designTask.leader, (e: any) => {setDesignTask({...designTask, leader: e})})}
+                      {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(design.fio, (e: any) => {setDesign({...design, fio: e.target.value})})}
+                      {new MyField('Подразделение', 'Введите подразделение', 'text', 'subdivision').createFiled(design.subdivision, (e: any) => {setDesign({...design, subdivision: e.target.value})})}
+                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(design.tgId, (e: any) => {setDesign({...design, tgId: e.target.value})})}
+                      {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(design.branch, (e: any) => {setDesign({...design, branch: e.target.value})})}
+                      {new MyField('Лидер мероприятия', 'Введите лидера мероприятия', 'text', 'leader').createFiled(design.leader, (e: any) => {setDesign({...design, leader: e.target.value})})}
                     
                     </Col>
                   </Row>
 
+
+                  {
+                    typeSelector.createSelector(design.type, (e: any) => {setDesign({...design, type: e.target.value})})
+                  }
+
+                
+
+                  {
+                    currentField.map((field: any, index: number) => {
+                      return (
+                        <Row className='d-flex flex-row justify-content-center align-items-center' key={index}>
+                          <Col md={12}>
+
+                            {(() => {
+                              switch (field.typeField) {
+                                case 'selector':
+                                  return new MySelector(field.title, field.name, field.options).createSelector(
+                                    design[field.name],
+                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.value }) }
+                                  );
+                                case 'selector_multi':
+                                  return new MySelectorMulti(field.title, field.name, field.options).createMultiSelector(
+                                      design[field.name],
+                                      (e: any) => {
+                                        setDesign((prev: any) => (
+                                          {...prev, [field.name]: Array.from(new Set([...(prev[field.name] || []), e.target.value]))}
+                                        ))
+                                      },
+                                      (title: any) => {
+                                        setDesign((prev: any) => (
+                                          {...prev, [field.name]: prev[field.name].filter((item: any) => item !== title)}
+                                        ))
+                                      })
+                                case 'file':
+                                  return new MyFileField(field.title, field.placeholder, field.name).uploadFile(
+                                    design[field.name],
+                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.files })}
+                                  );
+                                case 'area':
+                                  return new MyTextAreaField(field.title, field.placeholder, field.name).createTextArea(
+                                    design[field.name],
+                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.value }) }
+                                  );
+                                case 'text':
+                                  return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
+                                    design[field.name],
+                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.value }) }
+                                  );
+                                case 'date':
+                                  return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
+                                    design[field.name],
+                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.value }) }
+                                  );
+                                default:
+                                  return (
+                                    <div>
+                                      <div></div>
+                                    </div>
+                                  );
+                              }
+                            })()}
+                          
+                          </Col>
+                        </Row>
+                      )
+                    })
+                  }
+
+
+                  <Col md={12} className='mt-3 mb-3'>
+
+                    <MyButton text={'Добавить что то еще....'} onClick={() => {setActiveOther(prev => !prev)}} type={'button'}/>
+
+                  </Col>
+
+
+                  {
+                    (activeOther) && new MyTextAreaField('Дополнительно', 'Что ещё важно учесть?', 'extra').createTextArea(design.other, (e: any) => {setDesign({...design, other: e.target.value})})
+                  }
+
+
+
+
                   {/*  */}
 
-                  <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-3'>
-                    <Col md={12}>
 
-                      {typeSelector.createSelector(typeProject, (e: any) => {setTypeProject(e)})}
+                  <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                        <Col className='mb-3' md={6}>
+                          <MyButton
+                            text={'Создать заявку'}
+                            onClick={() => {
+                              submitMessage(design)
+                            }}
+                            type={'button'}
+                          />
+                        </Col>
 
-                    </Col>
-                  </Row>
-
-                  {/*  */}
-
-
-                    <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-3'>
-                      <Col md={12}>
-                        {currentSelectorProject(typeProject)}
-                      </Col>
+                        <Col className='mb-3' md={6}>
+                          <MyButton
+                            text={'На главную'}
+                            onClick={() => {window.location.href = '/'}}
+                            type={'button'}
+                          />
+                        </Col>
                     </Row>
-
-
-                  {/*  */}
-
-
-
-                  <Row className='d-flex flex-row justify-content-center align-items-center'>
-                      <Col className='mb-3' md={6}>
-                        <MyButton
-                          text={'Создать заявку'}
-                          onClick={() => {console.log('succees')
-                          }}
-                          type={'submit'}
-                        />
-                      </Col>
-
-                      <Col className='mb-3' md={6}>
-                        <MyButton
-                          text={'На главную'}
-                          onClick={() => {window.location.href = '/'}}
-                          type={'button'}
-                        />
-                      </Col>
-                  </Row>
-
-                </form>
 
           </div>
         </div>
+
       </Row>
-      
     </Container>
 
   )
 }
 
-export default DesignForm
+export default AdvertisingForms

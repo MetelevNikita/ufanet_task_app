@@ -44,6 +44,25 @@ export type DesignFormType = {
 
 // UI types
 
+
+
+export type departmentType = {
+  id: string | number,
+  label: string,
+  value: string
+  icon: string | StaticImageData
+}
+
+
+export type MySelectType = {
+  id: string | number,
+  value: string,
+  label: string,
+  icon: any,
+}
+
+
+
 export type SelectType = {
   id: string | number
   value: string,

@@ -18,9 +18,9 @@ interface MyFileProps {
   title: string,
   placeholder: string,
   value: File | any,
-  onChange: (e: any) => void,
+  onChange: (e: any) => any,
   name: string
-  data: File | null
+  data: File | any
 
 
 }
@@ -28,14 +28,12 @@ interface MyFileProps {
 const MyFile: FC<MyFileProps> = ({ title, placeholder, onChange, name, data }) => {
 
 
-  
 
-  const file = (data === null) ?  '' : data
-  console.log(file)
+  const files = (!data) ? [] : Array.from(data).map((item: any) => {
+    return {img: URL.createObjectURL(item), name: item.name}
+  })
+  console.log(files)
 
-  const image = (file) ? URL.createObjectURL(file as any) : ''
-  console.log(image)
-  
 
   return (
 
@@ -43,31 +41,39 @@ const MyFile: FC<MyFileProps> = ({ title, placeholder, onChange, name, data }) =
         <span className={styles.file_title}>{title}</span>
         <motion.div className={styles.file_input} whileHover={{background: '#4f01ae', border: '1px solid #4f01ae00', color: 'white'}} whileTap={{scale: 1.01}}>
           
-          <label htmlFor={'file'} className={styles.file_input_wrapper}>
+          <label htmlFor={name} className={styles.file_input_wrapper}>
           {placeholder}
           <Image className={styles.input_file_icon} src={icon} alt={'icon'} />
         </label></motion.div>
         <input
           className={styles.file}
-          type="file" id={'file'}
+          type="file" id={name}
           onChange={onChange}
           name={name}
+          multiple
         />
 
-        <div className={styles.result_wrapper}>
-            {
-              (!data?.name) ? <></> : <span className={styles.file_insert}>Выбран Файл - {data?.name}</span>
-            }
+        <div className={styles.file_container}>
 
-            {
+          {
 
-              (image) && (
-                <div className={styles.result_image_wrapper}><Image src={image} alt='image' width={100} height={100}/></div>
+            (data) && files.map((item: any, index: number) => {
+
+              console.log(item)
+
+              return (
+                <div className={styles.file_wrapper} key={index+1}>
+                  <span className={styles.file_insert}>Выбран Файл - {item.name}</span>
+                  <div className={styles.result_image_wrapper}><Image src={item.img} alt='image' width={100} height={100}/></div>
+                </div>
               )
+            })
 
-            }
+          }
+
         </div>
 
+       
 
     </div>
 

@@ -18,31 +18,62 @@ datasource db {
 
 
 
-model TaskPr {
-  id Int @id @default(autoincrement())
-  ygId String
-  department String
-  product String
-  event String? 
-  fio String
-  subdivision String
-  tgId String
-  branch String
-  title String?
-  description String?
-  target String?
-  build String?
-  leader String?
-  place String?
-  site String?
-  participants String?
-  deadline  String?
-  status String 
-  createAt DateTime @default(now())
-  updateAt DateTime @default(now())
-}
+// model TaskPr {
+//   id Int @id @default(autoincrement())
+//   ygId String
+//   department String
+//   product String
+//   event String? 
+//   fio String
+//   subdivision String
+//   tgId String
+//   branch String
+//   title String?
+//   description String?
+//   target String?
+//   build String?
+//   leader String?
+//   place String?
+//   site String?
+//   participants String?
+//   deadline  String?
+//   status String 
+//   createAt DateTime @default(now())
+//   updateAt DateTime @default(now())
+// }
 
-model TaskDesign {
+// model TaskDesign {
+//   id Int @id @default(autoincrement())
+//   ygId String
+//   department String
+//   fio String
+//   subdivision String
+//   tgId String
+//   branch String
+//   leader String
+//   type String
+//   title String?
+//   description String?
+//   date String?
+//   target String?
+//   audience String?
+//   build String?
+//   size String?
+//   orientation String?
+//   future String?
+//   place String?
+//   file String?
+//   change String?
+//   deadline String?
+//   other String?
+//   status String 
+//   createAt DateTime @default(now())
+//   updateAt DateTime @default(now())
+
+// }
+
+
+model Task {
   id Int @id @default(autoincrement())
   ygId String
   department String
@@ -52,22 +83,10 @@ model TaskDesign {
   branch String
   leader String
   type String
-  title String?
-  description String?
-  date String?
-  target String?
-  audience String?
-  build String?
-  size String?
-  orientation String?
-  future String?
-  place String?
-  file String?
-  change String?
-  deadline String?
-  other String?
-  status String 
-  createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  title String
+  deadline String
+  message String
+  status String
+  stage String
 
 }

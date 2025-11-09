@@ -23,7 +23,6 @@ export const createTGTask = async (department: string, data: any, descriptionTas
             [
               { text: 'Согласовать', callback_data: buildCB('approve', department, id.toString())},
               { text: 'Отклонить', callback_data: buildCB('reject', department, id.toString())},
-              { text: 'Согласовать с замечаниями', callback_data: buildCB('comment', department, id.toString())}
             ]
           ]
         }

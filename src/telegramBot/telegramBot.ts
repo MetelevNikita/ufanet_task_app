@@ -107,9 +107,6 @@ export const getBot = async () => {
 
         bot.on('callback_query', async (query) => {
 
-
-
-  
           const chatId = query.message?.chat.id as number;
           const messageId = query.message?.message_id as number;
 
@@ -140,15 +137,8 @@ export const getBot = async () => {
                 message_id: messageId
               });
 
-          } else if (status === 'comment') {
-              await sendAnswerMessage(status, department, id)
-              await bot.editMessageText(`Заявка #${query.id}: ❓ ЗАМЕЧАНИЯ!!!!`, {
-                chat_id: chatId,
-                message_id: messageId
-              });
+          } 
               
-          }
-
 
         })
 

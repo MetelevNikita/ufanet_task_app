@@ -64,6 +64,7 @@ const page: FC = () => {
     setPath(pathname)
   }, [])
 
+  
 
 
   useEffect(() => {
@@ -77,12 +78,10 @@ const page: FC = () => {
     }
 
 
-
-
     const getFilterTasks = async () => {
 
-      const data = await getTask(currentDepartment.value)
-
+      const data = await getTask()
+      
       let filter = data
 
       if (department) {
@@ -93,6 +92,11 @@ const page: FC = () => {
 
       if (status) {
         filter = filter.filter((item: {status: string}) => {
+
+          if (status === 'У исполнителя') {
+            return item.status !== 'Входящие' && item.status !== 'Согласовано' && item.status !== 'Отклонено' && item.status !== 'Замечания' && item.status !== 'Готово'
+          }
+
           return item.status === status
         })
       }
@@ -103,18 +107,13 @@ const page: FC = () => {
         })
       }
 
-
       setTasks(filter)
-
-
  
     }
 
     getFilterTasks()
 
   }, [status, department, name])
-
-
 
 
 
@@ -147,6 +146,9 @@ const page: FC = () => {
     </Col>
 
 
+ 
+
+
     {/*  */}
 
 
@@ -176,7 +178,7 @@ const page: FC = () => {
               tasks.map((task: any, index: number): React.ReactNode => {
                 return (
                   <Col className='mb-2 mt-3' key={index+1}>
-                    <SearchElement status={task.status} title={task.title} date={task.deadline} department={task.department} author={task.fio}/>
+                    <SearchElement status={task.status} title={task.title} date={task.deadline} department={task.department} author={task.fio} stage={(task.stage === '') ? '' : task.stage}/>
                   </Col>
                   )
                 }

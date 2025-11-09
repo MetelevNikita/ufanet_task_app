@@ -38,31 +38,14 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     const {status, department} = await req.json();
 
-    let getTask
-
-
-    //  get TASK from ID
-
-    if (department === 'PR отдел') {
-      getTask = await prisma.taskPr.findUnique({
+    let getTask = await prisma.task.findUnique({
         where: {
           id: Number(id)
         }
       })
 
-    } else if (department === 'Отдел дизайна') {
-      getTask = await prisma.taskDesign.findUnique({
-        where: {
-          id: Number(id)
-        }
-      })
-    } else {
-      getTask = ''
-      return NextResponse.json(
-        { message: 'Отдел не указан' },
-        { status: 400 }
-      );
-    }
+
+      console.log('ЗАДАЧА ', getTask)
 
 
     if (!getTask) {
@@ -75,6 +58,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     const currentProject = projects.content.find((project: {title: string}) => {
       return project.title === getTask.department
     })
+
+    console.log('ПРОЕКТ ', currentProject)
 
 
     // 
@@ -180,50 +165,29 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
         console.log('status', status)
 
-        if (department === 'PR отдел') {
-          const changeTaskStatus = await prisma.taskPr.update({
-            where: { id: Number(id) },
-            data: { status }
-          })
-
-          if (!changeTaskStatus) {
-            return NextResponse.json(
-              { message: 'Ошибка обновления статуса задачи' },
-              { status: 500 }
-            );
+        const changeTaskStatus = await prisma.task.update({
+          where: {
+            id: Number(id)
+          },
+          data: {
+            status
           }
+        })
 
-          return NextResponse.json({message: 'Status pr change'}, { status: 200 });
-        } else if (department === 'Отдел дизайна') {
-          console.log('design')
-          const changeTaskStatus = await prisma.taskDesign.update({
-            where: { id: Number(id) },
-            data: { status }
-          })
 
-          if (!changeTaskStatus) {
-            return NextResponse.json(
-              { message: 'Ошибка обновления статуса задачи' },
-              { status: 500 }
-            );
-          }
-          return NextResponse.json({message: 'Status design change'}, { status: 200 });
-        } else if (department === 'Интернет маркетинг') {
-          console.log('merketing')
-          return NextResponse.json({message: 'Status merketing change'}, { status: 200 });
-        } else if (department === 'Отдел рекламы') {
-          console.log('advertising')
-          return NextResponse.json({message: 'Status advertising change'}, { status: 200 });
-        } else {
+        if (!changeTaskStatus) {
           NextResponse.json(
-            { message: 'Отдел не найден' },
-            { status: 404 }
-          );
+            { message: 'Ошибка изменения статуса задачи' },
+          )
         }
 
 
+        return NextResponse.json({
+          message: 'Статус задачи изменен',
+        })
 
 
+      
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
