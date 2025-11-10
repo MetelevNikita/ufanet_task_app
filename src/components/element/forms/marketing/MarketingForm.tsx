@@ -225,10 +225,14 @@ interface MarketingFormsProps {
   modalInfo:  {
     modalBackInfo: boolean,
     setModalBackInfo: (e: boolean) => void
+  },
+  modalDownload: {
+    modalInfoDownload: boolean,
+    setModalInfoDownload: (e: boolean) => void
   }
 }
 
-const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo }) => {
+const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
 
 
   // modals
@@ -236,6 +240,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
   const { modalSubmitSuccess, setModalSubmitSuccess } = modalSuccess
   const { modalSubmitError, setModalSubmitError } = modalError
   const { modalBackInfo, setModalBackInfo } = modalInfo
+  const { modalInfoDownload, setModalInfoDownload } = modalDownload
 
   // 
 
@@ -278,8 +283,16 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
         console.log(data)
   
         if (data) {
-          if (data.status === 'success') return setModalSubmitSuccess(true)
-          if (data.status === 'abort') return setModalSubmitError(true)
+          if (data.status === 'success') {
+            setModalInfoDownload(false)
+            setModalSubmitSuccess(true)
+            return 
+          }
+          if (data.status === 'abort') {
+            setModalInfoDownload(false)
+            setModalSubmitError(true)
+            return
+          }
         }
   
   

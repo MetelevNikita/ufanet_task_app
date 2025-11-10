@@ -33,15 +33,9 @@ const socialArr = [
     id: 1,
     title: 'telegram',
     icon: tgIcon,
-    link: ''
+    link: 'https://t.me/MetelevNikita'
   },
 
-  {
-    id: 2,
-    title: 'whatsapp',
-    icon: waIcon,
-    link: ''
-  }
 ]
 
 
@@ -75,6 +69,13 @@ const Header: FC<HeaderProps>  = () => {
 
         <Col md={5} xs={6} className='d-flex justify-content-end align-items-center'>
 
+
+
+          <div className={styles.info_wrapper}>
+
+
+          <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={[styles.header_info_title, 'd-flex d-none d-sm-block'].join(' ')}>Что то не работает? Пишите.</motion.div>
+
           {
           
             socialArr.map((item: any, index: number): React.ReactNode => {
@@ -82,6 +83,8 @@ const Header: FC<HeaderProps>  = () => {
             })
 
           }
+
+          </div>
 
         </Col>
 

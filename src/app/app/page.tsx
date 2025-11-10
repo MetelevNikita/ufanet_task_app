@@ -34,6 +34,7 @@ import { BsCheckCircle } from "react-icons/bs";
 import { BsInfoCircle } from "react-icons/bs";
 import { BsQuestionCircle } from "react-icons/bs";
 import { BsXCircle } from "react-icons/bs";
+import { BsAlarm } from "react-icons/bs";
 
 
 // 
@@ -48,6 +49,7 @@ const page = () => {
   const [modalSubmitSuccess, setModalSubmitSuccess] = useState<boolean>(false)
   const [modalSubmitError, setModalSubmitError] = useState<boolean>(false)
   const [modalBackInfo, setModalBackInfo] = useState<boolean>(false)
+  const [modalInfoDownload, setModalInfoDownload] = useState<boolean>(false)
 
   // 
 
@@ -87,6 +89,7 @@ const page = () => {
             modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
             modalError={{modalSubmitError, setModalSubmitError}}
             modalInfo={{modalBackInfo, setModalBackInfo}}
+            modalDownload={{modalInfoDownload, setModalInfoDownload}}
         />
       case 'Отдел дизайна':
         console.log('design')
@@ -95,6 +98,7 @@ const page = () => {
             modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
             modalError={{modalSubmitError, setModalSubmitError}}
             modalInfo={{modalBackInfo, setModalBackInfo}}
+            modalDownload={{modalInfoDownload, setModalInfoDownload}}
         />
 
       case 'Отдел рекламы':
@@ -103,6 +107,7 @@ const page = () => {
             modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
             modalError={{modalSubmitError, setModalSubmitError}}
             modalInfo={{modalBackInfo, setModalBackInfo}}
+            modalDownload={{modalInfoDownload, setModalInfoDownload}}
         />
       case 'Интернет маркетинг':
         return <MarketingForms
@@ -110,6 +115,7 @@ const page = () => {
             modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
             modalError={{modalSubmitError, setModalSubmitError}}
             modalInfo={{modalBackInfo, setModalBackInfo}}
+            modalDownload={{modalInfoDownload, setModalInfoDownload}}
             />
     }
   }
@@ -119,12 +125,11 @@ const page = () => {
  <Container>
       <Row className='d-flex flex-row'>
 
-      
+
         {/* Modal */}
 
         <Row className='d-flex flex-row'>
           <Col md={12} className='d-flex justify-content-center align-items-center'>
-
 
           {
             (modalBackInfo) && (
@@ -144,9 +149,6 @@ const page = () => {
                 />
             )
           }
-
-
-
 
           {
             (modalSubmitSuccess) && (
@@ -172,6 +174,13 @@ const page = () => {
                 modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
                 modalError={{modalSubmitError, setModalSubmitError}}
               />
+            )
+          }
+
+
+          {
+            (modalInfoDownload) && (
+              <ModalInfo title={'Данные загружаются. Ожидайте...'} image={<BsAlarm style={{width: '60px', color: '#FC9B32'}}/>} />
             )
           }
 

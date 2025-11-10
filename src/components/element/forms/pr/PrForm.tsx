@@ -224,10 +224,14 @@ interface AdvertisingFormsProps {
   modalInfo:  {
     modalBackInfo: boolean,
     setModalBackInfo: (e: boolean) => void
+  },
+  modalDownload: {
+    modalInfoDownload: boolean,
+    setModalInfoDownload: (e: boolean) => void
   }
 }
 
-const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo }) => {
+const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
 
 
   // modals
@@ -235,6 +239,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   const { modalSubmitSuccess, setModalSubmitSuccess } = modalSuccess
   const { modalSubmitError, setModalSubmitError } = modalError
   const { modalBackInfo, setModalBackInfo } = modalInfo
+  const { modalInfoDownload, setModalInfoDownload } = modalDownload
 
   // 
 
@@ -274,13 +279,21 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
    const submitMessage = async (message: any) => {
       try {
 
-
+        setModalInfoDownload(true)
         const data = await postTask(message)
         console.log(data)
   
         if (data) {
-          if (data.status === 'success') return setModalSubmitSuccess(true)
-          if (data.status === 'abort') return setModalSubmitError(true)
+          if (data.status === 'success') {
+            setModalInfoDownload(false)
+            setModalSubmitSuccess(true)
+            return 
+          }
+          if (data.status === 'abort') {
+            setModalInfoDownload(false)
+            setModalSubmitError(true)
+            return
+          }
         }
   
   

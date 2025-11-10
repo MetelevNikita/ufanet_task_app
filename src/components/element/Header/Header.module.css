@@ -17,6 +17,26 @@
 }
 
 
+.info_wrapper {
+  display: flex;
+  align-items: center;
+
+  /*  */
+
+  cursor: pointer;
+}
+
+.header_info_title {
+  font-size: 14px;
+  font-weight: 200;
+
+  /*  */
+
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+
 /*  */
 
 

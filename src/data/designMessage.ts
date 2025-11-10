@@ -33,11 +33,11 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('Целевая аудитория макета:', data.audience) +
       row('Что требуется разработать?:', data.what_to_make) +
       row('Размер макета:', data.size) +
-      row('Ориентация:', '-' + ' ' + data.orientation_direction) +
-      row('Форма:', '-' + ' ' + data.orientation_shape) +
+      row('Ориентация:', data.orientation_direction) +
+      row('Форма:', data.orientation_shape) +
       row('Каким ты видишь будущий макет?:', data.vision) +
       row('Где будет размещаться макет?:', data.placement) +
-      row('Фотография места размещения:', '-' + ' ' + data.place_file) +
+      row('Фотография места размещения:', data.place_file) +
       row('Желаемая дата готовности макета:', data.deadline) +
       row('Имя фамилия заказчика макета:', data.client_name) +
       row('Номер телефона заказчика макета:', data.client_phone) +
@@ -53,11 +53,11 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('Целевая аудитория макета:', data.audience, '\n') +
       row('Что требуется разработать?:', data.what_to_make, '\n') +
       row('Размер макета:', data.size, '\n') +
-      row('Ориентация:', '-' + ' ' + data.orientation_direction, '\n') +
-      row('Форма:', '-' + ' ' + data.orientation_shape, '\n') +
+      row('Ориентация:', data.orientation_direction, '\n') +
+      row('Форма:', data.orientation_shape, '\n') +
       row('Каким ты видишь будущий макет?:', data.vision, '\n') +
       row('Где будет размещаться макет?:', data.placement, '\n') +
-      row('Фотография места размещения:', '-' + ' ' + data.place_file, '\n') +
+      row('Фотография места размещения:', data.place_file, '\n') +
       row('Желаемая дата готовности макета:', data.deadline, '\n') +
       row('Имя фамилия заказчика макета:', data.client_name, '\n') +
       row('Номер телефона заказчика макета:', data.client_phone, '\n') +
@@ -83,7 +83,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
 
     const bodyTG =
       row('Название мероприятия / проекта / услуги:', data.title, '\n') +
-      row('Исходный файл:', '-' + ' ' + data.target_file, '\n') +
+      row('Исходный файл:', data.target_file, '\n') +
       row('Что нужно исправить?:', data.changes, '\n') +
       row('Желаемая дата готовности макета:', data.deadline, '\n') +
       row('Имя фамилия заказчика макета:', data.client_name, '\n') +
@@ -100,22 +100,22 @@ export const designMessage = async (department: string, data: any): Promise<{mes
     const bodyYG =
       row('Что требуется разработать?:', data.what_to_make) +
       row('Размер макета:', data.size) +
-      row('Ориентация:', '-' + ' ' + data.orientation_direction) +
-      row('Форма:', '-' + ' ' + data.orientation_shape) +
+      row('Ориентация:', data.orientation_direction) +
+      row('Форма:', data.orientation_shape) +
       row('Каким ты видишь будущий макет?:', data.vision) +
       row('Где будет размещаться макет?:', data.placement) +
-      row('Фотография места размещения:', '-' + ' ' + data.place_file) +
+      row('Фотография места размещения:', data.place_file) +
       row('Желаемая дата готовности макета:', data.deadline) +
       row('Дополнительно:', data.extra);
 
     const bodyTG =
       row('Что требуется разработать?:', data.what_to_make, '\n') +
       row('Размер макета:', data.size, '\n') +
-      row('Ориентация:', '-' + ' ' + data.orientation_direction, '\n') +
-      row('Форма:', '-' + ' ' + data.orientation_shape, '\n') +
+      row('Ориентация:', data.orientation_direction, '\n') +
+      row('Форма:', data.orientation_shape, '\n') +
       row('Каким ты видишь будущий макет?:', data.vision, '\n') +
       row('Где будет размещаться макет?:', data.placement, '\n') +
-      row('Фотография места размещения:', '-' + ' ' + data.place_file, '\n') +
+      row('Фотография места размещения:', data.place_file, '\n') +
       row('Желаемая дата готовности макета:', data.deadline, '\n') +
       row('Дополнительно:', data.extra, '\n');
 

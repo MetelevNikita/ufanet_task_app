@@ -322,46 +322,5 @@ export const typeSelectorArr = [
       { id: 7, title: 'Схема опроса', placeholder: 'Прикрепите файл или перечислите вопросы', typeField: 'file', type: 'file', name: 'schema_file' },
       { id: 8, title: 'Желаемая дата реализации', placeholder: 'Дата выполнения', typeField: 'date', type: 'date', name: 'deadline' }
     ]
-  },
-
-
-
-
-  // TEST TEST УДЛИТЬ!!!!
-
-
-
-  // 4) ТЗ на запуск рекламы
-  {
-    id: 12,
-    label: 'TEST!!!!!',
-    value: 'test!!!!!',
-    field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
-      {
-        id: 3,
-        title: 'На какой площадке запустить рекламу?',
-        placeholder: 'Можно выбрать несколько вариантов',
-        typeField: 'selector_multi',
-        type: 'selector',
-        name: 'platforms',
-        options: [
-          { id: 1, label: 'Яндекс.Директ', value: 'yandex_direct', icon: '' },
-          { id: 2, label: 'VK Реклама', value: 'vk_ads', icon: '' },
-          { id: 3, label: 'МаркетПлатформа', value: 'market_platform', icon: '' },
-          { id: 4, label: 'Telegram Ads', value: 'telegram_ads', icon: '' },
-          { id: 5, label: 'Авито', value: 'avito', icon: '' },
-          { id: 6, label: 'MyTarget / Одноклассники', value: 'mytarget_ok', icon: '' },
-          { id: 7, label: 'YouTube', value: 'youtube', icon: '' },
-          { id: 8, label: 'Google Ads', value: 'google_ads', icon: '' },
-          { id: 9, label: 'Instagram* / Facebook* (Meta*)', value: 'meta_ads', icon: '' },
-          { id: 10, label: 'Реклама в партнерских базах (email / sms / push)', value: 'partner_bases', icon: '' },
-          { id: 11, label: 'Другое (уточните)', value: 'other', icon: '' }
-        ]
-      },
-      { id: 14, title: 'База для рассылки (если нужна)', placeholder: 'Телефоны, email, ID пользователей', typeField: 'file', type: 'file', name: 'base_file' },
-      { id: 15, title: 'Примеры конкурентов / объявлений', placeholder: 'Ссылки или скриншоты', typeField: 'file', type: 'file', name: 'concurents_file' },
-      { id: 19, title: 'Срок запуска', placeholder: 'Желаемая дата', typeField: 'date', type: 'date', name: 'deadline' }
-    ]
-  },
-];
+  }
+]

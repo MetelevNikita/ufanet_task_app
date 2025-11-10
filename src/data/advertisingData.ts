@@ -91,7 +91,7 @@ export const typeSelectorArr = [
         placeholder: 'Загрузить макет',
         typeField: 'file',
         type: 'file',
-        name: 'file'
+        name: 'maket_file'
       },
       {
         id: 6,

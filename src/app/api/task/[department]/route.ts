@@ -36,6 +36,20 @@ const prisma = new PrismaClient();
 
 
 
+// 
+
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '150mb',
+    },
+  },
+};
+
+
+
+// 
 
 
 

@@ -2,6 +2,7 @@
 import { advertisingMessage } from '@/data/advertisingMessage'
 import { prMessage } from '@/data/prMessage'
 import { designMessage } from '@/data/designMessage'
+import { marketingMessage } from '@/data/marketingMessage'
 
 
 
@@ -14,7 +15,7 @@ export const createMessageTgYG = async (department: string, data: any) => {
       case 'Отдел рекламы':
         return await advertisingMessage(department, data)
       case 'Интернет маркетинг':
-        return ''
+        return marketingMessage(department, data)
       case 'PR отдел':
         return prMessage(department, data)
       case 'Отдел дизайна':
