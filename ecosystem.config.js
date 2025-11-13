@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "ufanet_task_app",
-      cwd: "./ufanetapp",
+      cwd: "./ufanet_task_app",
       script: "node_modules/next/dist/bin/next",
       args: "start -p 4000",
 
