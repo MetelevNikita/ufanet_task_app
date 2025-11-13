@@ -14,9 +14,9 @@ export const createMessageTgYG = async (department: string, data: any) => {
     switch (department) {
       case 'Отдел рекламы':
         return await advertisingMessage(department, data)
-      case 'Интернет маркетинг':
+      case 'Отдел интернет-маркетинга':
         return marketingMessage(department, data)
-      case 'PR отдел':
+      case 'PR':
         return prMessage(department, data)
       case 'Отдел дизайна':
         return designMessage(department, data)

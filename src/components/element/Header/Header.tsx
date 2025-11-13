@@ -79,7 +79,7 @@ const Header: FC<HeaderProps>  = () => {
           {
           
             socialArr.map((item: any, index: number): React.ReactNode => {
-              return <Link key={index+1} href={item.link}><Image className={styles.social_icon}  src={item.icon} alt='icon'/></Link>
+              return <Link key={index+1} target={'_blank'} href={item.link}><Image className={styles.social_icon}  src={item.icon} alt='icon'/></Link>
             })
 
           }

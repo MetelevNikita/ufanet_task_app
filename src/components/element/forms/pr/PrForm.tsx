@@ -250,6 +250,8 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
   const { department, setDepartment } = departmentData
 
+  console.log(department)
+
   // 
 
   const currentDepartment = useMemo(() => {
@@ -274,14 +276,51 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
 
   // POST FN
+
+
+  const currentType = typeSelectorArr.find((type: any) => type.label === pr.type)
+  console.log(currentType)
   
   
    const submitMessage = async (message: any) => {
       try {
 
+
+
+        if (Object.entries(message).length < 1) {
+          alert('Все поля должны быть заполнены')
+          return
+        }
+
+        if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader) {
+          alert('Все поля должны быть заполнены')
+          return
+        }
+
         setModalInfoDownload(true)
-        const data = await postTask(message)
+
+
+        if (!currentType) {
+          alert('Ошибка получение данных формы для определения согласователя, попробуйте позже...')
+          return
+        }
+
+        const newData = {
+          ...message,
+          reconciliator: {
+            name: currentType.reconciliator.name,
+            id: currentType.reconciliator.id,
+          },
+        }
+
+        console.log(newData)
+
+
+        const data = await postTask(newData)
         console.log(data)
+
+
+        setModalInfoDownload(false)
   
         if (data) {
           if (data.status === 'success') {
@@ -430,6 +469,13 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                             onClick={() => {window.location.href = '/'}}
                             type={'button'}
                           />
+                        </Col>
+                    </Row>
+
+
+                    <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-3'>
+                        <Col className='d-flex flex-column justify-content-center align-items-center mt-3 mb-3'>
+                              <div className={styles.info_title}>В случае успешной отправки заявка отправляется на согласование Эделевой О.Н. , после чего будет передано в работу в отдел дизайна</div>
                         </Col>
                     </Row>
 

@@ -23,6 +23,7 @@ const prisma = new PrismaClient()
 const changeStatusTaskDB = async (department: string, title: string, key: string, value: any) => {
   try {
 
+
       const findTask: any = await prisma.task.findFirst({
         where: {
           title: title,
@@ -89,9 +90,13 @@ const findCurrentStiacker = (findSteakers: any, status: any, state: any) => {
     }
 
     const currentSteacker = arrOfStiaker.find((item: any) => item.id === status)
+
+
+
     if (!currentSteacker) {
       return
     }
+
     return state.find((item: any) => item.id === currentSteacker.name)
     
   } catch (error: Error | unknown) {
@@ -116,8 +121,6 @@ export const POST = async (req: Request) => {
 
     const event = await req.json()
 
-    console.log(event)
-
     const title = event.payload.title ?? ''
     const description = event.payload.description ?? ''
     const columnId = event.payload.columnId ?? ''
@@ -134,10 +137,6 @@ export const POST = async (req: Request) => {
       }
     })
 
-
-    console.log('ID ', tgId.split('-'))
-
-
     // yougile
 
     const YouGileKey = process.env.YOGILE_KEY_INSTANCE as string
@@ -153,12 +152,8 @@ export const POST = async (req: Request) => {
       const currentAssignedUsers = event.payload.assigned || []
       const prevAssignedUsers = event.prevData.assigned || []
 
-      console.log(currentAssignedUsers)
-      console.log(prevAssignedUsers)
 
       compressionAssigned = (prevAssignedUsers.length === currentAssignedUsers.length && prevAssignedUsers.every((item: string, index: number) => item === currentAssignedUsers[index])) ? false : true
-
-      console.log(compressionAssigned)
 
       if (!compressionAssigned) {
         console.log(
@@ -177,10 +172,11 @@ export const POST = async (req: Request) => {
     // comparison steacker
 
     let comprassionSteacker: boolean
-    const statusSticker = await getYGStickers(YouGileKey) ?? []
-    console.log(statusSticker)
+    const allSticker = await getYGStickers(YouGileKey) ?? []
 
-    if (!statusSticker) {
+
+
+    if (!allSticker) {
       return NextResponse.json({
         message: `Ошибка при получении стикеров`,
         status: 500
@@ -188,15 +184,15 @@ export const POST = async (req: Request) => {
     }
 
 
-    console.log('получаем id статуса задачи')
 
+    const statusSticker = allSticker.content.find((item: {name: string}) => item.name === 'Статус') ?? {}
 
-    const statusName = statusSticker.content[0].id ?? ''
-    const statusState = statusSticker.content[0].states ?? []
+    const statusName = statusSticker.id ?? ''
+    const statusState = statusSticker.states ?? []
+
 
     const currentSteaker = findCurrentStiacker(event.payload?.stickers || {}, statusName, statusState)
     const prevSteaker = findCurrentStiacker(event.prevData?.stickers || {}, statusName, statusState)
-
 
     comprassionSteacker = (prevSteaker?.id == currentSteaker?.id) ? false : true
     
@@ -209,13 +205,10 @@ export const POST = async (req: Request) => {
         `Статус задачи изменился. Статус задачи - ${currentSteaker?.name || 'не определен'}`
       )
     }
-    
 
-    
+    //
 
-    // 
-
-    const departmentName = department.split(' ')[2] + ' ' + department.split(' ')[3]
+    const departmentName = department.split(' ').slice(2).join(' ')
 
     const projects = await getYGProjects(YouGileKey)
     const currentProjects = projects.content.find((project: any) => {
@@ -226,7 +219,6 @@ export const POST = async (req: Request) => {
 
 
     const boards = await getBoardCompany(YouGileKey, currentProjects.id)
-
     let allColums = []
 
     for (const board of boards.content) {
@@ -244,50 +236,29 @@ export const POST = async (req: Request) => {
     })
 
 
-  // change status DB
+    // change status DB
 
-  const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'status', findColumn)
+    const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'status', findColumn)
 
-  //
+    //
 
-  let messageFromUser = '';
+    let messageFromUser = '';
 
-  if (findColumn.title === 'Согласовано') {
-    messageFromUser = `Ваша задача «${title}» согласована.\n\nДальше задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`;
-  } else if (findColumn.title === 'Не согласовано') {
-    messageFromUser = `Ваша задача «${title}» отклонена. Свяжитесь с руководителем направления для получения информации об отказе.`;
-  } else if (findColumn.title === 'Согласовано с замечаниями') {
-    messageFromUser = `Ваша задача «${title}» согласована с замечаниями. Свяжитесь с руководителем направления.\n\nПосле этого задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`;
-  } else if (compressionAssigned) {
-
-    console.log(assignedUsers)
-    let userArr: string[] = []
-
-    const nameUser = assignedUsers.map(async (user: any) => {
-      const data = await getYGUsersID(user, YouGileKey)
-
-      return userArr.push(data.realName)
-    })
-
-    console.log(userArr)
-
-
-    const list = (userArr.length >= 1) ? userArr.join(', ') : 'ПУСТО';
-    messageFromUser = `НОВЫЙ ИСПОЛНИТЕЛЬ!\n\nВаша задача «${title}». Список исполнителей: ${list}.\n\nСледите за изменениями в БОТЕ`;
-  } else if (comprassionSteacker && currentSteaker?.name) {
-    const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'stage', currentSteaker.name)
-    messageFromUser = `НОВЫЙ СТАТУС!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен статус «${currentSteaker.name}».\n\nСледите за изменениями в БОТЕ`;
-  } else {
-    messageFromUser = `Ваша задача «${title}» перемещена в «${findColumn.title}».\n\nСледите за изменениями в БОТЕ`;
-  }
+    if (findColumn.title === 'Согласовано') {
+      messageFromUser = `Ваша задача «${title}» согласована.\n\nДальше задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`;
+    } else if (findColumn.title === 'Не согласовано') {
+      messageFromUser = `Ваша задача «${title}» отклонена. Свяжитесь с руководителем направления для получения информации об отказе.`;
+    } else if (findColumn.title === 'Согласовано с замечаниями') {
+      messageFromUser = `Ваша задача «${title}» согласована с замечаниями. Свяжитесь с руководителем направления.\n\nПосле этого задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`;
+    } else if (comprassionSteacker && currentSteaker.name) {
+      const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'stage', currentSteaker.name)
+      messageFromUser = `НОВЫЙ СТАТУС!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен статус «${currentSteaker.name}».\n\nСледите за изменениями в БОТЕ`;
+    } else {
+      messageFromUser = `Ваша задача «${title}» перемещена в «${findColumn.title}».\n\nСледите за изменениями в БОТЕ`;
+    }
       
-
-  
-
     const bot = await getBot()
     bot.sendMessage(tgId.split('-')[1].trim(), messageFromUser as string) 
-
-    console.log('Cообщение отправлено')
 
     return NextResponse.json({
       message: 'Cообщение отправлено',

@@ -55,7 +55,6 @@ const page: FC = () => {
 
 
 
-
   // 
 
   const pathname = usePathname()
@@ -81,6 +80,8 @@ const page: FC = () => {
     const getFilterTasks = async () => {
 
       const data = await getTask()
+
+      console.log(data)
       
       let filter = data
 

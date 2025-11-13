@@ -4,7 +4,8 @@ export const typeSelectorArr = [
     id: 1,
     label: 'Выберите тип работы',
     value: 'select',
-    field: []
+    field: [],
+    reconciliator: {}
   },
 
   /* 1) Разработка с нуля */
@@ -12,6 +13,10 @@ export const typeSelectorArr = [
     id: 2,
     label: 'Разработка с нуля',
     value: 'design_from_scratch',
+    reconciliator: {
+      name: 'Дизайн согласование',
+      id: '-1003374496970'
+    },
     field: [
       // О проекте
       { id: 1, title: 'Название проекта / мероприятия / услуги', placeholder: 'Реклама, бренд-пакет, мероприятие…', typeField: 'text', type: 'text', name: 'title' },
@@ -59,6 +64,10 @@ export const typeSelectorArr = [
     id: 3,
     label: 'Адаптация и внесение изменений в макет',
     value: 'adapt_edit',
+    reconciliator: {
+      name: 'Дизайн согласование',
+      id: '-1003374496970'
+    },
     field: [
       { id: 1, title: 'Название мероприятия / проекта / услуги', placeholder: 'Как называется задача', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Прикрепить файл в исходном виде', placeholder: 'Загрузите исходник (PSD/AI/PDF и т.п.)', typeField: 'file', type: 'file', name: 'target_file' },
@@ -72,6 +81,10 @@ export const typeSelectorArr = [
     id: 4,
     label: 'Другое',
     value: 'other',
+    reconciliator: {
+      name: 'Дизайн согласование',
+      id: '-1003374496970'
+    },
     field: [
       { id: 1, title: 'Название мероприятия / проекта / услуги', placeholder: 'Как называется задача', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что требуется разработать?', placeholder: 'Опишите задачу', typeField: 'area', type: 'area', name: 'what_to_make' },

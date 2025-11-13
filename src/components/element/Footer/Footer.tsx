@@ -34,7 +34,7 @@ const Footer: FC = () => {
 
           <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={styles.footer_wrapper}>
 
-            <div className={styles.footer_title}>Что бы подписаться на события ваших карточек вам необходимо добавить бота @UfanetTaskBot и начать работы с ним</div>
+            <div className={styles.footer_title}>Что бы подписаться на события ваших карточек вам необходимо добавить бота <a target='_blanck' href="https://t.me/PR_main_bot">@PR_main_bot</a> и начать работы с ним</div>
 
           </motion.div>
   

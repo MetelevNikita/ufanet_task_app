@@ -3,7 +3,8 @@ export const typeSelectorArr = [
     id: 1,
     label: 'Выберите тип заявки',
     value: 'Выберите тип заявки',
-    field: []
+    reconciliator: {},
+    field: [],
   },
 
   /* 1) Первичное обращение */
@@ -11,6 +12,10 @@ export const typeSelectorArr = [
     id: 2,
     label: 'Первичное обращение по задаче (полное описание)',
     value: 'primary',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [{id: 1, title: 'Название', placeholder: 'Напишите название задачи',typeField: 'text', type: 'text', name: 'title'},
       {
         id: 2,
@@ -36,6 +41,10 @@ export const typeSelectorArr = [
     id: 3,
     label: 'Заявка на полиграфию, баннеры, таблички',
     value: 'printing',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       {
         id: 1,
@@ -109,6 +118,10 @@ export const typeSelectorArr = [
     id: 4,
     label: 'Заявка на Мероприятие/выставку/ДОД',
     value: 'event',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Лидер', placeholder: 'Ответственный/лидер проекта', typeField: 'text', type: 'text', name: 'leader' },
@@ -128,6 +141,10 @@ export const typeSelectorArr = [
     id: 5,
     label: 'Заявка на оплату счета',
     value: 'payment',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Цель/Описание', placeholder: 'За что и зачем оплата', typeField: 'area', type: 'area', name: 'description' },
@@ -145,6 +162,10 @@ export const typeSelectorArr = [
     id: 6,
     label: 'Заявка на оформление договора',
     value: 'agreement',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Предмет договора', placeholder: 'Что является предметом', typeField: 'area', type: 'area', name: 'subject' },
@@ -160,6 +181,10 @@ export const typeSelectorArr = [
     id: 7,
     label: 'Заявка на трансфер',
     value: 'transfer',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Цель/Описание', placeholder: 'Куда/зачем поездка', typeField: 'area', type: 'area', name: 'description' },
@@ -180,6 +205,10 @@ export const typeSelectorArr = [
     id: 8,
     label: 'Заявка на ТМЦ/реквизит',
     value: 'props',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Ссылка на товар', placeholder: 'URL на позицию/карточку', typeField: 'text', type: 'text', name: 'link' },
@@ -193,6 +222,10 @@ export const typeSelectorArr = [
     id: 9,
     label: 'Заявка на сувениры с лого/подарки',
     value: 'souvenir',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Цель/Описание', placeholder: 'Повод, аудитория, задачи', typeField: 'area', type: 'area', name: 'description' },
@@ -208,6 +241,10 @@ export const typeSelectorArr = [
     id: 10,
     label: 'Заявка на промо одежду',
     value: 'promo',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Цель/Описание', placeholder: 'Для какого мероприятия/задачи', typeField: 'area', type: 'area', name: 'description' },
@@ -237,6 +274,10 @@ export const typeSelectorArr = [
     id: 11,
     label: 'Заявка на кофе брейк',
     value: 'coffe',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Цель/Описание', placeholder: 'Формат и повод', typeField: 'area', type: 'area', name: 'description' },
@@ -254,6 +295,10 @@ export const typeSelectorArr = [
     id: 12,
     label: 'Заявка на закуп на маркетплейсе ОЗОН',
     value: 'marketplace',
+    reconciliator: {
+      name: 'Реклама согласование',
+      id: '-1003330661427'
+    },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Цель покупки', placeholder: 'Для какого проекта/нужд', typeField: 'area', type: 'area', name: 'purpose' },

@@ -4,6 +4,7 @@ export const typeSelectorArr = [
     id: 1,
     label: 'Выберите тип заявки',
     value: 'select',
+    reconciliator: {},
     field: []
   },
 
@@ -12,6 +13,10 @@ export const typeSelectorArr = [
     id: 2,
     label: 'Проекты и продвижение услуг',
     value: 'project_promo',
+    reconciliator: {
+      name: 'PR согласование',
+      id: '-1003306162120'
+    },
     field: [
       { id: 1,  title: 'Название проекта / услуги', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
       { id: 2,  title: 'Описание проекта / услуги', placeholder: 'Кратко опишите, что это', typeField: 'area',  type: 'area',  name: 'description' },
@@ -26,6 +31,10 @@ export const typeSelectorArr = [
     id: 3,
     label: 'Мероприятие — внешнее',
     value: 'event_external',
+    reconciliator: {
+      name: 'PR согласование',
+      id: '-1003306162120'
+    },
     field: [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
       { id: 2,  title: 'Описание мероприятия', placeholder: 'Кратко опишите формат и суть', typeField: 'area',  type: 'area',  name: 'description' },
@@ -42,6 +51,10 @@ export const typeSelectorArr = [
     id: 4,
     label: 'Мероприятие — внутреннее (для сотрудников)',
     value: 'event_internal',
+    reconciliator: {
+      name: 'PR согласование',
+      id: '-1003306162120'
+    },
     field: [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
       { id: 2,  title: 'Описание мероприятия', placeholder: 'Кратко опишите формат и суть', typeField: 'area',  type: 'area',  name: 'description' },
@@ -58,6 +71,10 @@ export const typeSelectorArr = [
     id: 5,
     label: 'Выставки, выезды, конференции',
     value: 'event_expo',
+    reconciliator: {
+      name: 'PR согласование',
+      id: '-1003306162120'
+    },
     field: [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Как называется',typeField: 'text',  type: 'text',  name: 'title' },
       { id: 2,  title: 'Описание мероприятия', placeholder: 'Коротко: формат, кто участвует, зачем', typeField: 'area',  type: 'area',  name: 'description' },
@@ -75,6 +92,10 @@ export const typeSelectorArr = [
     id: 6,
     label: 'Прочее',
     value: 'other',
+    reconciliator: {
+      name: 'PR согласование',
+      id: '-1003306162120'
+    },
     field: [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
       { id: 2,  title: 'Что необходимо сделать?', placeholder: 'Опишите задачу', typeField: 'area',  type: 'area',  name: 'todo' },

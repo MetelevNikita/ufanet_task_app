@@ -2,21 +2,13 @@ import dotenv from 'dotenv'
 import path from 'path'
 import TelegramBot from 'node-telegram-bot-api'
 
-dotenv.config({
-  path: path.resolve(
-    process.cwd(), '.env'
-  )
-})
+dotenv.config()
 
 
 // sendAnswerMessage
 
 const sendAnswerMessage = async (status: string, department: string, id: any) => {
   try {
-
-
-    console.log('cardId', id)
-    console.log('status', status)
 
     if (!process.env.API_URL) {
       throw new Error('API_URL не задан в переменных окружения');

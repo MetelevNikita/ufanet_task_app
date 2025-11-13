@@ -22,12 +22,15 @@ export const createYGTask = async (department: string, data: any, descriptionTas
       return project.title === department
     })
 
-    console.log('department', currentProject)
-
     // 
 
     const board = await getBoardCompany(yougileKey, currentProject.id);
-    const columns = await getYGColumns(yougileKey, board.content[0].id)
+
+    const currentBoard = board.content.find((item: {title: string}) => {
+      return item.title === currentProject.title
+    })
+
+    const columns = await getYGColumns(yougileKey, currentBoard.id)
     const inboxColumn = columns.content.find((column: {title: string}) => {
       return column.title === 'Входящие'
     })
@@ -43,8 +46,7 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     const stickers = await getYGStickers(yougileKey)
 
     const statusSticker = stickers.content.find((item: {name: string}) => item.name === 'Статус') ?? {}
-    console.log(statusSticker.id, 'statusSticker')
-
+    console.log(statusSticker)
 
     if (!statusSticker) {
       console.log(
@@ -54,11 +56,7 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     }
 
 
-    const currentState = statusSticker.states.find((item: any) => item.name === 'в очереди') ?? {}
-    console.log(currentState.id)
-
-
-
+    const currentState = statusSticker.states.find((item: any) => item.name === 'В очереди') ?? {}
 
     // 
 
@@ -75,7 +73,7 @@ export const createYGTask = async (department: string, data: any, descriptionTas
         columnId: inboxColumn.id,
         description: descriptionTask,
         deadline: (deadline) && {deadline: new Date(data.deadline).getTime()},
-        stickers: {[statusSticker.id]: [currentState.id], [process.env.YG_AUTHOR_STICKER_ID as string]: data.fio.toString(), [process.env.YG_TYPE_STICKER_ID as string]: (data.type) ? data.type.toString() : data.product.toString()},
+        stickers: {[statusSticker.id]: [currentState.id]},
       })
     })
 

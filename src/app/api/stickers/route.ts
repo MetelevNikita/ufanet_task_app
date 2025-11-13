@@ -13,8 +13,6 @@ export const GET = async () => {
 
     const stickers = await getYGStickers(yougileKey);
 
-    console.log(stickers)
-
     return NextResponse.json({
       message: 'stickers success',
       data: stickers.content

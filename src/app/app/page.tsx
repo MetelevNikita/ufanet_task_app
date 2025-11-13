@@ -83,7 +83,7 @@ const page = () => {
 
   const currentForm = (department: string) => {
     switch (department) {
-      case 'PR отдел':
+      case 'PR':
         return <PrForm
             departmentData={{department, setDepartment}}
             modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
@@ -109,7 +109,7 @@ const page = () => {
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
         />
-      case 'Интернет маркетинг':
+      case 'Отдел интернет-маркетинга':
         return <MarketingForms
             departmentData={{department, setDepartment}}
             modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
@@ -121,104 +121,107 @@ const page = () => {
   }
 
 
+  console.log(process.env.NODE_ENV)
+
+
   return (
- <Container>
-      <Row className='d-flex flex-row'>
+      <Container>
+            <Row className='d-flex flex-row'>
 
 
-        {/* Modal */}
+              {/* Modal */}
 
-        <Row className='d-flex flex-row'>
-          <Col md={12} className='d-flex justify-content-center align-items-center'>
+              <Row className='d-flex flex-row'>
+                <Col md={12} className='d-flex justify-content-center align-items-center'>
 
-          {
-            (modalBackInfo) && (
-              <ModalInfo
-                title={'Все данные будут потеряны... Продолжить?'}
-                btnTitleOne={'Продолжить'}
-                btnTitleTwo='Назад'
-                image={<BsInfoCircle style={{width: '60px', color: '#FC9B32'}}/>}
-                onClickOne={() => {
-                  setModalBackInfo(false),
-                  window.location.href = '/'
-                }}
-                onClickTwo={
-                  () => {setModalBackInfo(false)
+                {
+                  (modalBackInfo) && (
+                    <ModalInfo
+                      title={'Все данные будут потеряны... Продолжить?'}
+                      btnTitleOne={'Продолжить'}
+                      btnTitleTwo='Назад'
+                      image={<BsInfoCircle style={{width: '60px', color: '#FC9B32'}}/>}
+                      onClickOne={() => {
+                        setModalBackInfo(false),
+                        window.location.href = '/'
+                      }}
+                      onClickTwo={
+                        () => {setModalBackInfo(false)
 
-                  }}
-                />
-            )
-          }
+                        }}
+                      />
+                  )
+                }
 
-          {
-            (modalSubmitSuccess) && (
-              <ModalSubmit
-                image={<BsCheckCircle
-                style={{width: '60px', color: '#51c947'}}/>}
-                title={`Заявка ${department} успешно отправлена`}
-                type={'success'}
-                modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
-                modalError={{modalSubmitError, setModalSubmitError}}
-              />
-            )
-          }
-
-
-          {
-            (modalSubmitError) && (
-              <ModalSubmit
-                image={<BsXCircle
-                style={{width: '60px', color: '#a85632'}}/>}
-                title={`Ошибка отправки заявки`}
-                type='error'
-                modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
-                modalError={{modalSubmitError, setModalSubmitError}}
-              />
-            )
-          }
+                {
+                  (modalSubmitSuccess) && (
+                    <ModalSubmit
+                      image={<BsCheckCircle
+                      style={{width: '60px', color: '#51c947'}}/>}
+                      title={`Заявка ${department} успешно отправлена`}
+                      type={'success'}
+                      modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+                      modalError={{modalSubmitError, setModalSubmitError}}
+                    />
+                  )
+                }
 
 
-          {
-            (modalInfoDownload) && (
-              <ModalInfo title={'Данные загружаются. Ожидайте...'} image={<BsAlarm style={{width: '60px', color: '#FC9B32'}}/>} />
-            )
-          }
+                {
+                  (modalSubmitError) && (
+                    <ModalSubmit
+                      image={<BsXCircle
+                      style={{width: '60px', color: '#a85632'}}/>}
+                      title={`Ошибка отправки заявки`}
+                      type='error'
+                      modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+                      modalError={{modalSubmitError, setModalSubmitError}}
+                    />
+                  )
+                }
+
+
+                {
+                  (modalInfoDownload) && (
+                    <ModalInfo title={'Данные загружаются. Ожидайте...'} image={<BsAlarm style={{width: '60px', color: '#FC9B32'}}/>} />
+                  )
+                }
 
 
 
 
-          </Col>
-        </Row>
+                </Col>
+              </Row>
 
 
-        {/*  */}
+              {/*  */}
 
 
-        <Col md={3} sm={1} xs={1} className='d-none d-sm-block'>
-          <LeftSideApplication departmentData={{department, setDepartment}}/>
-        </Col>
+              <Col md={3} sm={1} xs={1} className='d-none d-sm-block'>
+                <LeftSideApplication departmentData={{department, setDepartment}}/>
+              </Col>
 
 
-        {/* XS MENU */}
+              {/* XS MENU */}
 
-        <Col md={9} sm={11} xs={12} className='d-block d-sm-none mt-1 mb-4'>
-          <TopSideHorizontalMenu departmentData={{department, setDepartment}}/>
-        </Col>
+              <Col md={9} sm={11} xs={12} className='d-block d-sm-none mt-1 mb-4'>
+                <TopSideHorizontalMenu departmentData={{department, setDepartment}}/>
+              </Col>
 
-        {/*  */}
+              {/*  */}
 
-        <Col md={9} sm={11} xs={12}>
-            <div className='app_container'>
-              <div className='app_wrapper'>
-                
-                {currentForm(department)}
+              <Col md={9} sm={11} xs={12}>
+                  <div className='app_container'>
+                    <div className='app_wrapper'>
+                      
+                      {currentForm(department)}
 
-              </div>
-            </div>
-        </Col>
+                    </div>
+                  </div>
+              </Col>
 
-      </Row>
-    </Container>
+            </Row>
+        </Container>
   )
 }
 

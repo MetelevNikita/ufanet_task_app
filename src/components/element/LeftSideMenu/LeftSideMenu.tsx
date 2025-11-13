@@ -56,7 +56,7 @@ import { GrGift } from "react-icons/gr";
     },
     {
       id: '2',
-      label: "PR отдел",
+      label: "PR",
       value: "pr",
       icon: <GrAnnounce className={styles.menu_item_icon}/>,
       iconActive: <GrAnnounce className={styles.menu_item_icon_active}/>
@@ -64,7 +64,7 @@ import { GrGift } from "react-icons/gr";
     },
     {
       id: '3',
-      label: "Интернет маркетинг",
+      label: "Отдел интернет-маркетинга",
       value: "marketing",
       icon: <GrBarChart className={styles.menu_item_icon}/>,
       iconActive: <GrBarChart className={styles.menu_item_icon_active}/>

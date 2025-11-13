@@ -61,7 +61,7 @@ export const getYGData = async () => {
     const { getYGKeys } = await import('@/functions/getYGKeys')
 
     const companys = await getYGCompany();
-    const currentCompany = companys.content.find((company: {id: string, name: string, isAdmin: string}) => company.name == 'UFANET')
+    const currentCompany = companys.content.find((company: {id: string, name: string, isAdmin: string}) => company.name == 'Служба PR')
 
     if (!currentCompany) {
       throw new Error(
@@ -69,13 +69,9 @@ export const getYGData = async () => {
       )
     }
 
-    const companyKey = await getYGKeys(currentCompany.id);
-    if (!companyKey) {
-      throw new Error(
-        `Ошибка получения ключей для компании ${currentCompany.name} в YouGile`
-      )
-    }
+    let companyKey = await getYGKeys(currentCompany.id);
 
+    companyKey = await getYGKeys(currentCompany.id);
     const key = companyKey[0].key
     if (!key) {
       console.error(`Ключ для компании ${currentCompany.name} не найден в YouGile`)

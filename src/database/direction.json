@@ -8,13 +8,13 @@
     },
     {
       "id": 2,
-      "label": "PR отдел",
+      "label": "PR",
       "value": "pr",
       "icon": ""
     },
     {
       "id": 3,
-      "label": "Интернет маркетинг",
+      "label": "Отдел интернет-маркетинга",
       "value": "marketing",
       "icon": ""
     },

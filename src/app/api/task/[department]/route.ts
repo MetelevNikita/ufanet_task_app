@@ -35,7 +35,6 @@ import { createMessageTgYG } from "@/lib/createMessageTgYG";
 const prisma = new PrismaClient();
 
 
-
 // 
 
 
@@ -50,7 +49,6 @@ export const config = {
 
 
 // 
-
 
 
 const writeFileData = async (data: string | null, url: string, folder: string) => {
@@ -167,42 +165,35 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const formData = await req.json()
 
 
+    const pairs = await Promise.all(
+      Object.entries(formData).map(async ([key, value]: any) => {
+        if (key.split('_')[1] === 'file') {
 
-      const pairs = await Promise.all(
-        Object.entries(formData).map(async ([key, value]: any) => {
-          if (key.split('_')[1] === 'file') {
-
-            const urls = await Promise.all(
-              value.map((item: any) =>
-                writeFileData(
-                  (item?.base64 ?? String(item)) as string,  // чистая base64
-                  process.env.WEBHOOK_URL as string,
-                  department
-                )
+          const urls = await Promise.all(
+            value.map((item: any) =>
+              writeFileData(
+                (item?.base64 ?? String(item)) as string,  // чистая base64
+                process.env.WEBHOOK_URL as string,
+                department
               )
-            );
+            )
+          );
 
-            return [key, urls] as const; // один ключ → массив URL'ов
+          return [key, urls] as const; // один ключ → массив URL'ов
 
-          } else {
-            return [key, value]
-          }
-        })
+        } else {
+          return [key, value]
+        }
+      })
 
-      )
+    )
 
-      const data = Object.fromEntries(pairs)
-      console.log(data)
-
-
+    const data = Object.fromEntries(pairs)
 
     // message
 
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
-
-    // console.log('yougile ' + messageYG)
-    // console.log('telegram ' + messageTG)
 
     //
 
@@ -217,27 +208,27 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     const newDatabaseTask = await createDBTask(ygId, departmentLabel, data)
 
+
     if (!newDatabaseTask) {
       return NextResponse.json({ message: `Ошибка создания задачи в базе данных` }, { status: 500 });
     }
 
     //
 
-    const TelegramRes = await createTGTask(departmentLabel, data, messageTG, newDatabaseTask)
+
+    const TelegramRes = await createTGTask(departmentLabel, data, messageTG, newDatabaseTask, formData.reconciliator.id)
+    console.log("TELEGRAM RES", TelegramRes)
 
     if (!TelegramRes) {
       return NextResponse.json({ message: `Ошибка создания задачи в телеграмм` }, { status: 500 });
     }
-
-     
-
 
     return NextResponse.json({message: `Сообщение в отдел ${department} отправлено на согласование`}, { status: 200 });
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       return NextResponse.json(
-        { message: error.message },
+        { message: error.message},
         { status: 500 }
       );
     }

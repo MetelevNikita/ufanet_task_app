@@ -6,6 +6,11 @@ export const typeSelectorArr = [
     id: 2,
     label: 'Первичное обращение по услуге',
     value: 'im_brief_service',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
+
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'OKR/KPI и цели', placeholder: 'Опишите цели или дайте ссылку', typeField: 'area', type: 'area', name: 'goals' },
@@ -27,6 +32,10 @@ export const typeSelectorArr = [
     id: 3,
     label: 'ТЗ на создание сайта/страницы',
     value: 'im_site_create',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами (так будет называться задача)', typeField: 'area', type: 'area', name: 'description' },
@@ -55,6 +64,10 @@ export const typeSelectorArr = [
     id: 4,
     label: 'ТЗ на внесение изменений на сайты',
     value: 'im_site_change',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами (так будет называться задача)', typeField: 'area', type: 'area', name: 'description' },
@@ -106,6 +119,10 @@ export const typeSelectorArr = [
     id: 5,
     label: 'ТЗ запуск рекламы',
     value: 'ad_launch',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами', typeField: 'area', type: 'area', name: 'description' },
@@ -182,6 +199,10 @@ export const typeSelectorArr = [
     id: 6,
     label: 'ТЗ на SMM (посты, статьи, видео и т.д.)',
     value: 'smm_task',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами', typeField: 'area', type: 'area', name: 'description' },
@@ -210,6 +231,10 @@ export const typeSelectorArr = [
     id: 7,
     label: 'ТЗ на написание статей (для СМИ и сайта ufanet.ru)',
     value: 'article_writing',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами', typeField: 'area', type: 'area', name: 'description' },
@@ -230,6 +255,10 @@ export const typeSelectorArr = [
     id: 8,
     label: 'ТЗ на редактуру (тексты статей, каталогов и т.п.)',
     value: 'text_editing',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Кратко о задаче (суть работы)', typeField: 'area', type: 'area', name: 'description' },
@@ -261,6 +290,10 @@ export const typeSelectorArr = [
     id: 9,
     label: 'ТЗ на пуши в приложении Уфанет',
     value: 'push_ufanet',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Кратко о задаче', typeField: 'area', type: 'area', name: 'description' },
@@ -279,6 +312,10 @@ export const typeSelectorArr = [
     id: 10,
     label: 'ТЗ на размещение сторис в приложении Уфанет',
     value: 'stories_ufanet',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Кратко о задаче', typeField: 'area', type: 'area', name: 'description' },
@@ -301,6 +338,10 @@ export const typeSelectorArr = [
     id: 11,
     label: 'ТЗ на опросы',
     value: 'surveys',
+    reconciliator: {
+      name: 'Согласование Интернет маркетинг',
+      id: '-1003229463914'
+    },
     field: [
       { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Кратко о задаче', typeField: 'area', type: 'area', name: 'description' },

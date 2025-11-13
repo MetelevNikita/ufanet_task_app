@@ -272,23 +272,55 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
 
 
   // POST FN
+
+
+    const currentType = typeSelectorArr.find((type: any) => type.label === marketing.type)
+    console.log(currentType)
   
   
    const submitMessage = async (message: any) => {
       try {
-  
-        console.log(message)
 
-        const data = await postTask(message)
-        console.log(data)
+
+        if (Object.entries(message).length < 1) {
+          alert('Все поля должны быть заполнены')
+          return
+        }
+
+        if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader) {
+          alert('Все поля должны быть заполнены')
+          return
+        }
   
+        setModalInfoDownload(true)
+
+        if (!currentType) {
+          alert('Ошибка получение данных формы для определения согласователя, попробуйте позже...')
+          return
+        }
+
+
+        const newData = {
+          ...message,
+          reconciliator: {
+            name: currentType?.reconciliator?.name,
+            id: currentType?.reconciliator?.id,
+          },
+        }
+
+        console.log(newData)
+  
+
+        const data = await postTask(newData)
+        console.log(data)
+
         if (data) {
           if (data.status === 'success') {
             setModalInfoDownload(false)
             setModalSubmitSuccess(true)
             return 
           }
-          if (data.status === 'abort') {
+          if (data.status === 'abort' || !data) {
             setModalInfoDownload(false)
             setModalSubmitError(true)
             return
@@ -438,6 +470,22 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                             type={'button'}
                           />
                         </Col>
+                    </Row>
+
+
+
+                    <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-3'>
+                      <Col className='d-flex flex-column justify-content-center align-items-center mt-3 mb-3'>
+                            <div className={styles.info_title}>ТЗ, в которых будет указано желаемое время «Сегодня», приниматься не будут!<br/>Минимальный срок создания посадочной страницы / сайта — 5–7 рабочих дней<br/>(в зависимости от объёма ТЗ, срочности и нагрузки).</div>
+
+                            <hr />
+
+                            <div className={styles.info_title}>Если вы устанавливаете срок реализации ТЗ менее 5 дней, необходимо обоснование срочности (потеря дохода, угроза репутации и т.д.).<br/><br/>(Срочность указывается для компании, не для вас лично.)</div>
+
+                            <hr />
+
+                            <div className={styles.info_title}>ТЗ принимается и передаётся в работу в течение суток. Ответственным за приём ТЗ является Мельников Алексей<br/><br/>Далее ТЗ попадает в очередь к сотруднику. Вы можете увидеть статус выполнения вашей задачи во вкладке по ссылке.<br/><br/>Мы готовы к вашей обратной связи. Если что — пишите мне: @alexey_prosmm <br/> Хорошего дня!</div>
+                      </Col>
                     </Row>
 
 

@@ -3,19 +3,19 @@ import { getBot } from "@/telegramBot/telegramBot";
 // 
 
 
-export const createTGTask = async (department: string, data: any, descriptionTask: string, taskDB: any) => {
+export const createTGTask = async (department: string, data: any, descriptionTask: string, taskDB: any, tgId: any) => {
   const buildCB = (status: string, department: string, cardId: any) => `${status}|${department}|${cardId}`
 
   try {
-    const id = taskDB.id as number
+
     const bot = await getBot();
-    
-    if (!process.env.TG_ID_BOSS) {
-      return `Не задан TG_ID_BOSS в переменных окружения`
-    }
+    const id = taskDB.id as number
+
+    console.log("ID ДЛЯ TELEGRAM", id)
+
 
     const sendTgBot = bot.sendMessage(
-      process.env.TG_ID_BOSS as string,
+      tgId as string,
       `Новое сообщение с доски - ${department}\n\n\n${descriptionTask}`,
       {
         reply_markup: {
