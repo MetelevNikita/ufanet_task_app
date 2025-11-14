@@ -8,24 +8,46 @@ export const typeSelectorArr = [
     value: 'im_brief_service',
     reconciliator: {
       name: 'Согласование Интернет маркетинг',
-      id: '-1003229463914'
+      // id: '-1003229463914'
+      id: '85252645'
     },
 
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
-      { id: 2, title: 'OKR/KPI и цели', placeholder: 'Опишите цели или дайте ссылку', typeField: 'area', type: 'area', name: 'goals' },
-      { id: 3, title: 'Клиентский путь и обработка заявок', placeholder: 'Кто/как обрабатывает; воронка', typeField: 'area', type: 'area', name: 'funnel' },
-      { id: 4, title: 'Краткое описание продукта', placeholder: '2–3 предложения, польза клиенту', typeField: 'area', type: 'area', name: 'description' },
-      { id: 5, title: 'Целевая аудитория', placeholder: 'Кто и какая потребность', typeField: 'area', type: 'area', name: 'audience' },
-      { id: 6, title: 'География продаж', placeholder: 'Города/регионы и почему', typeField: 'area', type: 'area', name: 'geo' },
-      { id: 7, title: 'Преимущества и УТП', placeholder: 'Не менее 3 пунктов / формулировки УТП', typeField: 'area', type: 'area', name: 'usp' },
-      { id: 8, title: 'Источники лидов сейчас', placeholder: 'Сколько заявок, конверсия', typeField: 'area', type: 'area', name: 'current_sources' },
-      { id: 9, title: 'Ключевые запросы', placeholder: '5–10 поисковых фраз', typeField: 'area', type: 'area', name: 'keywords' },
-      { id: 10, title: 'Конкуренты и ссылки', placeholder: '2–5 конкурентов и что у них хорошо/плохо', typeField: 'area', type: 'area', name: 'competitors' },
-      { id: 11, title: 'Нужен ли сайт/лендинг', placeholder: 'Есть/нет/нужны правки (что именно)', typeField: 'area', type: 'area', name: 'site_need' },
-      { id: 12, title: 'Срок реализации', placeholder: 'Желаемая дата', typeField: 'date', type: 'date', name: 'deadline' }
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
+      { id: 2, title: 'Есть ли цели на год/квартал/месяц по данной услуге или продукту? Описаны ли OKR или KR?', placeholder: 'Напишите их или прикрепите ссылку / файл с описанием.', typeField: 'area', type: 'area', name: 'goals' },
+      { id: 3, title: 'Опишите клиентский путь после оставления заявки.', placeholder: 'Кто будет обрабатывать заявки? Где и кем будет фиксироваться воронка продаж?', typeField: 'area', type: 'area', name: 'funnel' },
+      { id: 4, title: 'Краткое описание продукта (2–3 предложения)', placeholder: 'Основное назначение продукта / ключевая польза для клиента. Если есть сегменты продукта, обучение или другие направления — приведите их краткий список. Что это, для кого и какую проблему решает?', typeField: 'area', type: 'area', name: 'description' },
+      { id: 5, title: 'Целевая аудитория', placeholder: '(чем больше и подробнее будет описана ЦА, тем качественнее будет продвижение) (например: жители новостроек, управляющие компании, застройщики, интеграторы систем безопасности)', typeField: 'area', type: 'area', name: 'audience'},
+      { id: 6, title: 'География продаж', placeholder: '(укажите города и/или регионы — и поясните, почему выбраны именно эти территории)', typeField: 'area', type: 'area', name: 'geo' },
+      { id: 7, title: 'Конкурентные преимущества', placeholder: 'Опишите не менее трёх пунктов, чем ваш продукт лучше или уникальнее конкурентов.', typeField: 'area', type: 'area', name: 'usp' },
+      { id: 8, title: 'Откуда на данный момент приходят клиенты (источники)?', placeholder: 'Сколько в месяц приходит заявок, сколько из них конвертируется в продажи?', typeField: 'area', type: 'area', name: 'current_sources' },
+      { id: 9, title: 'Сколько заявок вы готовы обрабатывать в день, без потери качества?', placeholder: 'Количество', typeField: 'text', type: 'text', name: 'number_of_applications' },
+      { id: 10, title: 'Ключевые запросы / поисковые фразы, по которым можно найти ваш продукт или услугу', placeholder: 'Перечислите 5–10 запросов.', typeField: 'area', type: 'area', name: 'keywords' },
+      { id: 11, title: 'Кто является прямыми конкурентами?', placeholder: 'Укажите ссылки на конкурентов с их описанием (не менее двух и не более пяти конкурентов).', typeField: 'area', type: 'area', name: 'competitors' },
+      { id: 12, title: 'Ссылка на таблицу окупаемости продукта с учётом расходов на рекламу, составляемую совместно с финансовым аналитиком.', placeholder: 'Если данной таблицы нет — обратитесь к сотрудникам ФАО (Никита Поленко курирует этот вопрос).', typeField: 'area', type: 'area', name: 'link_table' },
+      { id: 13, title: 'Кто является прямыми конкурентами?', placeholder: 'Укажите ссылки на конкурентов с их описанием (не менее двух и не более пяти конкурентов).', typeField: 'text', type: 'text', name: 'competitors' },
+      { id: 14, title: 'Что у конкурентов хорошо? Что хотелось бы сделать лучше?', placeholder: 'Примеры сайтов / лендингов, которые нравятся (2–3 ссылки).', typeField: 'text', type: 'text', name: 'best_among_competitors' },
+      { id: 15, title: 'Где и как продвигаются конкуренты?', placeholder: 'Если есть рекламные макеты конкурентов, которые вас зацепили (сайт, ролики, посты и др.), прикрепите их.', typeField: 'text', type: 'text', name: 'promotion_of_ competitors' },
+      { id: 16, title: 'Нужен ли сайт/лендинг', placeholder: 'Есть/нет/нужны правки (что именно)', typeField: 'area', type: 'area', name: 'site_need' },
+      { id: 17, title: 'Нужен ли сайт/лендинг', placeholder: 'Выберите вариант', typeField: 'selector', type: 'selector', name: 'first_visit_selector', options: [
+          { id: 1, label: 'Да', value: 'yes', icon: '' },
+          { id: 2, label: 'Нет', value: 'no', icon: '' },
+          { id: 2, label: 'Есть, требуется изменение', value: 'no', icon: '' }
+        ]
+      },
+      { id: 18, title: 'Если сайт требует изменений, распишите подробнее, что нужно поменять.', placeholder: 'Если сайт требует изменений, распишите подробнее, что нужно поменять.', typeField: 'text', type: 'text', name: 'site_changes' },
+      { id: 19, title: 'Какие есть спецпредложения, акции, которые могут использоваться для продвижения?', placeholder: 'Какие есть спецпредложения, акции, которые могут использоваться для продвижения?', typeField: 'text', type: 'text', name: 'best_price' },
+      { id: 20, title: 'Есть ли уже существующие материалы, которые можно использовать для продвижения? Если да — укажите путь.', placeholder: '(Фото продукта, видео / промо, презентация, PDF-каталог — загрузите их по ссылке.)', typeField: 'text', type: 'text', name: 'web_promotion' },
+      { id: 21, title: 'Если вы знаете каналы, которые смотрит/читает ваша целевая аудитория, основные виды рекламы, на которые она обращает внимание, — расскажите про них.', placeholder: 'Если вы знаете каналы, которые смотрит/читает ваша целевая аудитория, основные виды рекламы, на которые она обращает внимание, — расскажите про них.', typeField: 'area', type: 'area', name: 'audience_channels' },
+      { id: 22, title: 'Есть ли какие-то существующие базы (база наших клиентов, холодная база и др.) для запуска рекламы по ним?', placeholder: 'Есть ли какие-то существующие базы (база наших клиентов, холодная база и др.) для запуска рекламы по ним?', typeField: 'area', type: 'area', name: 'existing_databases' },
+      { id: 23, title: 'Дополнительная информация', placeholder: '(любые комментарии, особенности согласования, внутренние ограничения, пожелания по дизайну и т.п.)', typeField: 'area', type: 'area', name: 'additional_information' },
+      { id: 24, title: 'Срок реализации', placeholder: 'Желаемая дата', typeField: 'date', type: 'date', name: 'deadline' }
     ]
   },
+
+
+
+
 
   // 2) ТЗ на создание сайта/страницы
   {
@@ -37,25 +59,35 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами (так будет называться задача)', typeField: 'area', type: 'area', name: 'description' },
       { id: 3, title: 'Ранее эту услугу уже продвигали?', placeholder: 'Выберите вариант', typeField: 'selector', type: 'selector', name: 'first_visit_selector', options: [
           { id: 1, label: 'Да', value: 'yes', icon: '' },
           { id: 2, label: 'Нет', value: 'no', icon: '' }
         ]
       },
-      { id: 4, title: 'Рабочая группа и поддержка', placeholder: 'Кто делает и кто поддерживает', typeField: 'area', type: 'area', name: 'team' },
-      { id: 5, title: 'Задачи страницы', placeholder: 'Что должна решать', typeField: 'area', type: 'area', name: 'tasks' },
-      { id: 6, title: 'Целевое действие', placeholder: 'Что должно случиться после чтения', typeField: 'text', type: 'text', name: 'cta' },
-      { id: 7, title: 'Структура/контент', placeholder: 'Блоки, тексты, материалы', typeField: 'area', type: 'area', name: 'content' },
-      { id: 8, title: 'Референсы', placeholder: 'Ссылки на примеры', typeField: 'area', type: 'area', name: 'refs' },
-      { id: 9, title: 'Преимущества и выгоды продукта', placeholder: 'В сравнении с конкурентами/альтернативами', typeField: 'area', type: 'area', name: 'advantages' },
-      { id: 10, title: 'Как работает продукт', placeholder: 'Нужно ли объяснять работу продукта? Опишите', typeField: 'area', type: 'area', name: 'work' },
-      { id: 11, title: 'Варианты приобретения', placeholder: 'Тарифы, оборудование, скидки, акции, опции', typeField: 'area', type: 'area', name: 'price' },
-      { id: 12, title: 'Детали исполнения', placeholder: 'Различия моб./десктоп версии и пр.', typeField: 'area', type: 'area', name: 'details' },
-      { id: 13, title: 'Пожелания', placeholder: 'Пожелания по дизайну/странице', typeField: 'text', type: 'text', name: 'wishes' },
-      { id: 14, title: 'Администрирование', placeholder: 'Кто обрабатывает заявки с сайта?', typeField: 'text', type: 'text', name: 'processing' },
-      { id: 15, title: 'Срок запуска', placeholder: 'Желаемая дата', typeField: 'date', type: 'date', name: 'deadline' }
+      { id: 4, title: 'Кто входит в рабочую группу по созданию?', placeholder: 'Кто будет поддерживать актуальность сайта / лендинга / страницы?', typeField: 'area', type: 'area', name: 'team' },
+      { id: 5, title: 'Какие задачи должен выполнять сайт / лендинг / страница?', placeholder: 'Что должна решать', typeField: 'area', type: 'area', name: 'tasks' },
+      { id: 6, title: 'Какое целевое действие должно быть совершено после прочтения страницы?', placeholder: 'Что должно случиться после чтения', typeField: 'text', type: 'text', name: 'cta' },
+      { id: 7, title: 'Кто является целевой аудиторией продукта / услуги / предложения? На какие группы она подразделяется? Какова география проживания целевой аудитории?', placeholder: 'Кто является целевой аудиторией продукта / услуги / предложения? На какие группы она подразделяется? Какова география проживания целевой аудитории?', typeField: 'text', type: 'text', name: 'cta_audience' },
+      { id: 8, title: 'Какими способами целевая аудитория будет попадать на сайт / лендинг / страницу?', placeholder: 'Какими способами целевая аудитория будет попадать на сайт / лендинг / страницу?', typeField: 'text', type: 'text', name: 'cta_audience_insert' },
+      { id: 9, title: 'Перечислите конкурентов продукта / услуги / предложения, в том числе компании из других регионов или стран с аналогичным продуктом.', placeholder: 'Перечислите конкурентов продукта / услуги / предложения, в том числе компании из других регионов или стран с аналогичным продуктом.', typeField: 'text', type: 'text', name: 'competitors' },
+
+
+      { id: 10, title: 'Есть ли макеты, которые можно взять за основу дизайна', placeholder: '(коммерческое предложение, афиша, брошюра и т.п.)?', typeField: 'area', type: 'area', name: 'content' },
+      { id: 11, title: 'Есть ли референсы (сайты / лендинги / страницы), на которые стоит ориентироваться по дизайну или содержанию?', placeholder: 'Ссылки на примеры', typeField: 'area', type: 'area', name: 'refs' },
+      { id: 12, title: 'В чём заключаются преимущества и выгоды продукта? (по сравнению с конкурентом, альтернативным решением или отсутствием продукта).', placeholder: 'В сравнении с конкурентами/альтернативами', typeField: 'area', type: 'area', name: 'advantages' },
+      { id: 13, title: 'Нужно ли объяснять, как работает продукт? Если да, опишите это подробно.', placeholder: 'Нужно ли объяснять работу продукта? Опишите', typeField: 'area', type: 'area', name: 'work' },
+
+      { id: 14, title: 'Какие есть варианты приобретения продукта (разные тарифы, оборудование, скидки, акции, опции и т.п.)?', placeholder: 'Тарифы, оборудование, скидки, акции, опции', typeField: 'area', type: 'area', name: 'price' },
+      { id: 15, title: 'Какая дополнительная информация должна присутствовать на сайте / лендинге / странице (отзывы, карты, схемы, ссылки, контакты, описания и т.д.)?', placeholder: 'отзывы, карты, схемы, ссылки, контакты, описания и т.д.', typeField: 'area', type: 'area', name: 'details' },
+
+      { id: 16, title: 'Должны ли мобильная и десктопная версии совпадать по содержанию? Есть ли контент или функционал, который будет доступен только в одной из версий?', placeholder: 'Должны ли мобильная и десктопная версии совпадать по содержанию? Есть ли контент или функционал, который будет доступен только в одной из версий?', typeField: 'area', type: 'area', name: 'site_content' },
+
+
+      { id: 17, title: 'Пожелания по дизайну сайта / лендинга / страницы.', placeholder: 'Пожелания по дизайну/странице', typeField: 'text', type: 'text', name: 'wishes' },
+      { id: 18, title: 'Кто будет обрабатывать заявки, приходящие с данного сайта?', placeholder: 'Кто обрабатывает заявки с сайта?', typeField: 'text', type: 'text', name: 'processing' },
+      { id: 19, title: 'Срок запуска', placeholder: 'Желаемая дата', typeField: 'date', type: 'date', name: 'deadline' }
     ]
   },
 
@@ -69,8 +101,7 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
-      { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами (так будет называться задача)', typeField: 'area', type: 'area', name: 'description' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       {
         id: 3,
         title: 'Укажите тип изменения',
@@ -94,9 +125,9 @@ export const typeSelectorArr = [
           { id: 13, label: 'Другое (уточните)', value: 'other', icon: '' }
         ]
       },
-      { id: 4, title: 'Прикрепите скриншот страницы', placeholder: 'Загрузите файл', typeField: 'file', type: 'file', name: 'screenshot_file' },
-      { id: 5, title: 'Ссылка на страницу, где нужно внести изменения', placeholder: 'Полный URL', typeField: 'text', type: 'text', name: 'url' },
-      { id: 6, title: 'Готовый текст / изображение / документ для размещения', placeholder: 'Прикрепите файл или вставьте текст ниже', typeField: 'file', type: 'file', name: 'content_file' },
+      { id: 4, title: 'Прикрепите скриншот страницы, где необходимо внести изменения (необязательно, но желательно)', placeholder: 'Загрузите файл', typeField: 'file', type: 'file', name: 'screenshot_file' },
+      { id: 5, title: 'Ссылка на страницу, где нужно внести изменения: (укажите полный URL)', placeholder: 'Полный URL', typeField: 'text', type: 'text', name: 'url' },
+      { id: 6, title: 'Есть ли у вас готовый текст / изображение / документ для размещения? (если да, приложите файл)', placeholder: 'Прикрепите файл или вставьте текст ниже', typeField: 'file', type: 'file', name: 'content_file' },
       {
         id: 7,
         title: 'Нужно ли согласование перед публикацией?',
@@ -124,10 +155,9 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
-      { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами', typeField: 'area', type: 'area', name: 'description' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       {
-        id: 3,
+        id: 2,
         title: 'На какой площадке запустить рекламу?',
         placeholder: 'Можно выбрать несколько вариантов',
         typeField: 'selector_multi',
@@ -148,8 +178,8 @@ export const typeSelectorArr = [
         ]
       },
       {
-        id: 4,
-        title: 'Цель рекламы',
+        id: 3,
+        title: 'Цель рекламы (выберите одно или несколько)',
         placeholder: 'Выберите одно или несколько направлений',
         typeField: 'selector_multi',
         type: 'selector',
@@ -163,15 +193,15 @@ export const typeSelectorArr = [
           { id: 6, label: 'Другое (уточните)', value: 'other', icon: '' }
         ]
       },
-      { id: 5, title: 'Ссылка, куда будет идти реклама', placeholder: 'Сайт/лендинг/группа ВК (необязательно)', typeField: 'text', type: 'text', name: 'landing_url' },
-      { id: 6, title: 'География размещения', placeholder: 'Город, район или регион кампании', typeField: 'text', type: 'text', name: 'geo' },
-      { id: 7, title: 'Кто ваш клиент?', placeholder: 'Возраст, статус, интересы, поведение и т.д.', typeField: 'area', type: 'area', name: 'target_audience' },
-      { id: 8, title: 'Боль / потребность клиента', placeholder: 'Комфорт, безопасность, контроль и пр.', typeField: 'area', type: 'area', name: 'pain_point' },
-      { id: 9, title: 'УТП (уникальное предложение)', placeholder: 'Напр.: «Монтаж за 0 ₽», «5 дней теста бесплатно»', typeField: 'area', type: 'area', name: 'unique_offer' },
-      { id: 10, title: 'Акции, скидки, подарки', placeholder: 'Напр.: «Скидка 15%…», «Бесплатное подключение»', typeField: 'area', type: 'area', name: 'discounts' },
+      { id: 4, title: 'Ссылка, куда будет идти реклама', placeholder: 'Сайт/лендинг/группа ВК (необязательно)', typeField: 'text', type: 'text', name: 'landing_url' },
+      { id: 5, title: 'География размещения', placeholder: 'Укажите название города, района или поселка, где будет запущена реклама. (если кампания федеральная — уточните регионы приоритета)', typeField: 'text', type: 'text', name: 'geo' },
+      { id: 6, title: 'Кто ваш клиент?', placeholder: 'Опишите целевую аудиторию максимально подробно: Возраст, пол Социальный статус (работает, учится, пенсионер и т.д.) Род деятельности Доход, интересы, поведение Где чаще бывает онлайн (например: владельцы кафе и магазинов, мужчины 30–50 лет, интересуются безопасностью бизнеса)', typeField: 'area', type: 'area', name: 'target_audience' },
+      { id: 7, title: 'Какую боль / потребность закрывает ваш продукт?', placeholder: 'Например: защита от краж, контроль сотрудников, комфортное проживание, безопасность семьи', typeField: 'area', type: 'area', name: 'pain_point' },
+      { id: 8, title: 'УТП (уникальное предложение)', placeholder: 'Например: “Монтаж за 0 рублей”, “5 дней теста бесплатно”, “Доступ через приложение”', typeField: 'area', type: 'area', name: 'unique_offer' },
+      { id: 9, title: 'Есть ли акции, скидки или подарки?', placeholder: 'Например: “Скидка 15% при заказе до 1 мая”, “Бесплатное подключение”', typeField: 'area', type: 'area', name: 'discounts' },
       {
-        id: 11,
-        title: 'Клиентский путь и обработка заявок',
+        id: 10,
+        title: 'Клиентский путь и обработка заявок. Как будет фиксироваться воронка продаж? Кто обрабатывает заявки?',
         placeholder: 'Кто фиксирует воронку и обрабатывает заявки',
         typeField: 'selector',
         type: 'selector',
@@ -183,14 +213,14 @@ export const typeSelectorArr = [
           { id: 4, label: 'Другое (уточните)', value: 'other', icon: '' }
         ]
       },
-      { id: 12, title: 'Ключевые слова / запросы', placeholder: 'Напр.: «Обслуживание АТС», «Wi-Fi для кафе»', typeField: 'area', type: 'area', name: 'keywords' },
-      { id: 13, title: 'Материалы для рекламы', placeholder: 'Баннеры, фото, тексты, видео (если есть)', typeField: 'file', type: 'file', name: 'banner_file' },
-      { id: 14, title: 'База для рассылки (если нужна)', placeholder: 'Телефоны, email, ID пользователей', typeField: 'file', type: 'file', name: 'base_file' },
-      { id: 15, title: 'Примеры конкурентов / объявлений', placeholder: 'Ссылки или скриншоты', typeField: 'file', type: 'file', name: 'concurents_file' },
-      { id: 16, title: 'Бюджет на рекламу в месяц', placeholder: 'Например: 15 000 ₽', typeField: 'text', type: 'text', name: 'budget' },
-      { id: 17, title: 'KPI (ожидаемые результаты)', placeholder: 'Напр.: 100 лидов, 5000 показов, CTR 2%…', typeField: 'text', type: 'text', name: 'kpi' },
-      { id: 18, title: 'Период проведения кампании', placeholder: 'Например: с 1 по 30 ноября', typeField: 'text', type: 'text', name: 'campaign_period' },
-      { id: 19, title: 'Срок запуска', placeholder: 'Желаемая дата', typeField: 'date', type: 'date', name: 'deadline' }
+      { id: 11, title: 'Какие ключевые слова / запросы хотите использовать в продвижении?', placeholder: 'Например: “Обслуживание АТС”, “Видеонаблюдение для бизнеса”, “Wi-Fi для кафе”', typeField: 'area', type: 'area', name: 'keywords' },
+      { id: 12, title: 'Ссылки на материалы, если есть (без нихзапуск рекламы будет позже)', placeholder: '(картинки, макеты, презентации, фото, исходники, тексты объявлений и т.п.)', typeField: 'file', type: 'file', name: 'banner_file' },
+      { id: 13, title: 'Если необходима реклама по базе, загрузите базу данных: (номера телефонов, email, ID пользователей и т.д.)', placeholder: 'Телефоны, email, ID пользователей', typeField: 'file', type: 'file', name: 'base_file' },
+      { id: 14, title: 'Примеры конкурентов / объявлений', placeholder: 'Ссылки или скриншоты', typeField: 'file', type: 'file', name: 'concurents_file' },
+      { id: 15, title: 'Бюджет на рекламу в месяц', placeholder: 'Например: 15 000 ₽', typeField: 'text', type: 'text', name: 'budget' },
+      { id: 16, title: 'KPI (ожидаемые результаты)', placeholder: 'Напр.: 100 лидов, 5000 показов, CTR 2%…', typeField: 'text', type: 'text', name: 'kpi' },
+      { id: 17, title: 'Период проведения кампании', placeholder: 'Например: с 1 по 30 ноября', typeField: 'text', type: 'text', name: 'campaign_period' },
+      { id: 18, title: 'Срок запуска', placeholder: 'Желаемая дата', typeField: 'date', type: 'date', name: 'deadline' }
     ]
   },
 
@@ -204,7 +234,7 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами', typeField: 'area', type: 'area', name: 'description' },
       {
         id: 3,
@@ -236,7 +266,7 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Опишите задачу своими словами', typeField: 'area', type: 'area', name: 'description' },
       { id: 3, title: 'Где будет размещаться статья?', placeholder: 'Издание/газета/журнал/сайт (название или ссылка)', typeField: 'text', type: 'text', name: 'placement' },
       { id: 4, title: 'Регион / город размещения', placeholder: 'Один или несколько регионов/городов', typeField: 'text', type: 'text', name: 'region' },
@@ -260,7 +290,7 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Кратко о задаче (суть работы)', typeField: 'area', type: 'area', name: 'description' },
       {
         id: 3,
@@ -295,7 +325,7 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Кратко о задаче', typeField: 'area', type: 'area', name: 'description' },
       { id: 3, title: 'Цель рассылки', placeholder: 'Информирование, реклама, уведомление об акции и т.д.', typeField: 'area', type: 'area', name: 'goal' },
       { id: 4, title: 'Файл с выгрузкой абонентов', placeholder: 'Если нет — пропустите', typeField: 'file', type: 'file', name: 'abonents_file' },
@@ -317,7 +347,7 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Кратко о задаче', typeField: 'area', type: 'area', name: 'description' },
       { id: 3, title: 'Кто отвечает за визуал', placeholder: 'ФИО, филиал, отдел', typeField: 'text', type: 'text', name: 'responsible_person' },
       { id: 4, title: 'Цель размещения сторис', placeholder: 'Информирование, акция, реклама и т.д.', typeField: 'area', type: 'area', name: 'goal' },
@@ -343,7 +373,7 @@ export const typeSelectorArr = [
       id: '-1003229463914'
     },
     field: [
-      { id: 1, title: 'Название продукта / услуги', placeholder: 'Например: «Умный шлагбаум»', typeField: 'text', type: 'text', name: 'title' },
+      { id: 1, title: 'Опишите задачу своими словами.', placeholder: 'Что необходимо сделать? (Как будет называться задача, чтобы сразу понимать суть.)', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Что необходимо сделать?', placeholder: 'Кратко о задаче', typeField: 'area', type: 'area', name: 'description' },
       { id: 3, title: 'Цель опроса', placeholder: 'Исследование, обратная связь, потребности, NPS и т.д.', typeField: 'area', type: 'area', name: 'goal' },
       { id: 4, title: 'Целевая аудитория (чьи ответы нужны)', placeholder: 'Возраст, пол, город, интересы, профессии и т.п.', typeField: 'area', type: 'area', name: 'target_audience' },

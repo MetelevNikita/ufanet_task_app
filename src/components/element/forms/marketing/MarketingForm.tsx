@@ -274,8 +274,8 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
   // POST FN
 
 
-    const currentType = typeSelectorArr.find((type: any) => type.label === marketing.type)
-    console.log(currentType)
+  const currentType = typeSelectorArr.find((type: any) => type.label === marketing.type)
+  console.log(currentType)
   
   
    const submitMessage = async (message: any) => {
@@ -287,7 +287,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
           return
         }
 
-        if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader) {
+        if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader || !message.deadline) {
           alert('Все поля должны быть заполнены')
           return
         }

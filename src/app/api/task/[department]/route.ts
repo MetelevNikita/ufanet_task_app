@@ -217,7 +217,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
 
     const TelegramRes = await createTGTask(departmentLabel, data, messageTG, newDatabaseTask, formData.reconciliator.id)
-    console.log("TELEGRAM RES", TelegramRes)
 
     if (!TelegramRes) {
       return NextResponse.json({ message: `Ошибка создания задачи в телеграмм` }, { status: 500 });

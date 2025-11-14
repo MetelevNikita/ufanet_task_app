@@ -57,11 +57,15 @@ export const getYGData = async () => {
 
     if (process.env.NEXT_RUNTIME !== 'nodejs') return;
 
+
+    const companyName = process.env.COMPANY_NAME as string
+    console.log('COMPANY NAME', companyName)
+
     const { getYGCompany } = await import('@/functions/getYGCompany')
     const { getYGKeys } = await import('@/functions/getYGKeys')
 
     const companys = await getYGCompany();
-    const currentCompany = companys.content.find((company: {id: string, name: string, isAdmin: string}) => company.name == 'Служба PR')
+    const currentCompany = companys.content.find((company: {id: string, name: string, isAdmin: string}) => company.name == process.env.COMPANY_NAME)
 
     if (!currentCompany) {
       throw new Error(

@@ -66,6 +66,9 @@
 
 .search_status_stage {
 
+  width: max-content;
+
+
   font-size: 12px;
   padding: 4px;
   border-radius: 5px;
@@ -76,7 +79,6 @@
 
   /*  */
 
-  text-align: center;
 
 }
 

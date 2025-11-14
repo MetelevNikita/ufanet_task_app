@@ -1,4 +1,8 @@
 export const getYGCompany = async () => {
+
+  console.log(process.env.YG_LOGIN)
+  console.log(process.env.YG_PASSWORD)
+
   try {
 
     const responce = await fetch('https://yougile.com/api-v2/auth/companies', {
@@ -18,6 +22,7 @@ export const getYGCompany = async () => {
     }
 
     const data = await responce.json();
+    console.log(data)
     return data;
       
   } catch (error: Error | unknown) {

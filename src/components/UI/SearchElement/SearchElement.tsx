@@ -90,20 +90,29 @@ const SearchElement: FC<SearchElementProps> = ({ status, title, date, department
 
       <div className={styles.search_status_line} style={{backgroundColor: statusColor}}></div> 
   
-      <Col className='d-flex flex-md-row flex-column justify-md-center' style={{marginLeft: '10px', marginRight: '10px'}}>
+      <Col className='d-flex flex-md-row flex-column justify-content-md-start' style={{marginLeft: '10px', marginRight: '10px'}}>
 
-        <Col md={2} className='d-flex flex-row justify-center justify-md-between align-items-center mt-3 mb-3'>
+        <Col md={2} className='d-flex align-items-center flex-row mt-3 mb-3'>
             <div className={styles.search_status_circle} style={{backgroundColor: statusColor}}></div>
             <div className={styles.search_status_subtext} style={{borderColor: statusColor, color: statusColor, borderWidth: '2px'}}>{statusText}</div>
         </Col>
 
-        <Col md={10} className='d-flex align-items-center flex-md-row flex-column mt-3 mb-3'>
-          <Col className={styles.search_status_author}>Автор: {author}</Col>
-          <Col className={styles.search_status_title}>Задача: {title}</Col>
+        <Col md={10} className='d-flex align-items-md-center align-items-start flex-md-row flex-column mt-3 mb-3'>
+          <Col className='mt-1 mb-1'>
+            <div className={styles.search_status_author}>Автор: {author}</div>
+          </Col>
 
-          <Col className={styles.search_status_stage} style={{backgroundColor: stageText}}>Cостояние: {(stage === '') ? 'Не определено' : stage}</Col>
+          <Col md={2} className='mt-1 mb-1'>
+            <div className={styles.search_status_title}>Задача: {title}</div>
+          </Col>
 
-          <Col className={styles.search_status_date}>Дата: {newDate}</Col>
+          <Col className='mt-1 mb-1'>
+            <div style={{backgroundColor: stageText}} className={styles.search_status_stage}>Cостояние: {(stage === '') ? 'В очереди' : stage}</div>
+          </Col>
+
+          <Col className='mt-1 mb-1'>
+            <div className={styles.search_status_date}>Дата: {newDate}</div>
+          </Col>
         </Col>
 
       </Col>

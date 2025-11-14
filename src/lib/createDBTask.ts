@@ -24,7 +24,7 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
       deadline: data.deadline,
       message: JSON.stringify(currentMessageOBJ, null, 3),
       status: 'Входящие',
-      stage: ''
+      stage: 'В очереди'
     }
 
     console.log(databaseCard)
