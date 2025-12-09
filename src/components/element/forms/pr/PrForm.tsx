@@ -244,8 +244,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   // 
 
 
-  const [pr, setPr] = useState<any>({
-  })
+  const [pr, setPr] = useState<any>({})
 
 
   const { department, setDepartment } = departmentData
@@ -260,13 +259,10 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
     }
   }, [department])
 
-
-  console.log(currentDepartment)
-
-
   // type field
 
   const typeSelector = new MySelector('Тип заявки', 'type', typeSelectorArr)
+
 
   // primary
 
@@ -282,7 +278,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   console.log(currentType)
   
   
-   const submitMessage = async (message: any) => {
+  const submitMessage = async (message: any) => {
       try {
 
 
@@ -343,9 +339,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
           throw new Error(error.message);
         }
       }
-    }
-
-
+  }
 
 
   return (

@@ -1,6 +1,7 @@
 .header_title_wrapper {
   display: flex;
   align-items: center;
+  gap: 20px;
 
   /*  */
 

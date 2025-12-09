@@ -25,7 +25,7 @@ import MyButton from '@/components/UI/MyButton/MyButton'
 
 import logo from '@/../public/logo_ufanet/logo_full.svg'
 import tgIcon from '@/../public/social_icon/tg.svg'
-import waIcon from '@/../public/social_icon/wa.svg'
+
 
 
 const socialArr = [
@@ -48,43 +48,36 @@ const Header: FC<HeaderProps>  = () => {
 
 
   const {path, setPath} = useContext(Context)
-  console.log(path)
-
 
   return (
 
     <Container>
-      <Row className='d-flex align-items-center justify-content-between mt-4 mb-4' md={4}>
+      <Row className='d-flex align-items-center justify-content-around mt-4 mb-4' md={4}>
 
-        <Col md={5} xs={6} className='d-flex justify-content-start align-items-center'>
-
-          <div className={styles.header_title_wrapper} onClick={() => {
-            (path === '/tasks') ? window.location.href = '/' : window.location.href = '/tasks'}}>
-            <Image src={logo} alt={'logo'} width={120} height={120}/>
-
-            {(path === '/tasks') ? <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={styles.header_title}>Вернуться на главную</motion.div> : <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={styles.header_title}>Посмотреть история заявок</motion.div>}
-          </div>
-          
+        <Col md={2} xs={12} className='d-flex flex-md-row flex-column justify-content-start align-items-center mt-2 mb-2'>
+              <Image src={logo} alt={'logo'} width={120} height={120}/>
         </Col>
 
-        <Col md={5} xs={6} className='d-flex justify-content-end align-items-center'>
+        <Col md={3} xs={12} className='d-flex flex-md-row flex-column justify-content-start align-items-center mt-2 mb-2'>
+
+            <MyButton text={(path === '/tasks') ? 'Вернуться на главную' : 'Посмотреть история заявок'} onClick={() => {(path === '/tasks') ? window.location.href = '/' : window.location.href = '/tasks'}} type={'button'} />
+        
+        </Col>
+
+        <Col md={7} xs={12} className='d-flex flex-row justify-content-md-end justify-content-center align-items-center mt-2 mb-2'>
 
 
+            <motion.div onClick={() => {window.location.href = socialArr[0].link}} whileHover={{color: '#FF6600', scale: 1.02}} className={[styles.header_info_title, 'd-flex'].join(' ')}>Что то не работает? Пишите.</motion.div>
 
-          <div className={styles.info_wrapper}>
+            {
+            
+              socialArr.map((item: any, index: number): React.ReactNode => {
+                return <Link key={index+1} target={'_blank'} href={item.link}><Image className={styles.social_icon}  src={item.icon} alt='icon'/></Link>
+              })
+
+            }
 
 
-          <motion.div whileHover={{color: '#FF6600', scale: 1.02}} className={[styles.header_info_title, 'd-flex d-none d-sm-block'].join(' ')}>Что то не работает? Пишите.</motion.div>
-
-          {
-          
-            socialArr.map((item: any, index: number): React.ReactNode => {
-              return <Link key={index+1} target={'_blank'} href={item.link}><Image className={styles.social_icon}  src={item.icon} alt='icon'/></Link>
-            })
-
-          }
-
-          </div>
 
         </Col>
 

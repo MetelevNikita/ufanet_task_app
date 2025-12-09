@@ -1,7 +1,8 @@
 'use client'
 
 import { FC, useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { useRouter } from 'next/navigation';
+
 
 // icon
 
@@ -31,17 +32,6 @@ import MenuButton from '@/components/UI/MenuButton/MenuButton';
 
 // types
 
-import { SelectType } from '@/types/types'
-
-// 
-
-import directions from '@/database/direction.json'
-
-
-
-
-
-
 
 
 
@@ -55,8 +45,10 @@ interface LeftSideApplicationProps {
 const LeftSideApplication: FC<LeftSideApplicationProps> = ({ departmentData }) => {
 
 
-  const {department, setDepartment} = departmentData
+  const router = useRouter()
 
+
+  const {department, setDepartment} = departmentData
 
   const departmentArray = [
   {
@@ -124,8 +116,8 @@ const LeftSideApplication: FC<LeftSideApplicationProps> = ({ departmentData }) =
                           title={item.label}
                           image={(department === item.label) ? item.icon : item.iconActive}
                           onClick={() => {
-                              setDepartment(item.label)
-                              sessionStorage.setItem('department', item.value)
+                              console.log(item.value)
+                              router.push(`/app?department=${item.label}`)
                             }}
                           menuActive={{department, setDepartment}}/>
                       </Col>

@@ -259,6 +259,8 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
     }
   }, [department])
 
+    console.log(currentDepartment)
+
 
   // type field
 

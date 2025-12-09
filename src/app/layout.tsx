@@ -39,9 +39,9 @@ export default function RootLayout({
       <body className={`${montserrat.variable}`}>
         <Container className="mt-3">
           <RootContext>
-          <Header />
-        {children}
-          <Footer />
+                  <Header />
+                        {children}
+                  <Footer />
         </RootContext>
         </Container>
       </body>

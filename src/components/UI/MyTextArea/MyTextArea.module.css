@@ -27,17 +27,19 @@
 
     /*  */
 
-    resize: none
+    resize: none;
+    font-size: 13px;
 }
 
 
 textarea:focus {
   outline: none;
   border-color: #80298D;
+  font-size: 12px;
 }
 
 
 textarea::placeholder {
-  color: #5f5f5f;
+  color: #5f5f5fa9;
   font-size: 12px;
 }

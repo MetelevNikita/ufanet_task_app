@@ -2,6 +2,7 @@
 
 import { FC, useState, useContext, useEffect } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 // styles
 
@@ -23,8 +24,6 @@ import { MenuType } from '@/types/types'
 
 // image
 
-import logo from '@/../public/logo_ufanet/logo_full.svg'
-import MenuElement from '@/components/element/Menu/MenuElement'
 import bgImage from '@/../public/background/right_image.png'
 
 // db
@@ -34,6 +33,9 @@ import directionsData from '@/database/direction.json'
 // Context
 
 import { Context } from '@/utils/RootContext'
+
+// compoennts
+
 import MyButton from '@/components/UI/MyButton/MyButton'
 
 
@@ -82,6 +84,8 @@ const page: FC = () => {
   useEffect(() => {
     setPath('/')
   }, [])
+
+  const router = useRouter()
 
 
 
@@ -138,8 +142,7 @@ const page: FC = () => {
               {
                 (menu.length > 1 ) && menu.map((item: MenuType, index: number) => {
                   return <Col key={index+1} className='mb-2 mt-2'><MyButton text={item.label} onClick={() => {
-                      sessionStorage.setItem('department', item.value)
-                      window.location.href = `/app`
+                      router.push(`/app?department=${item.label}`)
                   }} type={'button'} /></Col>
                 })
               }

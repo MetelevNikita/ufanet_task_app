@@ -1,6 +1,7 @@
-'use client'
+"use client"
 
 import { FC, useState, useEffect } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 // bootstrap
 
@@ -37,12 +38,31 @@ import { BsXCircle } from "react-icons/bs";
 import { BsAlarm } from "react-icons/bs";
 
 
-// 
 
 
 
 
-const page = () => {
+
+
+const page: FC = () => {
+
+  const searchParams = useSearchParams()
+  const params = searchParams.get('department')
+  console.log(params)
+
+  useEffect(() => {
+
+    if (params) {
+      setDepartment(params)
+    }
+
+  }, [params])
+
+
+
+
+
+ 
 
   // modal state
 
@@ -51,22 +71,9 @@ const page = () => {
   const [modalBackInfo, setModalBackInfo] = useState<boolean>(false)
   const [modalInfoDownload, setModalInfoDownload] = useState<boolean>(false)
 
-  // 
+  //
 
-
-
-  const [department, setDepartment] = useState<string>('')
-
-  useEffect(() => {
-    const data = sessionStorage.getItem('department')
-
-    const currentDepartment = directions.data.find((item) => item.value == data)
-    console.log(currentDepartment)
-
-    if (!currentDepartment) return
-
-    setDepartment(currentDepartment.label)
-  }, [])
+  const [department, setDepartment] = useState<any>()
 
 
   if (!department) {
@@ -78,8 +85,6 @@ const page = () => {
       </Row>
     )
   }
-
-
 
   const currentForm = (department: string) => {
     switch (department) {
@@ -121,7 +126,6 @@ const page = () => {
   }
 
 
-  console.log(process.env.NODE_ENV)
 
 
   return (
@@ -146,8 +150,8 @@ const page = () => {
                         window.location.href = '/'
                       }}
                       onClickTwo={
-                        () => {setModalBackInfo(false)
-
+                        () => {
+                          setModalBackInfo(false)
                         }}
                       />
                   )
