@@ -1,5 +1,6 @@
 
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 
@@ -39,9 +40,11 @@ export default function RootLayout({
       <body className={`${montserrat.variable}`}>
         <Container className="mt-3">
           <RootContext>
-                  <Header />
-                        {children}
-                  <Footer />
+            <Header />
+                <Suspense fallback={<div>Loading...</div>}>
+                    {children}
+                </Suspense>
+            <Footer />
         </RootContext>
         </Container>
       </body>
