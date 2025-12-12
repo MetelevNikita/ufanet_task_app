@@ -372,10 +372,10 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                     <Col md={12}>
 
                       {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(marketing.fio, (e: any) => {setMarketing({...marketing, fio: e.target.value})})}
-                      {new MyField('Подразделение', 'Введите подразделение', 'text', 'subdivision').createFiled(marketing.subdivision, (e: any) => {setMarketing({...marketing, subdivision: e.target.value})})}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(marketing.subdivision, (e: any) => {setMarketing({...marketing, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(marketing.tgId, (e: any) => {setMarketing({...marketing, tgId: e.target.value})})}
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(marketing.branch, (e: any) => {setMarketing({...marketing, branch: e.target.value})})}
-                      {new MyField('Лидер мероприятия', 'Введите лидера мероприятия', 'text', 'leader').createFiled(marketing.leader, (e: any) => {setMarketing({...marketing, leader: e.target.value})})}
+                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(marketing.leader, (e: any) => {setMarketing({...marketing, leader: e.target.value})})}
                     
                     </Col>
                   </Row>
@@ -453,7 +453,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
 
 
 
-                  <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                  {/* <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
                         <Col className='mb-3' md={6}>
                           <MyButton
                             text={'Создать заявку'}
@@ -472,7 +472,20 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                             type={'button'}
                           />
                         </Col>
-                    </Row>
+                    </Row> */}
+
+
+                  <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                      <Col className='mb-3' md={12}>
+                        <MyButton
+                          text={'Создать заявку'}
+                          onClick={() => {
+                            submitMessage(marketing)
+                          }}
+                          type={'button'}
+                        />
+                      </Col>
+                  </Row>
 
 
 

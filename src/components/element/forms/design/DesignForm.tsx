@@ -374,10 +374,10 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                     <Col md={12}>
 
                       {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(design.fio, (e: any) => {setDesign({...design, fio: e.target.value})})}
-                      {new MyField('Подразделение', 'Введите подразделение', 'text', 'subdivision').createFiled(design.subdivision, (e: any) => {setDesign({...design, subdivision: e.target.value})})}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(design.subdivision, (e: any) => {setDesign({...design, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(design.tgId, (e: any) => {setDesign({...design, tgId: e.target.value})})}
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(design.branch, (e: any) => {setDesign({...design, branch: e.target.value})})}
-                      {new MyField('Лидер мероприятия', 'Введите лидера мероприятия', 'text', 'leader').createFiled(design.leader, (e: any) => {setDesign({...design, leader: e.target.value})})}
+                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(design.leader, (e: any) => {setDesign({...design, leader: e.target.value})})}
                     
                     </Col>
                   </Row>
@@ -468,7 +468,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   {/*  */}
 
 
-                  <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                  {/* <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
                         <Col className='mb-3' md={6}>
                           <MyButton
                             text={'Создать заявку'}
@@ -483,6 +483,19 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                           <MyButton
                             text={'На главную'}
                             onClick={() => {window.location.href = '/'}}
+                            type={'button'}
+                          />
+                        </Col>
+                    </Row> */}
+
+
+                  <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                        <Col className='mb-3' md={12}>
+                          <MyButton
+                            text={'Создать заявку'}
+                            onClick={() => {
+                              submitMessage(design)
+                            }}
                             type={'button'}
                           />
                         </Col>

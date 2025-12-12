@@ -369,10 +369,10 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                     <Col md={12}>
 
                       {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(pr.fio, (e: any) => {setPr({...pr, fio: e.target.value})})}
-                      {new MyField('Подразделение', 'Введите подразделение', 'text', 'subdivision').createFiled(pr.subdivision, (e: any) => {setPr({...pr, subdivision: e.target.value})})}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(pr.subdivision, (e: any) => {setPr({...pr, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(pr.tgId, (e: any) => {setPr({...pr, tgId: e.target.value})})}
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(pr.branch, (e: any) => {setPr({...pr, branch: e.target.value})})}
-                      {new MyField('Лидер мероприятия', 'Введите лидера мероприятия', 'text', 'leader').createFiled(pr.leader, (e: any) => {setPr({...pr, leader: e.target.value})})}
+                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(pr.leader, (e: any) => {setPr({...pr, leader: e.target.value})})}
                     
                     </Col>
                   </Row>
@@ -446,7 +446,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   {/*  */}
 
 
-                  <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                  {/* <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
                         <Col className='mb-3' md={6}>
                           <MyButton
                             text={'Создать заявку'}
@@ -464,12 +464,25 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                             type={'button'}
                           />
                         </Col>
+                    </Row> */}
+
+
+                    <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                        <Col className='mb-3' md={12}>
+                          <MyButton
+                            text={'Создать заявку'}
+                            onClick={() => {
+                              submitMessage(pr)
+                            }}
+                            type={'button'}
+                          />
+                        </Col>
                     </Row>
 
 
                     <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-3'>
                         <Col className='d-flex flex-column justify-content-center align-items-center mt-3 mb-3'>
-                              <div className={styles.info_title}>В случае успешной отправки заявка отправляется на согласование Эделевой О.Н. , после чего будет передано в работу в отдел дизайна</div>
+                              <div className={styles.info_title}>В случае успешной отправки заявка отправляется на согласование Эделевой О.Н. , после чего будет передано в работу в отдел PR</div>
                         </Col>
                     </Row>
 

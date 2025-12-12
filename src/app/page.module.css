@@ -39,9 +39,10 @@
 
 .left_title {
   color: #691875;
-  font-size: 40px;
+  font-size: 39px;
   font-weight: 700;
   line-height: 1.2;
+  text-transform: uppercase;
 
   /*  */
 

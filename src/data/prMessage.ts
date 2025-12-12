@@ -17,14 +17,14 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('Описание проекта / услуги:', data.description) +
       row('Цель:', data.goal) +
       row('Что необходимо сделать:', data.todo) +
-      row('Какие сроки:', data.deadline);
+      row('Дата мероприятия:', data.deadline);
 
     const bodyTG =
       row('Название проекта / услуги:', data.title, '\n') +
       row('Описание проекта / услуги:', data.description, '\n') +
       row('Цель:', data.goal, '\n') +
       row('Что необходимо сделать:', data.todo, '\n') +
-      row('Какие сроки:', data.deadline, '\n');
+      row('Дата мероприятия:', data.deadline, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -108,13 +108,13 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('Название мероприятия:', data.title) +
       row('Что необходимо сделать:', data.todo) +
       row('Цель — для чего это нужно:', data.goal) +
-      row('Срок готовности:', data.deadline);
+      row('Дата мероприятия:', data.deadline);
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
       row('Что необходимо сделать:', data.todo, '\n') +
       row('Цель — для чего это нужно:', data.goal, '\n') +
-      row('Срок готовности:', data.deadline, '\n');
+      row('Дата мероприятия:', data.deadline, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }

@@ -1,4 +1,5 @@
-import { FC, useState, useEffect, useMemo } from 'react'
+import { FC, useState, useMemo } from 'react'
+import Link from 'next/link'
 
 // styles
 
@@ -373,10 +374,13 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                     <Col md={12}>
 
                       {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(advertising.fio, (e: any) => {setAdvertising({...advertising, fio: e.target.value})})}
-                      {new MyField('Подразделение', 'Введите подразделение', 'text', 'subdivision').createFiled(advertising.subdivision, (e: any) => {setAdvertising({...advertising, subdivision: e.target.value})})}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(advertising.subdivision, (e: any) => {setAdvertising({...advertising, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(advertising.tgId, (e: any) => {setAdvertising({...advertising, tgId: e.target.value})})}
+
+                      <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'@getmyid_bot'}>@getmyid_bot</Link></div>
+
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(advertising.branch, (e: any) => {setAdvertising({...advertising, branch: e.target.value})})}
-                      {new MyField('Лидер мероприятия', 'Введите лидера мероприятия', 'text', 'leader').createFiled(advertising.leader, (e: any) => {setAdvertising({...advertising, leader: e.target.value})})}
+                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(advertising.leader, (e: any) => {setAdvertising({...advertising, leader: e.target.value})})}
                     
                     </Col>
                   </Row>
@@ -450,7 +454,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   {/*  */}
 
 
-                  <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                  {/* <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
                         <Col className='mb-3' md={6}>
                           <MyButton
                             text={'Создать заявку'}
@@ -468,13 +472,27 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                             type={'button'}
                           />
                         </Col>
+                    </Row> */}
+
+
+
+                    <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
+                        <Col className='mb-3' md={12}>
+                          <MyButton
+                            text={'Создать заявку'}
+                            onClick={() => {
+                              submitMessage(advertising)
+                            }}
+                            type={'button'}
+                          />
+                        </Col>
                     </Row>
 
 
 
                     <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-3'>
                         <Col className='d-flex flex-column justify-content-center align-items-center mt-3 mb-3'>
-                              <div className={styles.info_title}>В случае успешной отправки заявка отправляется на согласование Эделевой О.Н. , после чего будет передано в работу в отдел дизайна</div>
+                              <div className={styles.info_title}>В случае успешной отправки заявка отправляется на согласование Эделевой О.Н. , после чего будет передано в работу в отдел рекламы</div>
                         </Col>
                     </Row>
 

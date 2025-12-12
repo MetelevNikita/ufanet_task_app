@@ -100,7 +100,7 @@ export const typeSelectorArr = [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
       { id: 2,  title: 'Что необходимо сделать?', placeholder: 'Опишите задачу', typeField: 'area',  type: 'area',  name: 'todo' },
       { id: 3,  title: 'Цель — для чего это нужно?', placeholder: 'Опишите цель', typeField: 'text',  type: 'text',  name: 'goal' },
-      { id: 4,  title: 'Срок готовности', placeholder: 'Желаемая дата', typeField: 'date',  type: 'date',  name: 'deadline' }
+      { id: 4,  title: 'Дата мероприятия', placeholder: 'Желаемая дата', typeField: 'date',  type: 'date',  name: 'deadline' }
     ]
   }
 ];

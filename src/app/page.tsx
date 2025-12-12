@@ -136,7 +136,7 @@ const page: FC = () => {
 
           <div className={styles.bg_left_wrapper}>
 
-              <div className={styles.left_title}>СЕРВИС ЗАЯВОК НА РАЗРАБОТКУ ПРОЕКТА</div>
+              <div className={styles.left_title}>Сервис приема заявок <br></br> в PR-службу</div>
               <div className={styles.left_subtitle}>При заполнении заявки необходимо заполнять все поля, в случаи их не заполнения заявка не будет отправлена исполнителю</div>
 
               {
