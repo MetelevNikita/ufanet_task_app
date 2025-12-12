@@ -42,6 +42,8 @@ export const createYGTask = async (department: string, data: any, descriptionTas
       return `Столбец Входящие не найден в доске ${department}`
     }
 
+    console.log(columns)
+
     // stecker
 
     const stickers = await getYGStickers(yougileKey)

@@ -263,8 +263,9 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
     }
   }, [department])
 
+  if (!currentDepartment) return
 
-  console.log(currentDepartment)
+  console.log(currentDepartment.value)
 
 
   // type field
@@ -315,10 +316,8 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
           },
         }
 
-        console.log(newData)
-  
 
-        const data = await postTask(newData)
+        const data = await postTask(newData, department)
         console.log(data)
 
         setModalInfoDownload(false)
@@ -377,7 +376,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                       {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(advertising.subdivision, (e: any) => {setAdvertising({...advertising, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(advertising.tgId, (e: any) => {setAdvertising({...advertising, tgId: e.target.value})})}
 
-                      <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'@getmyid_bot'}>@getmyid_bot</Link></div>
+                      <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
 
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(advertising.branch, (e: any) => {setAdvertising({...advertising, branch: e.target.value})})}
                       {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(advertising.leader, (e: any) => {setAdvertising({...advertising, leader: e.target.value})})}

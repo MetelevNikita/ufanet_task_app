@@ -1,4 +1,5 @@
-import { FC, useState, useEffect, useMemo } from 'react'
+import { FC, useState, useMemo } from 'react'
+import Link from 'next/link'
 
 // styles
 
@@ -317,7 +318,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
         console.log(newData)
   
 
-        const data = await postTask(newData)
+        const data = await postTask(newData, department)
         console.log(data)
 
         setModalInfoDownload(false)
@@ -376,6 +377,9 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                       {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(design.fio, (e: any) => {setDesign({...design, fio: e.target.value})})}
                       {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(design.subdivision, (e: any) => {setDesign({...design, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(design.tgId, (e: any) => {setDesign({...design, tgId: e.target.value})})}
+
+                      <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
+
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(design.branch, (e: any) => {setDesign({...design, branch: e.target.value})})}
                       {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(design.leader, (e: any) => {setDesign({...design, leader: e.target.value})})}
                     

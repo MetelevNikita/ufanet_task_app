@@ -18,10 +18,8 @@ export const fileToBase64 = (file: File): Promise<string> => {
 
 
 
-export const postTask = async (data: any) => {
+export const postTask = async (data: any, department: string) => {
   try {
-
-    const department = (typeof window !== "undefined") ? sessionStorage.getItem('department') : ''
 
 
     const entries = Object.entries(data)
@@ -43,6 +41,8 @@ export const postTask = async (data: any) => {
 
 
     const fromEntries = Object.fromEntries(newData) as any
+
+    console.log('ДАННЫЕ из POST TASK')
 
     const responce = await fetch (`/api/task/${department}`, {
       method: 'POST',

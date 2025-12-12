@@ -149,11 +149,14 @@ export const POST = async (req: Request) => {
 
 
     if (event.payload.assigned) {
-      const currentAssignedUsers = event.payload.assigned || []
-      const prevAssignedUsers = event.prevData.assigned || []
+      const currentAssignedUsers = event.payload.assigned ?? []
+      const prevAssignedUsers = event.prevData.assigned ?? []
+
+      console.log("Current assign data ", currentAssignedUsers.length)
+      console.log("Previous assign data ", prevAssignedUsers.length)
 
 
-      compressionAssigned = (prevAssignedUsers.length === currentAssignedUsers.length && prevAssignedUsers.every((item: string, index: number) => item === currentAssignedUsers[index])) ? false : true
+      compressionAssigned = (currentAssignedUsers.length > prevAssignedUsers.length) ? true : false
 
       if (!compressionAssigned) {
         console.log(
@@ -165,6 +168,12 @@ export const POST = async (req: Request) => {
         )
       }
     }
+
+
+    const users = (event.payload.assigned) ? await getYGUsersID(event.payload.assigned[0], YouGileKey) : null
+    console.log("ПОЛЬЗОВАТЕЛИ!!!!!", users)
+
+    console.log("ПОЛЬЗОВАТЕЛИ!!!!! ИЗМЕНИЛИСЬ", compressionAssigned)
 
     
 
@@ -244,17 +253,36 @@ export const POST = async (req: Request) => {
 
     let messageFromUser = '';
 
+    // if (findColumn.title === 'Согласовано') {
+    //   messageFromUser = `Ваша задача «${title}» согласована.\n\nДальше задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`;
+    // } else if (findColumn.title === 'Не согласовано') {
+    //   messageFromUser = `Ваша задача «${title}» отклонена. Свяжитесь с руководителем направления для получения информации об отказе.`;
+    // } else if (findColumn.title === 'Согласовано с замечаниями') {
+    //   messageFromUser = `Ваша задача «${title}» согласована с замечаниями. Свяжитесь с руководителем направления.\n\nПосле этого задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`;
+    // } else if (comprassionSteacker && currentSteaker.name) {
+    //   const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'stage', currentSteaker.name)
+    //   messageFromUser = `НОВЫЙ СТАТУС!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен статус «${currentSteaker.name}».\n\nСледите за изменениями в БОТЕ`;
+    // } else {
+    //   messageFromUser = `Ваша задача «${title}» перемещена в «${findColumn.title}».\n\nСледите за изменениями в БОТЕ`;
+    // }
+
+
+
     if (findColumn.title === 'Согласовано') {
       messageFromUser = `Ваша задача «${title}» согласована.\n\nДальше задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`;
     } else if (findColumn.title === 'Не согласовано') {
       messageFromUser = `Ваша задача «${title}» отклонена. Свяжитесь с руководителем направления для получения информации об отказе.`;
     } else if (findColumn.title === 'Согласовано с замечаниями') {
       messageFromUser = `Ваша задача «${title}» согласована с замечаниями. Свяжитесь с руководителем направления.\n\nПосле этого задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`;
-    } else if (comprassionSteacker && currentSteaker.name) {
+    } else {
+      if (comprassionSteacker && currentSteaker.name) {
       const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'stage', currentSteaker.name)
       messageFromUser = `НОВЫЙ СТАТУС!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен статус «${currentSteaker.name}».\n\nСледите за изменениями в БОТЕ`;
-    } else {
-      messageFromUser = `Ваша задача «${title}» перемещена в «${findColumn.title}».\n\nСледите за изменениями в БОТЕ`;
+      } else if (compressionAssigned) {
+        messageFromUser = `НОВЫЙ ИСПОЛНИТЕЛЬ!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен исполнитель ${users.realName}».\n\nСледите за изменениями в БОТЕ`;
+      } else {
+        messageFromUser = `Ваша задача «${title}» перемещена в «${findColumn.title}».\n\nСледите за изменениями в БОТЕ`;
+      }
     }
       
     const bot = await getBot()

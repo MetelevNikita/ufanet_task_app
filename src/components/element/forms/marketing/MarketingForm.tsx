@@ -1,4 +1,5 @@
-import { FC, useState, useEffect, useMemo } from 'react'
+import { FC, useState, useMemo } from 'react'
+import Link from 'next/link'
 
 // styles
 
@@ -313,7 +314,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
         console.log(newData)
   
 
-        const data = await postTask(newData)
+        const data = await postTask(newData, department)
         console.log(data)
 
         if (data) {
@@ -374,6 +375,9 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                       {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(marketing.fio, (e: any) => {setMarketing({...marketing, fio: e.target.value})})}
                       {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(marketing.subdivision, (e: any) => {setMarketing({...marketing, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(marketing.tgId, (e: any) => {setMarketing({...marketing, tgId: e.target.value})})}
+
+                      <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
+
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(marketing.branch, (e: any) => {setMarketing({...marketing, branch: e.target.value})})}
                       {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(marketing.leader, (e: any) => {setMarketing({...marketing, leader: e.target.value})})}
                     

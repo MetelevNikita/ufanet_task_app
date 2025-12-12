@@ -151,8 +151,17 @@ const createTGPhoto = async (department: string, data: any, descriptionTask: str
 export const POST = async (req: Request, context: {params: {department: string}}) => {
   try {
 
+    console.log('Начинаем обработку данных')
+
     const { department } = await context.params 
-    const currentDepartment = directions.data.find((item: MenuType): Boolean => item.value === department)
+
+    console.log("ОТДЕЛ ", department)
+
+    console.log(directions)
+
+    const currentDepartment = directions.data.find((item: MenuType): Boolean => item.value === department.toLocaleLowerCase())
+
+
 
     if (!currentDepartment) {
       return NextResponse.json({
@@ -161,8 +170,12 @@ export const POST = async (req: Request, context: {params: {department: string}}
       })
     }
 
+    console.log(currentDepartment)
+
     const departmentLabel = currentDepartment.label
     const formData = await req.json()
+
+    console.log(formData)
 
 
     const pairs = await Promise.all(
@@ -190,6 +203,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     const data = Object.fromEntries(pairs)
 
+    console.log(data)
+
     // message
 
 
@@ -204,6 +219,9 @@ export const POST = async (req: Request, context: {params: {department: string}}
       return NextResponse.json({ message: `Ошибка создания задачи в YouGile.ru` }, { status: 500 });
     }
 
+    console.info(`Задача в YouGile Создана ${ygId}`)
+
+
     //
 
     const newDatabaseTask = await createDBTask(ygId, departmentLabel, data)
@@ -213,6 +231,9 @@ export const POST = async (req: Request, context: {params: {department: string}}
       return NextResponse.json({ message: `Ошибка создания задачи в базе данных` }, { status: 500 });
     }
 
+
+    console.info(`Задача в БД Создана`)
+
     //
 
 
@@ -221,6 +242,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
     if (!TelegramRes) {
       return NextResponse.json({ message: `Ошибка создания задачи в телеграмм` }, { status: 500 });
     }
+
+    console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
 
     return NextResponse.json({message: `Сообщение в отдел ${department} отправлено на согласование`}, { status: 200 });
     
