@@ -186,7 +186,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
               writeFileData(
                 (item?.base64 ?? String(item)) as string,  // чистая base64
                 process.env.WEBHOOK_URL as string,
-                department
+                currentDepartment.value
               )
             )
           );
@@ -199,6 +199,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
       })
 
     )
+
+    console.log('PAIRS ', pairs)
 
     const data = Object.fromEntries(pairs)
 
