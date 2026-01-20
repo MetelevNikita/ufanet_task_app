@@ -73,7 +73,7 @@ const writeFileData = async (data: string | null, url: string, folder: string) =
     }
 
 
-    const currentFolder = path.join(process.cwd(), 'src', 'app', 'uploads', folder, `Folder_${Date.now()}_${uuid}`)
+    const currentFolder = path.join(process.cwd(), 'src', 'app', 'uploads', folder, `Folder_${Date.now()}`)
 
     if (!fs.existsSync(currentFolder)) {
       fs.mkdirSync(currentFolder, { recursive: true })
