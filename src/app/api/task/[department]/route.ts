@@ -159,7 +159,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     console.log(directions)
 
-    const currentDepartment = directions.data.find((item: MenuType): Boolean => item.value === department.toLocaleLowerCase())
+    const currentDepartment = directions.data.find((item: MenuType): Boolean => item.label.toLocaleLowerCase() == department.toLocaleLowerCase())
+
 
 
 
@@ -170,12 +171,10 @@ export const POST = async (req: Request, context: {params: {department: string}}
       })
     }
 
-    console.log(currentDepartment)
+    console.log('Найденный отдел!!!! ', currentDepartment)
 
     const departmentLabel = currentDepartment.label
     const formData = await req.json()
-
-    console.log(formData)
 
 
     const pairs = await Promise.all(
@@ -203,7 +202,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     const data = Object.fromEntries(pairs)
 
-    console.log(data)
 
     // message
 
@@ -214,6 +212,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
     const ygId = newTaskYougile.id
+
+    console.log('YOU GILE DATA ', newTaskYougile)
 
     if (!newTaskYougile) {
       return NextResponse.json({ message: `Ошибка создания задачи в YouGile.ru` }, { status: 500 });

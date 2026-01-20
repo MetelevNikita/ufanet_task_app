@@ -7,10 +7,6 @@ import { usePathname, useSearchParams } from 'next/navigation'
 
 import { Container, Row, Col } from 'react-bootstrap'
 
-// directions
-
-import directions from '@/database/direction.json'
-
 // components
 
 import LeftSideApplication from '@/components/element/LeftSifeApplication/LeftSideApplication'
@@ -48,7 +44,6 @@ const page: FC = () => {
 
   const searchParams = useSearchParams()
   const params = searchParams.get('department')
-  console.log(params)
 
   useEffect(() => {
 

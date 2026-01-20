@@ -14,13 +14,23 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     //
 
     if (!yougileKey) {
-      return 'ERROR'
+      throw new Error('Yougile key not found');
     }
 
     const projects = await getYGProjects(yougileKey);
+
+
+    if (!projects) {
+      throw new Error('Projects not found');
+    }
+
+
     const currentProject = projects.content.find((project: {title: string}) => {
       return project.title === department
     })
+
+
+    console.log('CURRENT PROJECT YOUGILE ', currentProject)
 
 
     // 
@@ -42,14 +52,12 @@ export const createYGTask = async (department: string, data: any, descriptionTas
       return `Столбец Входящие не найден в доске ${department}`
     }
 
-    console.log(columns)
 
     // stecker
 
     const stickers = await getYGStickers(yougileKey)
 
     const statusSticker = stickers.content.find((item: {name: string}) => item.name === 'Статус') ?? {}
-    console.log(statusSticker)
 
     if (!statusSticker) {
       console.log(

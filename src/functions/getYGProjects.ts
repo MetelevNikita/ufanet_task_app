@@ -20,6 +20,7 @@ export const getYGProjects = async (key: string) => {
     }
 
     const data = await responce.json();
+    console.log(data)
     return data
     
   } catch (error: Error | unknown) {
