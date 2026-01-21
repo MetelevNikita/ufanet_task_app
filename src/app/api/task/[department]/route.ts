@@ -78,16 +78,16 @@ const writeFileData = async (data: string | null, url: string, folder: string) =
     }
 
 
-    const currentFolder = path.join(process.cwd(), 'src', 'app', 'uploads', folder, `Folder_${Date.now()}`)
+    const currentFolder = path.join(process.cwd(), 'src', 'app', 'uploads', folder, `Folder_${uuid}`)
 
     if (!fs.existsSync(currentFolder)) {
       fs.mkdirSync(currentFolder, { recursive: true })
     }
 
-    writeFileSync(path.join(currentFolder, `${uuid}_img.${fileType.ext}`), buffer)
+    writeFileSync(path.join(currentFolder, `${uuid}_${fileType.ext}.${fileType.ext}`), buffer)
 
     console.log(`Файл ${uuid}_img.png успешно загружен`)
-    return `${url}/api/uploads/${folder}/Folder_${uuid}/${uuid}_img.${fileType.ext}`
+    return `${url}/api/uploads/${folder}/Folder_${uuid}/${uuid}_${fileType.ext}.${fileType.ext}`
 
     
   } catch (error: Error | unknown) {
