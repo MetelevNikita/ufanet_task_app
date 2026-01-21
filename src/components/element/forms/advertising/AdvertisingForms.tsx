@@ -372,13 +372,13 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(advertising.fio, (e: any) => {setAdvertising({...advertising, fio: e.target.value})})}
+                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(advertising.fio, (e: any) => {setAdvertising({...advertising, fio: e.target.value})})}
+                      {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(advertising.branch, (e: any) => {setAdvertising({...advertising, branch: e.target.value})})}
                       {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(advertising.subdivision, (e: any) => {setAdvertising({...advertising, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(advertising.tgId, (e: any) => {setAdvertising({...advertising, tgId: e.target.value})})}
 
                       <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
 
-                      {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(advertising.branch, (e: any) => {setAdvertising({...advertising, branch: e.target.value})})}
                       {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(advertising.leader, (e: any) => {setAdvertising({...advertising, leader: e.target.value})})}
                     
                     </Col>
@@ -453,28 +453,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   {/*  */}
 
 
-                  {/* <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
-                        <Col className='mb-3' md={6}>
-                          <MyButton
-                            text={'Создать заявку'}
-                            onClick={() => {
-                              submitMessage(advertising)
-                            }}
-                            type={'button'}
-                          />
-                        </Col>
-
-                        <Col className='mb-3' md={6}>
-                          <MyButton
-                            text={'На главную'}
-                            onClick={() => {window.location.href = '/'}}
-                            type={'button'}
-                          />
-                        </Col>
-                    </Row> */}
-
-
-
+   
                     <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
                         <Col className='mb-3' md={12}>
                           <MyButton

@@ -16,7 +16,7 @@ export const typeSelectorArr = [
       name: 'Реклама согласование',
       id: '-1003330661427'
     },
-    field: [{id: 1, title: 'Название', placeholder: 'Напишите название задачи',typeField: 'text', type: 'text', name: 'title'},
+    field: [{id: 1, title: 'Название', placeholder: 'Напишите название проекта',typeField: 'text', type: 'text', name: 'title'},
       {
         id: 2,
         title: 'Что необходимо сделать?',
@@ -39,7 +39,7 @@ export const typeSelectorArr = [
   /* 2) Полиграфия / баннеры / таблички */
   {
     id: 3,
-    label: 'Заявка на полиграфию, баннеры, таблички',
+    label: 'Заявка на полиграфию/таблички/Стенд',
     value: 'printing',
     reconciliator: {
       name: 'Реклама согласование',
@@ -83,11 +83,24 @@ export const typeSelectorArr = [
           { id: 4, label: 'А3 — (297×420 мм)', value: 'A3', icon: '' },
           { id: 5, label: 'А2 — (420×594 мм)', value: 'A2', icon: '' },
           { id: 6, label: 'А1 — (594×841 мм)', value: 'A1', icon: '' },
-          { id: 7, label: 'А0 — (841×1189 мм)', value: 'A0', icon: '' }
+          { id: 7, label: 'А0 — (841×1189 мм)', value: 'A0', icon: '' },
+          { id: 8, label: 'Другое', value: 'Другое', icon: '' }
         ]
       },
+
+
       {
         id: 4,
+        title: 'Другое',
+        placeholder: 'Укажите размер изделия',
+        typeField: 'text',
+        type: 'text',
+        name: 'size_other'
+      },
+
+
+      {
+        id: 5,
         title: 'Ориентация',
         placeholder: 'Горизонтальная/вертикальная',
         typeField: 'text',
@@ -95,7 +108,7 @@ export const typeSelectorArr = [
         name: 'orientation'
       },
       {
-        id: 5,
+        id: 6,
         title: 'Добавить файл',
         placeholder: 'Загрузить макет',
         typeField: 'file',
@@ -103,7 +116,7 @@ export const typeSelectorArr = [
         name: 'maket_file'
       },
       {
-        id: 6,
+        id: 7,
         title: 'Дата сдачи',
         placeholder: 'Желаемая дата готовности',
         typeField: 'date',
@@ -124,15 +137,14 @@ export const typeSelectorArr = [
     },
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
-      { id: 2, title: 'Лидер', placeholder: 'Ответственный/лидер проекта', typeField: 'text', type: 'text', name: 'leader' },
       { id: 3, title: 'Цель', placeholder: 'Ключевая цель', typeField: 'text', type: 'text', name: 'target' },
       { id: 4, title: 'Участники', placeholder: 'Кто участвует', typeField: 'area', type: 'area', name: 'participants' },
-      { id: 5, title: 'Даты и время', placeholder: 'Плановые даты и временные окна', typeField: 'text', type: 'text', name: 'dates' },
-      { id: 6, title: 'Адрес и место проведения', placeholder: 'Локация/площадка', typeField: 'text', type: 'text', name: 'place' },
+      { id: 5, title: 'Даты и время', placeholder: 'Укажите дату и время проведения', typeField: 'text', type: 'text', name: 'dates' },
+      { id: 6, title: 'Адрес и место проведения', placeholder: 'Укажите место проведения(адрес)', typeField: 'text', type: 'text', name: 'place' },
       { id: 7, title: 'Что необходимо сделать', placeholder: 'Задачи и зоны ответственности', typeField: 'area', type: 'area', name: 'todo' },
-      { id: 8, title: 'Поставщики/подрядчики', placeholder: 'Если есть – кто и что делает', typeField: 'area', type: 'area', name: 'vendors' },
-      { id: 9, title: 'Бюджет', placeholder: 'Оценка бюджета/ограничения', typeField: 'text', type: 'text', name: 'budget' },
-      { id:13, title: 'Дата готовности ТЗ', placeholder: 'К какому сроку нужно финальное ТЗ', typeField: 'date', type: 'date', name: 'deadline' }
+      { id: 9, title: 'Бюджет', placeholder: 'Предварительная смета', typeField: 'text', type: 'text', name: 'budget' },
+      { id: 10, title: 'Прикрепите файл сметы', placeholder: 'Файл сметы', typeField: 'file', type: 'file', name: 'smeta_file' },
+      { id: 11, title: 'Дата готовности ТЗ', placeholder: 'К какому сроку нужно финальное ТЗ', typeField: 'date', type: 'date', name: 'deadline' }
     ]
   },
 

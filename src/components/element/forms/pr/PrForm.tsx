@@ -250,8 +250,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
   const { department, setDepartment } = departmentData
 
-  console.log(department)
-
   // 
 
   const currentDepartment = useMemo(() => {
@@ -281,8 +279,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   
   const submitMessage = async (message: any) => {
       try {
-
-
 
         if (Object.entries(message).length < 1) {
           alert('Все поля должны быть заполнены')
@@ -369,13 +365,13 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(pr.fio, (e: any) => {setPr({...pr, fio: e.target.value})})}
+                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(pr.fio, (e: any) => {setPr({...pr, fio: e.target.value})})}
+                      {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(pr.branch, (e: any) => {setPr({...pr, branch: e.target.value})})}
                       {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(pr.subdivision, (e: any) => {setPr({...pr, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(pr.tgId, (e: any) => {setPr({...pr, tgId: e.target.value})})}
 
                       <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
 
-                      {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(pr.branch, (e: any) => {setPr({...pr, branch: e.target.value})})}
                       {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(pr.leader, (e: any) => {setPr({...pr, leader: e.target.value})})}
                     
                     </Col>

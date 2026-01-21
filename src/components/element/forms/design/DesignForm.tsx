@@ -374,13 +374,12 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {new MyField('ФИО', 'Введите ФИО', 'text', 'fio').createFiled(design.fio, (e: any) => {setDesign({...design, fio: e.target.value})})}
+                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(design.fio, (e: any) => {setDesign({...design, fio: e.target.value})})}
+                      {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(design.branch, (e: any) => {setDesign({...design, branch: e.target.value})})}
                       {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(design.subdivision, (e: any) => {setDesign({...design, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(design.tgId, (e: any) => {setDesign({...design, tgId: e.target.value})})}
 
                       <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
-
-                      {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(design.branch, (e: any) => {setDesign({...design, branch: e.target.value})})}
                       {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(design.leader, (e: any) => {setDesign({...design, leader: e.target.value})})}
                     
                     </Col>

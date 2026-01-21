@@ -35,6 +35,7 @@ const MySelectMulti: FC<MySelectMultiProps> = ({ title, options, onChange, name,
 
       <span className={styles.select_title}>{title}</span>
       <select className={styles.select} name={name} onChange={onChange}>
+        <option value='' disabled selected>Выберите значение</option>
         { 
           options.map((item: any, index: number) => {
             return <option key={index+1} value={item.label}>{item.label}</option>

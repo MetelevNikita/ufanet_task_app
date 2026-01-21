@@ -31,6 +31,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Название:', data.title) +
       row('Изделие:', data.view) +
       row('Размер:', data.size) +
+      row('Другое:', data.size_other) +
       row('Ориентация:', data.orientation) +
       row('Файл макета:', data.file) +
       row('Дата сдачи:', data.deadline);
@@ -38,6 +39,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Название:', data.title, '\n') +
       row('Изделие:', data.view, '\n') +
       row('Размер:', data.size, '\n') +
+      row('Другое:', data.size_other, '\n') +
       row('Ориентация:', data.orientation, '\n') +
       row('Файл макета:', data.file, '\n') +
       row('Дата сдачи:', data.deadline, '\n');
@@ -48,26 +50,24 @@ export const advertisingMessage = async (department: string, data: any): Promise
   if (type === 'Заявка на Мероприятие/выставку/ДОД' || data.value === 'event') {
     const bodyYG =
       row('Название:', data.title) +
-      row('Лидер проекта:', data.leader) +
       row('Цель:', data.target) +
       row('Участники:', data.participants) +
       row('Даты и время:', data.dates) +
       row('Адрес/место проведения:', data.place) +
       row('Что необходимо сделать:', data.todo) +
-      row('Поставщики/подрядчики:', data.vendors) +
       row('Бюджет:', data.budget) +
+      row('Файл сметы', data.smeta_file, '\n') +
       row('Дата готовности ТЗ:', data.deadline);
 
     const bodyTG =
       row('Название:', data.title, '\n') +
-      row('Лидер проекта:', data.leader, '\n') +
       row('Цель:', data.target, '\n') +
       row('Участники:', data.participants, '\n') +
       row('Даты и время:', data.dates, '\n') +
       row('Адрес/место проведения:', data.place, '\n') +
       row('Что необходимо сделать:', data.todo, '\n') +
-      row('Поставщики/подрядчики:', data.vendors, '\n') +
       row('Бюджет:', data.budget, '\n') +
+      row('Файл сметы', data.smeta_file, '\n');
       row('Дата готовности ТЗ:', data.deadline, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };

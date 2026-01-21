@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import fs, { writeFile, writeFileSync } from "fs";
-import fsPromice from "fs/promises";
+import fs, { writeFileSync } from "fs";
+import  { fileTypeFromBuffer }  from  'file-type' ;
 import path from "path";
 
 
@@ -61,6 +61,11 @@ const writeFileData = async (data: string | null, url: string, folder: string) =
 
     const buffer = Buffer.from(data, 'base64')
 
+    const fileType = await fileTypeFromBuffer(buffer)
+    console.log('РАСШИРЕНИЕ ФАЙЛА ', fileType)
+
+    if (!fileType) return
+
 
     // folder
 
@@ -79,10 +84,10 @@ const writeFileData = async (data: string | null, url: string, folder: string) =
       fs.mkdirSync(currentFolder, { recursive: true })
     }
 
-    writeFileSync(path.join(currentFolder, `${uuid}_img.png`), buffer)
+    writeFileSync(path.join(currentFolder, `${uuid}_img.${fileType.ext}`), buffer)
 
     console.log(`Файл ${uuid}_img.png успешно загружен`)
-    return `${url}/api/uploads/design/Folder_${uuid}/${uuid}_img.png`
+    return `${url}/api/uploads/${folder}/Folder_${uuid}/${uuid}_img.${fileType.ext}`
 
     
   } catch (error: Error | unknown) {
@@ -157,12 +162,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     console.log("ОТДЕЛ ", department)
 
-    console.log(directions)
-
     const currentDepartment = directions.data.find((item: MenuType): Boolean => item.label.toLocaleLowerCase() == department.toLocaleLowerCase())
-
-
-
 
     if (!currentDepartment) {
       return NextResponse.json({
@@ -170,8 +170,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
         status: 500
       })
     }
-
-    console.log('Найденный отдел!!!! ', currentDepartment)
 
     const departmentLabel = currentDepartment.label
     const formData = await req.json()
@@ -200,13 +198,9 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     )
 
-    console.log('PAIRS ', pairs)
-
     const data = Object.fromEntries(pairs)
 
-
     // message
-
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
 

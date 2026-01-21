@@ -12,6 +12,7 @@ import styles from './MyFile.module.css'
 
 import icon from '@/../public/inputs_icon/cross.svg'
 import { div } from 'motion/react-client'
+import path from 'path'
 
 interface MyFileProps {
 
@@ -29,10 +30,12 @@ const MyFile: FC<MyFileProps> = ({ title, placeholder, onChange, name, data }) =
 
 
 
+
+
+
   const files = (!data) ? [] : Array.from(data).map((item: any) => {
     return {img: URL.createObjectURL(item), name: item.name}
   })
-  console.log(files)
 
 
   return (
@@ -61,12 +64,27 @@ const MyFile: FC<MyFileProps> = ({ title, placeholder, onChange, name, data }) =
 
               console.log(item)
 
-              return (
-                <div className={styles.file_wrapper} key={index+1}>
-                  <span className={styles.file_insert}>Выбран Файл - {item.name}</span>
-                  <div className={styles.result_image_wrapper}><Image src={item.img} alt='image' width={100} height={100}/></div>
-                </div>
-              )
+              const fileExtension = path.extname(item.name).toLowerCase();
+              const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+
+              console.log(fileExtension)
+
+              if (!imageExtensions.includes(fileExtension)) {
+                return (
+                  <div className={styles.file_wrapper} key={index+1}>
+                    <span className={styles.file_insert}>Выбран Файл - {item.name}</span>
+                  </div>
+                )
+              } else {
+                return (
+                  <div className={styles.file_wrapper} key={index+1}>
+                    <span className={styles.file_insert}>Выбран Файл - {item.name}</span>
+                    <div className={styles.result_image_wrapper}><Image src={item.img} alt='image' width={100} height={100}/></div>
+                  </div>
+                )
+              }
+
+
             })
 
           }

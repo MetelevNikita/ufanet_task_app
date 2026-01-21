@@ -8,10 +8,9 @@ export const typeSelectorArr = [
     field: []
   },
 
-  /* 1) Проекты и продвижение услуг */
   {
     id: 2,
-    label: 'Проекты и продвижение услуг',
+    label: 'Проекты (продвижение услуг, сервиса)',
     value: 'project_promo',
     reconciliator: {
       name: 'PR согласование',
@@ -26,18 +25,17 @@ export const typeSelectorArr = [
     ]
   },
 
-  /* 2) Мероприятие — внешнее (сторонние праздники, фестивали и т.д.) */
   {
     id: 3,
-    label: 'Мероприятие — внешнее',
-    value: 'event_external',
+    label: 'Мероприятие - внутреннее (для сотрудников)',
+    value: 'event_internal',
     reconciliator: {
       name: 'PR согласование',
       id: '-1003306162120'
     },
     field: [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
-      { id: 2,  title: 'Описание мероприятия', placeholder: 'Кратко опишите формат и суть', typeField: 'area',  type: 'area',  name: 'description' },
+      { id: 2,  title: 'Описание мероприятия', placeholder: 'Расскажите подробно про мероприятие: Какой формат? Программа мероприятия?Для кого оно (ЦА)? Какая наша цель/роль?', typeField: 'area',  type: 'area',  name: 'description' },
       { id: 3,  title: 'Цель проведения мероприятия', placeholder: 'Для чего проводится', typeField: 'text',  type: 'text',  name: 'goal' },
       { id: 4,  title: 'Лидер мероприятия', placeholder: 'Ответственный/лидер', typeField: 'text',  type: 'text',  name: 'leader' },
       { id: 5,  title: 'Что необходимо сделать?', placeholder: 'Список задач', typeField: 'area',  type: 'area',  name: 'todo' },
@@ -46,18 +44,17 @@ export const typeSelectorArr = [
     ]
   },
 
-  /* 3) Мероприятие — внутреннее (для сотрудников) */
   {
     id: 4,
-    label: 'Мероприятие — внутреннее (для сотрудников)',
-    value: 'event_internal',
+    label: 'Мероприятие - внешнее (для партнеров, абонентов, жителей)',
+    value: 'event_external',
     reconciliator: {
       name: 'PR согласование',
       id: '-1003306162120'
     },
     field: [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
-      { id: 2,  title: 'Описание мероприятия', placeholder: 'Кратко опишите формат и суть', typeField: 'area',  type: 'area',  name: 'description' },
+      { id: 2,  title: 'Описание мероприятия', placeholder: 'Расскажите подробно про мероприятие: Какой формат? Программа мероприятия?Для кого оно (ЦА)? Какая наша цель/роль?', typeField: 'area',  type: 'area',  name: 'description' },
       { id: 3,  title: 'Цель проведения мероприятия', placeholder: 'Для чего проводится', typeField: 'text',  type: 'text',  name: 'goal' },
       { id: 4,  title: 'Лидер мероприятия', placeholder: 'Ответственный/лидер', typeField: 'text',  type: 'text',  name: 'leader' },
       { id: 5,  title: 'Что необходимо сделать?', placeholder: 'Список задач', typeField: 'area',  type: 'area',  name: 'todo' },
@@ -65,6 +62,8 @@ export const typeSelectorArr = [
       { id: 7,  title: 'Место проведения мероприятия', placeholder: 'Адрес/площадка', typeField: 'text',  type: 'text',  name: 'place' }
     ]
   },
+
+
 
   /* 4) Выставки / выезды / конференции */
   {
@@ -77,7 +76,7 @@ export const typeSelectorArr = [
     },
     field: [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Как называется',typeField: 'text',  type: 'text',  name: 'title' },
-      { id: 2,  title: 'Описание мероприятия', placeholder: 'Коротко: формат, кто участвует, зачем', typeField: 'area',  type: 'area',  name: 'description' },
+      { id: 2,  title: 'Описание мероприятия', placeholder: 'Расскажите подробно про мероприятие: Какой формат? Программа мероприятия?Для кого оно (ЦА)? Какая наша цель/роль?', typeField: 'area',  type: 'area',  name: 'description' },
       { id: 3,  title: 'Сайт мероприятия', placeholder: 'URL (если есть)', typeField: 'text',  type: 'text',  name: 'site' },
       { id: 4,  title: 'Дата мероприятия', placeholder: 'Дата проведения', typeField: 'date',  type: 'date',  name: 'deadline' },
       { id: 5,  title: 'Место проведения мероприятия', placeholder: 'Адрес/площадка', typeField: 'text',  type: 'text',  name: 'place' },
