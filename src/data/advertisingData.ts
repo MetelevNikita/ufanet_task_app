@@ -188,29 +188,6 @@ export const typeSelectorArr = [
     ]
   },
 
-  /* 6) Трансфер */
-  {
-    id: 7,
-    label: 'Заявка на трансфер',
-    value: 'transfer',
-    reconciliator: {
-      name: 'Реклама согласование',
-      id: '-1003330661427'
-    },
-    field: [
-      { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
-      { id: 2, title: 'Цель/Описание', placeholder: 'Куда/зачем поездка', typeField: 'area', type: 'area', name: 'description' },
-      { id: 3, title: 'Дата поездки', placeholder: 'Дата начала', typeField: 'text', type: 'date', name: 'deadline' },
-      { id: 4, title: 'Маршрут (подробно)', placeholder: 'Откуда–куда, точки по пути', typeField: 'area', type: 'area', name: 'route' },
-      { id: 5, title: 'Время отправления', placeholder: 'Часы/минуты', typeField: 'text', type: 'text', name: 'time_start' },
-      { id: 6, title: 'Место отправления', placeholder: 'Адрес/локация', typeField: 'text', type: 'text', name: 'place_start' },
-      { id: 7, title: 'Место прибытия', placeholder: 'Адрес/локация', typeField: 'text', type: 'text', name: 'place_finish' },
-      { id: 8, title: 'Время прибытия', placeholder: 'Если известно', typeField: 'text', type: 'text', name: 'time_finish' },
-      { id: 9, title: 'Количество человек', placeholder: 'Сколько пассажиров', typeField: 'number', type: 'number', name: 'people' },
-      { id: 10, title: 'Пожелания к транспорту', placeholder: 'Класс авто, багаж, детское кресло и т.д.', typeField: 'area', type: 'area', name: 'wishes' },
-      { id: 11, title: 'Пассажиры', placeholder: 'ФИО и паспортные данные (при необходимости)', typeField: 'area', type: 'area', name: 'passengers' },
-    ]
-  },
 
   /* 7) ТМЦ / реквизит */
   {
@@ -222,11 +199,15 @@ export const typeSelectorArr = [
       id: '-1003330661427'
     },
     field: [
-      { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
-      { id: 2, title: 'Ссылка на товар', placeholder: 'URL на позицию/карточку', typeField: 'text', type: 'text', name: 'link' },
+      { id: 1, title: 'Где будет использоваться', placeholder: 'Назначение', typeField: 'text', type: 'text', name: 'title' },
       { id: 3, title: 'Что нужно и количество', placeholder: 'Наименование, параметры, шт', typeField: 'area', type: 'area', name: 'what' },
       { id: 4, title: 'Сроки', placeholder: 'Когда нужно получить', typeField: 'date', type: 'date', name: 'deadline' },
-    ]
+    ],
+
+    general: {
+      title: 'Реквизит со склада отдела рекламы',
+      link: ''
+    }
   },
 
   /* 8) Сувениры с лого / подарки */
@@ -241,11 +222,28 @@ export const typeSelectorArr = [
     field: [
       { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Цель/Описание', placeholder: 'Повод, аудитория, задачи', typeField: 'area', type: 'area', name: 'description' },
-      { id: 3, title: 'Категория/вид сувениров', placeholder: 'Что рассматриваем', typeField: 'area', type: 'area', name: 'category' },
+      { id: 3, title: 'Индивидуальный заказ', placeholder: 'Что рассматриваем', typeField: 'area', type: 'area', name: 'category' },
+
+      // 
+
+      { id: 4, title: 'Цвет', placeholder: 'Укажите цвет', typeField: 'text', type: 'text', name: 'color' },
+      { id: 5, title: 'Макет', placeholder: 'Загрузите файл макета (если есть)', typeField: 'file', type: 'file', name: 'maket_file' },
+      { id: 6, title: 'Список награждаемых', placeholder: 'Загрузите список награждаемых (если есть)', typeField: 'file', type: 'file', name: 'awarded_file' },
+
+      // 
+
+
       { id: 4, title: 'Количество', placeholder: 'Сколько единиц', typeField: 'number', type: 'number', name: 'qty' },
-      { id: 5, title: 'Брендирование', placeholder: 'Нанесение логотипа/цвета', typeField: 'area', type: 'area', name: 'branding' },
       { id: 6, title: 'Сроки', placeholder: 'Дата готовности', typeField: 'date', type: 'date', name: 'deadline' },
-    ]
+      
+    ],
+
+    general: {
+      title: 'Перечень тут',
+      link: 'http://ufanet.team/shop'
+    }
+
+
   },
 
   /* 9) Промо одежда */
@@ -268,41 +266,21 @@ export const typeSelectorArr = [
         type: 'selector',
         name: 'clothes_type',
         options: [
-          { id: 1, label: 'Футболка', value: 'tshirt', icon: '' },
-          { id: 2, label: 'Футболка-поло', value: 'polo', icon: '' },
-          { id: 3, label: 'Толстовка/худи', value: 'hoodie', icon: '' },
-          { id: 4, label: 'Куртка/ветровка', value: 'jacket', icon: '' },
-          { id: 5, label: 'Кепка/головной убор', value: 'cap', icon: '' }
+          { id: 1, label: 'Футболка оранжевая', value: 'tshirt', icon: '' },
+          { id: 2, label: 'Толстовка', value: 'hoodie', icon: '' },
+          { id: 3, label: 'Куртка', value: 'jacket', icon: '' },
+          { id: 4, label: 'Ветровка', value: 'windbreaker', icon: '' },
+          { id: 5, label: 'Дождевик', value: 'raincoat', icon: '' },
         ]
       },
-      { id: 4, title: 'Логотип/брендинг', placeholder: 'Где и как наносить', typeField: 'area', type: 'area', name: 'branding' },
-      { id: 5, title: 'Размеры и количества', placeholder: 'Таблица размеров: S-.., M-.. и т.п.', typeField: 'area', type: 'area', name: 'sizes' },
+      { id: 4, title: 'Размеры и количества', placeholder: 'Таблица размеров: S-.., M-.. и т.п.', typeField: 'area', type: 'area', name: 'sizes' },
+      { id: 5, title: 'Примечание', placeholder: 'Добавить примечание', typeField: 'area', type: 'area', name: 'note' },
       { id: 6, title: 'Дата готовности', placeholder: 'К какому сроку', typeField: 'date', type: 'date', name: 'deadline' },
     ]
   },
 
-  /* 10) Кофе-брейк */
-  {
-    id: 11,
-    label: 'Заявка на кофе брейк',
-    value: 'coffe',
-    reconciliator: {
-      name: 'Реклама согласование',
-      id: '-1003330661427'
-    },
-    field: [
-      { id: 1, title: 'Название', placeholder: 'Название проекта', typeField: 'text', type: 'text', name: 'title' },
-      { id: 2, title: 'Цель/Описание', placeholder: 'Формат и повод', typeField: 'area', type: 'area', name: 'description' },
-      { id: 3, title: 'Место проведения', placeholder: 'Адрес/площадка', typeField: 'text', type: 'text', name: 'place' },
-      { id: 4, title: 'Длительность', placeholder: 'Сколько по времени', typeField: 'text', type: 'text', name: 'duration' },
-      { id: 5, title: 'Меню/пожелания', placeholder: 'Кофе, чай, выпечка и т.д.', typeField: 'area', type: 'area', name: 'menu' },
-      { id: 6, title: 'Количество человек', placeholder: 'Оценка гостей', typeField: 'number', type: 'number', name: 'people' },
-      { id: 7, title: 'Дата и время', placeholder: 'Когда требуется сервис', typeField: 'text', type: 'date', name: 'deadline' },
 
-    ]
-  },
-
-  /* 11) Закуп на маркетплейсе ОЗОН */
+  /* 10) Закуп на маркетплейсе ОЗОН */
   {
     id: 12,
     label: 'Заявка на закуп на маркетплейсе ОЗОН',

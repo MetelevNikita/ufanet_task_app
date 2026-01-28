@@ -32,3 +32,15 @@
   margin-top: 5px;
   margin-bottom: 15px;
 }
+
+
+/*  */
+
+.general_title {
+  font-weight: 600;
+  color: #FF6600;
+}
+
+.general_link {
+    font-weight: 600;
+}

@@ -26,7 +26,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
   }
 
   // 2) Полиграфия / баннеры / таблички
-  if (type === 'Заявка на полиграфию, баннеры, таблички' || data.value === 'printing') {
+  if (type === 'Заявка на полиграфию/таблички/Стенд' || data.value === 'printing') {
     const bodyYG =
       row('Название:', data.title) +
       row('Изделие:', data.view) +
@@ -120,50 +120,17 @@ export const advertisingMessage = async (department: string, data: any): Promise
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
-  // 6) Трансфер
-  if (type === 'Заявка на трансфер' || data.value === 'transfer') {
-    const bodyYG =
-      row('Название:', data.title) +
-      row('Описание:', data.description) +
-      row('Дата поездки:', data.deadline) +
-      row('Маршрут (детально):', data.route) +
-      row('Время отправления:', data.time_start) +
-      row('Место отправления:', data.place_start) +
-      row('Место прибытия:', data.place_finish) +
-      row('Ориентир времени прибытия:', data.time_finish) +
-      row('Количество человек:', data.people) +
-      row('Пожелания к транспорту:', data.wishes) +
-      row('Пассажиры (ФИО/документы):', data.passengers)
 
-
-    const bodyTG =
-      row('Название:', data.title, '\n') +
-      row('Описание:', data.description, '\n') +
-      row('Дата поездки:', data.deadline, '\n') +
-      row('Маршрут (детально):', data.route, '\n') +
-      row('Время отправления:', data.time_start, '\n') +
-      row('Место отправления:', data.place_start, '\n') +
-      row('Место прибытия:', data.place_finish, '\n') +
-      row('Ориентир времени прибытия:', data.time_finish, '\n') +
-      row('Количество человек:', data.people, '\n') +
-      row('Пожелания к транспорту:', data.wishes, '\n') +
-      row('Пассажиры (ФИО/документы):', data.passengers, '\n')
-
-    return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
-  }
-
-  // 7) ТМЦ/реквизит
+  // 6) ТМЦ/реквизит
   if (type === 'Заявка на ТМЦ/реквизит' || data.value === 'props') {
     const bodyYG =
-      row('Название:', data.title) +
-      row('Ссылка на товар:', data.link) +
+      row('Где будет использоваться:', data.title) +
       row('Что нужно и количество:', data.what) +
       row('Сроки:', data.deadline)
 
 
     const bodyTG =
-      row('Название:', data.title, '\n') +
-      row('Ссылка на товар:', data.link, '\n') +
+      row('Где будет использоваться:', data.title, '\n') +
       row('Что нужно и количество:', data.what, '\n') +
       row('Сроки:', data.deadline, '\n')
 
@@ -171,72 +138,58 @@ export const advertisingMessage = async (department: string, data: any): Promise
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
-  // 8) Сувениры с лого/подарки
+  // 7) Заявка на сувениры с лого/подарки   
   if (type === 'Заявка на сувениры с лого/подарки' || data.value === 'souvenir') {
     const bodyYG =
       row('Название:', data.title) +
       row('Описание/повод:', data.description) +
-      row('Категория:', data.category) +
+      row('Индивидуальный заказ:', data.category) +
+
+      row('Цвет:', data.color) +
+      row('Макет', data.maket_file) +
+      row('Список награждаемых:', data.awarded_file) +
+
+
       row('Количество:', data.qty) +
-      row('Брендирование:', data.branding) +
       row('Сроки:', data.deadline)
 
     const bodyTG =
       row('Название:', data.title, '\n') +
       row('Описание/повод:', data.description, '\n') +
-      row('Категория:', data.category, '\n') +
+      row('Индивидуальный заказ:', data.category, '\n') +
+
+      row('Цвет:', data.color, '\n') +
+      row('Маке:т', data.maket_file, '\n') +
+      row('Список награждаемых:', data.awarded_file, '\n') +
+
       row('Количество:', data.qty, '\n') +
-      row('Брендирование:', data.branding, '\n') +
       row('Сроки:', data.deadline, '\n')
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
-  // 9) Промо одежда
+  // 8) Промо одежда
   if (type === 'Заявка на промо одежду' || data.value === 'promo') {
     const bodyYG =
       row('Название:', data.title) +
       row('Описание:', data.description) +
       row('Вид одежды:', data.clothes_type) +
-      row('Логотип/брендинг:', data.branding) +
       row('Размеры и количества:', data.sizes) +
+      row('Примечание:', data.note) +
       row('Дата готовности:', data.deadline)
 
     const bodyTG =
       row('Название:', data.title, '\n') +
       row('Описание:', data.description, '\n') +
       row('Вид одежды:', data.clothes_type, '\n') +
-      row('Логотип/брендинг:', data.branding, '\n') +
       row('Размеры и количества:', data.sizes, '\n') +
+      row('Примечание:', data.note, '\n') +
       row('Дата готовности:', data.deadline, '\n')
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
-  // 10) Кофе-брейк
-  if (type === 'Заявка на кофе брейк' || data.value === 'coffe') {
-    const bodyYG =
-      row('Название:', data.title) +
-      row('Описание/формат:', data.description) +
-      row('Место проведения:', data.place) +
-      row('Дата и время:', data.deadline) +
-      row('Длительность:', data.duration) +
-      row('Меню/пожелания:', data.menu) +
-      row('Количество человек:', data.people)
-
-    const bodyTG =
-      row('Название:', data.title, '\n') +
-      row('Описание/формат:', data.description, '\n') +
-      row('Место проведения:', data.place, '\n') +
-      row('Дата и время:', data.deadline, '\n') +
-      row('Длительность:', data.duration, '\n') +
-      row('Меню/пожелания:', data.menu, '\n') +
-      row('Количество человек:', data.people, '\n')
-
-    return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
-  }
-
-  // 11) Маркетплейс Ozon
+  // 9) Маркетплейс Ozon
   if (type === 'Заявка на закуп на маркетплейсе ОЗОН' || data.value === 'marketplace') {
     const bodyYG =
       row('Название:', data.title) +

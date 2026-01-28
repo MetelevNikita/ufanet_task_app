@@ -33,6 +33,7 @@ import { postTask } from '@/lib/postTask'
 // data
 
 import { typeSelectorArr } from '@/data/advertisingData'
+import { a, div } from 'motion/react-client'
 
 // class
 
@@ -265,7 +266,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
   if (!currentDepartment) return
 
-  console.log(currentDepartment.value)
+
 
 
   // type field
@@ -278,12 +279,15 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   const data = typeSelectorArr.find((type: any) => type.label === advertising.type)
   const currentField = (!data) ? [] : data.field
 
+  console.log(data)
+
+
+
 
   // POST FN
 
 
   const currentType = typeSelectorArr.find((type: any) => type.label === advertising.type)
-  console.log(currentType)
   
   
    const submitMessage = async (message: any) => {
@@ -448,7 +452,26 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                           </Row>
                         )
                       })
-                    }
+                  }
+
+
+                  <Row className='mt-3'>
+                    <Col>
+
+                              {
+                                (data?.general) && <div>
+                                  {
+                                    (data?.general.title) && <div className={styles.general_title}>*{data?.general.title}</div>
+                                  }
+
+                                  {
+                                    (data?.general.link) && <Link className={styles.general_link} target='_blank' href={data?.general.link}>{data?.general.link}</Link>
+                                  }
+                                </div>
+                              }
+                    
+                    </Col>
+                  </Row>
 
                   {/*  */}
 
