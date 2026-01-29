@@ -46,17 +46,17 @@ export const advertisingMessage = async (department: string, data: any): Promise
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
-  // 3) Мероприятие / выставка / ДОД
-  if (type === 'Заявка на Мероприятие/выставку/ДОД' || data.value === 'event') {
+  // 3) Мероприятие/Региональный день/Обучение/Выезд отдела (службы)
+  if (type === 'Мероприятие/Региональный день/Обучение/Выезд отдела (службы)' || data.value === 'event') {
     const bodyYG =
       row('Название:', data.title) +
       row('Цель:', data.target) +
       row('Участники:', data.participants) +
       row('Даты и время:', data.dates) +
       row('Адрес/место проведения:', data.place) +
-      row('Что необходимо сделать:', data.todo) +
-      row('Бюджет:', data.budget) +
-      row('Файл сметы', data.smeta_file, '\n') +
+      row('Предварительная смета:', data.budget) +
+      row('Файл сметы', data.smeta_file) +
+      row('Дополнительные файлы', data.additionally_file) +
       row('Дата готовности ТЗ:', data.deadline);
 
     const bodyTG =
@@ -65,9 +65,9 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Участники:', data.participants, '\n') +
       row('Даты и время:', data.dates, '\n') +
       row('Адрес/место проведения:', data.place, '\n') +
-      row('Что необходимо сделать:', data.todo, '\n') +
-      row('Бюджет:', data.budget, '\n') +
-      row('Файл сметы', data.smeta_file, '\n');
+      row('Предварительная смета:', data.budget, '\n') +
+      row('Файл сметы', data.smeta_file, '\n') +
+      row('Дополнительные файлы', data.additionally_file, '\n') +
       row('Дата готовности ТЗ:', data.deadline, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };

@@ -7,36 +7,7 @@ export const typeSelectorArr = [
     field: [],
   },
 
-  /* 1) Первичное обращение */
-  {
-    id: 2,
-    label: 'Первичное обращение по задаче (полное описание)',
-    value: 'primary',
-    reconciliator: {
-      name: 'Реклама согласование',
-      id: '-1003330661427'
-    },
-    field: [{id: 1, title: 'Название', placeholder: 'Напишите название проекта',typeField: 'text', type: 'text', name: 'title'},
-      {
-        id: 2,
-        title: 'Что необходимо сделать?',
-        placeholder: 'Опишите задачу своими словами',
-        typeField: 'area',
-        type: 'area',
-        name: 'description'
-      },
-      {
-        id: 3,
-        title: 'Дата сдачи',
-        placeholder: 'Укажите желаемую дату реализации задачи',
-        typeField: 'date',
-        type: 'date',
-        name: 'deadline'
-      }
-    ]
-  },
-
-  /* 2) Полиграфия / баннеры / таблички */
+  /* 1) Полиграфия / баннеры / таблички */
   {
     id: 3,
     label: 'Заявка на полиграфию/таблички/Стенд',
@@ -66,7 +37,7 @@ export const typeSelectorArr = [
           { id: 2, label: 'Буклет/брошюра', value: 'brochure', icon: '' },
           { id: 3, label: 'Табличка', value: 'plate', icon: '' },
           { id: 4, label: 'Баннер', value: 'banner', icon: '' },
-          { id: 5, label: 'Стэнд', value: 'stand', icon: '' }
+          { id: 5, label: 'Стенд', value: 'stand', icon: '' }
         ]
       },
       {
@@ -126,10 +97,10 @@ export const typeSelectorArr = [
     ]
   },
 
-  /* 3) Мероприятие / выставка / ДОД */
+  /* 2) Мероприятие/Региональный день/Обучение/Выезд отдела (службы) */ 
   {
     id: 4,
-    label: 'Заявка на Мероприятие/выставку/ДОД',
+    label: 'Мероприятие/Региональный день/Обучение/Выезд отдела (службы)',
     value: 'event',
     reconciliator: {
       name: 'Реклама согласование',
@@ -141,14 +112,14 @@ export const typeSelectorArr = [
       { id: 4, title: 'Участники', placeholder: 'Кто участвует', typeField: 'area', type: 'area', name: 'participants' },
       { id: 5, title: 'Даты и время', placeholder: 'Укажите дату и время проведения', typeField: 'text', type: 'text', name: 'dates' },
       { id: 6, title: 'Адрес и место проведения', placeholder: 'Укажите место проведения(адрес)', typeField: 'text', type: 'text', name: 'place' },
-      { id: 7, title: 'Что необходимо сделать', placeholder: 'Задачи и зоны ответственности', typeField: 'area', type: 'area', name: 'todo' },
-      { id: 9, title: 'Бюджет', placeholder: 'Предварительная смета', typeField: 'text', type: 'text', name: 'budget' },
-      { id: 10, title: 'Прикрепите файл сметы', placeholder: 'Файл сметы', typeField: 'file', type: 'file', name: 'smeta_file' },
-      { id: 11, title: 'Дата готовности ТЗ', placeholder: 'К какому сроку нужно финальное ТЗ', typeField: 'date', type: 'date', name: 'deadline' }
+      { id: 7, title: 'Предварительная смета', placeholder: 'Введите сумму', typeField: 'text', type: 'text', name: 'budget' },
+      { id: 8, title: 'Прикрепите файл сметы', placeholder: 'Файл сметы', typeField: 'file', type: 'file', name: 'smeta_file' },
+      { id: 9, title: 'Прикрепите дополнительные файлы', placeholder: 'Дополнительные файлы', typeField: 'file', type: 'file', name: 'additionally_file'},
+      { id: 10, title: 'Дата готовности ТЗ', placeholder: 'К какому сроку нужно финальное ТЗ', typeField: 'date', type: 'date', name: 'deadline' }
     ]
   },
 
-  /* 4) Оплата счета */
+  /* 3) Оплата счета */
   {
     id: 5,
     label: 'Заявка на оплату счета',
@@ -169,7 +140,7 @@ export const typeSelectorArr = [
     ]
   },
 
-  /* 5) Оформление договора */
+  /* 4) Оформление договора */
   {
     id: 6,
     label: 'Заявка на оформление договора',
@@ -188,8 +159,7 @@ export const typeSelectorArr = [
     ]
   },
 
-
-  /* 7) ТМЦ / реквизит */
+  /* 5) ТМЦ / реквизит */
   {
     id: 8,
     label: 'Заявка на ТМЦ/реквизит',
@@ -210,7 +180,7 @@ export const typeSelectorArr = [
     }
   },
 
-  /* 8) Сувениры с лого / подарки */
+  /* 6) Сувениры с лого / подарки */
   {
     id: 9,
     label: 'Заявка на сувениры с лого/подарки',
@@ -246,7 +216,7 @@ export const typeSelectorArr = [
 
   },
 
-  /* 9) Промо одежда */
+  /* 7) Промо одежда */
   {
     id: 10,
     label: 'Заявка на промо одежду',
@@ -279,8 +249,7 @@ export const typeSelectorArr = [
     ]
   },
 
-
-  /* 10) Закуп на маркетплейсе ОЗОН */
+  /* 8) Закуп на маркетплейсе ОЗОН */
   {
     id: 12,
     label: 'Заявка на закуп на маркетплейсе ОЗОН',
