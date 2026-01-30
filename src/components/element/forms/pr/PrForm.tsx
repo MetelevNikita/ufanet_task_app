@@ -351,7 +351,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   <Col md={12}>
 
                     <div className={styles.title}>
-                      Вы находитесь на вкладке для создания заявки в
+                      Вы находитесь на вкладке для создания технического задания в
                       <div className={styles.subtitle}>{currentDepartment?.label}</div>
                     </div>
 

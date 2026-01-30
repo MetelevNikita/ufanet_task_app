@@ -28,7 +28,7 @@ export const marketingMessage = async (
   /* 1) Первичное обращение по услуге */
   if (type === 'Первичное обращение по услуге') {
     const bodyYG =
-      row('Название продукта / услуги', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Опишите задачу своими словами. Что необходимо сделать?', data.description) +
       row('Есть ли цели на год/квартал/месяц по данной услуге или продукту? Описаны ли OKR или KR?', data.goals) +
       row('Опишите клиентский путь после оставления заявки', data.funnel) +
@@ -60,7 +60,7 @@ export const marketingMessage = async (
   /* 2) ТЗ на создание сайта/страницы */
   if (type === 'ТЗ на создание сайта/страницы') {
     const bodyYG =
-      row('Название продукта / услуги', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Опишите задачу своими словами . Что необходимо сделать?', data.description) +
       row('Ранее эту услугу уже продвигали?', data.first_visit_selector && data.first_visit_selector.label) +
       row('Кто входит в рабочую группу по созданию? Кто будет поддерживать актуальность сайта / лендинга / страницы?', data.team) +
@@ -69,6 +69,7 @@ export const marketingMessage = async (
       row('Кто является целевой аудиторией продукта / услуги / предложения? На какие группы она подразделяется? Какова география проживания целевой аудитории?', data.cta_audience) +
       row('Какими способами целевая аудитория будет попадать на сайт / лендинг / страницу?', data.cta_audience_insert) +
       row('Перечислите конкурентов продукта / услуги / предложения, в том числе компании из других регионов или стран с аналогичным продуктом. Укажите ссылки на их сайты', data.competitors) +
+      row('Пожелания по дизайну сайта / лендинга / страницы', data.wishes) +
       row('Есть ли макеты, которые можно взять за основу дизайна', data.content) +
       row('Есть ли референсы (сайты / лендинги / страницы), на которые стоит ориентироваться по дизайну или содержанию?', data.refs) +
       row('В чём заключаются преимущества и выгоды продукта? (по сравнению с конкурентом, альтернативным решением или отсутствием продукта)', data.advantages) +
@@ -76,7 +77,6 @@ export const marketingMessage = async (
       row('Какие есть варианты приобретения продукта (разные тарифы, оборудование, скидки, акции, опции и т.п.)?', data.price) +
       row('Какая дополнительная информация должна присутствовать на сайте / лендинге / странице (отзывы, карты, схемы, ссылки, контакты, описания и т.д.)?', data.details) +
       row('Должны ли мобильная и десктопная версии совпадать по содержанию? Есть ли контент или функционал, который будет доступен только в одной из версий?', data.site_content) +
-      row('Пожелания по дизайну сайта / лендинга / страницы', data.wishes) +
       row('Кто будет обрабатывать заявки, приходящие с данного сайта?', data.processing) +
       row('Срок запуска', data.deadline);
 
@@ -88,7 +88,7 @@ export const marketingMessage = async (
   /* 3) ТЗ на внесение изменений на сайты */
   if (type === 'ТЗ на внесение изменений на сайты') {
     const bodyYG =
-      row('Опишите задачу своими словами', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Укажите тип изменения (Можно выбрать несколько вариантов)', 
           data.type_change && data.type_change.map ? data.type_change.map((t: any) => t.label).join(', ') : data.type_change) +
       row('Прикрепите скриншот страницы, где необходимо внести изменения (необязательно, но желательно)', data.screenshot_file) +
@@ -104,9 +104,9 @@ export const marketingMessage = async (
   }
 
   /* 4) ТЗ на запуск рекламы */
-  if (type === 'ТЗ запуск рекламы') {
+  if (type === 'ТЗ на запуск рекламы') {
     const bodyYG =
-      row('Опишите задачу своими словами', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('На какой площадке вы хотите запустить рекламу?(Можно выбрать несколько вариантов)', 
           data.platforms && data.platforms.map ? data.platforms.map((p: any) => p.label).join(', ') : data.platforms) +
       row('Цель рекламы (выберите одно или несколько)', 
@@ -126,17 +126,17 @@ export const marketingMessage = async (
       row('Бюджет на рекламу в месяц', data.budget) +
       row('Есть ли KPI (ожидаемые результаты)?', data.kpi) +
       row('Период проведения кампании', data.campaign_period) +
-      row('Срок запуска', data.deadline);
+      row('Дата запуска', data.deadline);
 
     const bodyTG = bodyYG.replace(/<br><br>/g, '\n\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
-  /* 5) ТЗ на SMM */
-  if (type === 'ТЗ на SMM (посты, статьи, видео и т.д.)') {
+  /* 5) ТЗ на SMM (размещения в соцсетях: посты, видео, конкурсы и т.д.)*/
+  if (type === 'ТЗ на SMM (размещения в соцсетях: посты, видео, конкурсы и т.д.)') {
     const bodyYG =
-      row('Опишите задачу своими словами', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Что необходимо сделать?', data.description) +
       row('Цель размещения', data.placement_goal && data.placement_goal.label) +
       row('Аудитория', data.audience) +
@@ -153,7 +153,7 @@ export const marketingMessage = async (
   /* 6) ТЗ на написание статей */
   if (type === 'ТЗ на написание статей (для СМИ и сайта ufanet.ru)') {
     const bodyYG =
-      row('Опишите задачу своими словами', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Что необходимо сделать?', data.description) +
       row('Где будет размещаться статья?', data.placement) +
       row('Регион / город размещения', data.region) +
@@ -161,8 +161,8 @@ export const marketingMessage = async (
       row('Целевая аудитория', data.target_audience) +
       row('Объём', data.volume) +
       row('Примерная структура текста', data.structure) +
-      row('Ссылки и материалы', data.link_file) +
-      row('Референсы', data.reference_file) +
+      row('Ссылки и материалы', data.link_text) +
+      row('Референсы', data.reference_text) +
       row('Желаемая дата реализации', data.deadline);
 
     const bodyTG = bodyYG.replace(/<br><br>/g, '\n\n');
@@ -173,7 +173,7 @@ export const marketingMessage = async (
   /* 7) ТЗ на редактуру */
   if (type === 'ТЗ на редактуру (тексты статей, каталогов и т.п.)') {
     const bodyYG =
-      row('Опишите задачу своими словами', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Что необходимо сделать?', data.description) +
       row('Вид работы', data.work_type && data.work_type.label) +
       row('Другое', data.other) +
@@ -182,6 +182,7 @@ export const marketingMessage = async (
       row('Цель размещения. Кто будет читать материал?', data.goal) +
       row('Целевая аудитория', data.target_audience) +
       row('Пожелания', data.preferences) +
+      row('Ссылки', data.links) +
       row('Желаемая дата реализации', data.deadline);
 
     const bodyTG = bodyYG.replace(/<br><br>/g, '\n\n');
@@ -190,9 +191,9 @@ export const marketingMessage = async (
   }
 
   /* 8) ТЗ на пуши в приложении Уфанет */
-  if (type === 'ТЗ на пуши в приложении Уфанет') {
+  if (type === 'ТЗ на отправку Push в приложении Уфанет/Уфанет Бизнес') {
     const bodyYG =
-      row('Опишите задачу своими словами', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Что необходимо сделать?', data.description) +
       row('Цель рассылки', data.goal) +
       row('Прикрепите файл с выгрузкой абонентов Если у вас нет готового файла - пропустите этот вопрос', data.abonents_file) +
@@ -208,9 +209,9 @@ export const marketingMessage = async (
   }
 
   /* 9) ТЗ на размещение сторис в приложении Уфанет */
-  if (type === 'ТЗ на размещение сторис в приложении Уфанет') {
+  if (type === 'ТЗ на размещение сторис в приложении “Уфанет/Уфанет для бизнеса”') {
     const bodyYG =
-      row('Опишите задачу своими словами', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Что необходимо сделать?', data.description) +
       row('Кто отвечает за создание визуала? (изображение для сторис и миниатюры)', data.responsible_person) +
       row('Цель размещения сторис', data.goal) +
@@ -220,8 +221,8 @@ export const marketingMessage = async (
       row('Надпись на миниатюре', data.thumbnail_text) +
       row('Надпись на кнопке', data.button_text) +
       row('На какой картинке ставится кнопка со ссылкой', data.button_image_ref) +
-      row('Прикрепите миниатюру-баннер', data.miniature_file) +
       row('Прикрепите изображения сторис. Если на сторис предполагается кнопка, фон должен быть контрастный оранжевому, так как кнопка оранжевого цвета', data.storis_file) +
+      row('Прикрепите миниатюру-баннер', data.miniature_file) +
       row('Желаемая дата реализации', data.deadline);
 
     const bodyTG = bodyYG.replace(/<br><br>/g, '\n\n');
@@ -232,10 +233,10 @@ export const marketingMessage = async (
   /* 10) ТЗ на опросы */
   if (type === 'ТЗ на опросы') {
     const bodyYG =
-      row('Опишите задачу своими словами', data.title) +
+      row('Назовите задачу так, чтобы сразу была понятна суть', data.title) +
       row('Что необходимо сделать?', data.description) +
       row('Цель опроса', data.goal) +
-      row('ЦА. Чьи ответы вы хотите видеть в результатах?', data.target_audience) +
+      row('Целевая аудитория. Чьи ответы вы хотите видеть в результатах?', data.target_audience) +
       row('Есть ли база клиентов (ID контрагента)?', data.has_client_base && data.has_client_base.label) +
       row('Регионы показа', data.regions) +
       row('Схема опроса', data.schema_file) +

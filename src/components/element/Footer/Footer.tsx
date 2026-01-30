@@ -35,7 +35,7 @@ const Footer: FC = () => {
 
             <Image src={qrCode} width={100} height={80} alt='qr_code'/>
 
-            <div className={styles.footer_title}>Что бы подписаться на события ваших карточек вам необходимо добавить бота <a target='_blanck' href="https://t.me/PR_main_bot">@PR_main_bot</a></div>
+            <div className={styles.footer_title}>Чтобы подписаться на события ваших карточек вам необходимо добавить бота <a target='_blanc' href="https://t.me/PR_main_bot">@PR_main_bot</a></div>
 
           </div>
   

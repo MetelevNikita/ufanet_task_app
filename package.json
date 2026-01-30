@@ -17,6 +17,7 @@
     "file-type": "^21.3.0",
     "motion": "^12.23.22",
     "next": "^15.5.7",
+    "node-cache": "^5.1.2",
     "node-telegram-bot-api": "^0.66.0",
     "react": "^19.2.3",
     "react-bootstrap": "^2.10.10",

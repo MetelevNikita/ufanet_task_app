@@ -10,6 +10,7 @@ import styles from './MySelect.module.css'
 // type
 
 import { SelectType } from '@/types/types'
+import { div } from 'motion/react-client';
 
 // 
 
@@ -25,6 +26,8 @@ interface MySelectProps {
 
 const MySelect: FC<MySelectProps> = ({title, options, name, value, onChange }) => {
 
+  console.log(value)
+
 
   return (
 
@@ -39,6 +42,7 @@ const MySelect: FC<MySelectProps> = ({title, options, name, value, onChange }) =
         }
 
       </select>
+
     </div>
 
   )

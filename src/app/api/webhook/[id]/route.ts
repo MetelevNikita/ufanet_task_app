@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "../../../../../generated/prisma";
+import NodeCache from 'node-cache'
 
 // yougile
 
@@ -18,7 +19,87 @@ import { getBot } from '@/telegramBot/telegramBot'
 
 const prisma = new PrismaClient()
 
-// 
+
+const ygCache = new NodeCache({
+  stdTTL: 600,
+  checkperiod: 300
+})
+
+const CACHE_DATA = {
+  PROJECTS: 'CACHE_PROJECTS',
+  BOARDS: 'CACHE_BOARDS',
+  COLUMNS: 'CACHE_COLUMNS'
+}
+
+async function getCacheProjects (YouGileKey: string): Promise<any> {
+  try {
+
+    let projects = ygCache.get(CACHE_DATA.PROJECTS)
+
+    if (!projects) {
+      console.log('Не удалось получить данные ПРОЕКТОВ из кэша дергаю АПИ')
+      projects = await getYGProjects(YouGileKey)
+      ygCache.set(CACHE_DATA.PROJECTS, projects)
+    }
+
+    console.log('ДАННЫЕ ПРОЕКТОВ ПОЛУЧЕНЫ ИЗ КЭША')
+    return projects
+    
+  } catch (error) {
+    console.error(error)
+    return []
+  }
+}
+
+
+async function getCacheBoards (YouGileKey: string, projectId: string): Promise<any> {
+  try {
+
+    let boards = ygCache.get(CACHE_DATA.BOARDS)
+
+    if (!boards) {
+      console.log('Не удалось получить данные ДОСОК из кэша дергаю АПИ')
+      boards = await getBoardCompany(YouGileKey, projectId)
+      ygCache.set(CACHE_DATA.BOARDS, boards)
+    }
+
+    console.log('ДАННЫЕ ДОСОК ПОЛУЧЕНЫ ИЗ КЭША')
+    return boards
+    
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
+
+async function getCacheColumns (yougile: string, boardId: string): Promise<any> {
+  try {
+
+    let columns = ygCache.get(CACHE_DATA.COLUMNS)
+
+    if (!columns) {
+      console.log('Не удалось получить данные КОЛОНОК из кэша дергаю АПИ')
+      columns = await getYGColumns(yougile, boardId)
+      ygCache.set(CACHE_DATA.COLUMNS, columns)
+    }
+
+    console.log('ДАННЫЕ КОЛОНОК ПОЛУЧЕНЫ ИЗ КЭША')
+    return columns
+    
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
+
+
+
+
+// cache
+
+
+
+
 
 const changeStatusTaskDB = async (department: string, title: string, key: string, value: any) => {
   try {
@@ -152,10 +233,6 @@ export const POST = async (req: Request) => {
       const currentAssignedUsers = event.payload.assigned ?? []
       const prevAssignedUsers = event.prevData.assigned ?? []
 
-      console.log("Current assign data ", currentAssignedUsers.length)
-      console.log("Previous assign data ", prevAssignedUsers.length)
-
-
       compressionAssigned = (currentAssignedUsers.length > prevAssignedUsers.length) ? true : false
 
       if (!compressionAssigned) {
@@ -171,9 +248,7 @@ export const POST = async (req: Request) => {
 
 
     const users = (event.payload.assigned) ? await getYGUsersID(event.payload.assigned[0], YouGileKey) : null
-    console.log("ПОЛЬЗОВАТЕЛИ!!!!!", users)
-
-    console.log("ПОЛЬЗОВАТЕЛИ!!!!! ИЗМЕНИЛИСЬ", compressionAssigned)
+    console.log("ПОЛЬЗОВАТЕЛЬ!!!!! ИЗМЕНИЛСЯ", compressionAssigned)
 
     
 
@@ -219,7 +294,9 @@ export const POST = async (req: Request) => {
 
     const departmentName = department.split(' ').slice(2).join(' ')
 
-    const projects = await getYGProjects(YouGileKey)
+    const projects = await getCacheProjects(YouGileKey)
+    console.log('ПОЛУЧАЕМ ПРОЕКТЫ ИЗ ФУНКЦИИ С КЭШЕМ ', projects)
+
     const currentProjects = projects.content.find((project: any) => {
       if (project.title == departmentName) {
         return project
@@ -227,7 +304,7 @@ export const POST = async (req: Request) => {
     })
 
 
-    const boards = await getBoardCompany(YouGileKey, currentProjects.id)
+    const boards = await getCacheBoards(YouGileKey, currentProjects.id)
     let allColums = []
 
     for (const board of boards.content) {
@@ -236,6 +313,8 @@ export const POST = async (req: Request) => {
         allColums.push(column)
       }
     }
+
+    console.log('ПОЛУЧАЕМ КОЛОНКИ ИЗ ФУНКЦИИ С КЭШЕМ ', allColums)
 
 
     const findColumn = allColums.find((column: any) => {
@@ -252,20 +331,6 @@ export const POST = async (req: Request) => {
     //
 
     let messageFromUser = '';
-
-    // if (findColumn.title === 'Согласовано') {
-    //   messageFromUser = `Ваша задача «${title}» согласована.\n\nДальше задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`;
-    // } else if (findColumn.title === 'Не согласовано') {
-    //   messageFromUser = `Ваша задача «${title}» отклонена. Свяжитесь с руководителем направления для получения информации об отказе.`;
-    // } else if (findColumn.title === 'Согласовано с замечаниями') {
-    //   messageFromUser = `Ваша задача «${title}» согласована с замечаниями. Свяжитесь с руководителем направления.\n\nПосле этого задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`;
-    // } else if (comprassionSteacker && currentSteaker.name) {
-    //   const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'stage', currentSteaker.name)
-    //   messageFromUser = `НОВЫЙ СТАТУС!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен статус «${currentSteaker.name}».\n\nСледите за изменениями в БОТЕ`;
-    // } else {
-    //   messageFromUser = `Ваша задача «${title}» перемещена в «${findColumn.title}».\n\nСледите за изменениями в БОТЕ`;
-    // }
-
 
 
     if (findColumn.title === 'Согласовано') {

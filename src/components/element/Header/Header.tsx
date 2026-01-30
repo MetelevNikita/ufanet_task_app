@@ -60,14 +60,14 @@ const Header: FC<HeaderProps>  = () => {
 
         <Col md={3} xs={12} className='d-flex flex-md-row flex-column justify-content-start align-items-center mt-2 mb-2'>
 
-            <MyButton text={(path === '/tasks') ? 'Вернуться на главную' : 'Посмотреть история заявок'} onClick={() => {(path === '/tasks') ? window.location.href = '/' : window.location.href = '/tasks'}} type={'button'} />
+            <MyButton text={(path === '/tasks') ? 'Вернуться на главную' : 'Посмотреть историю заявок'} onClick={() => {(path === '/tasks') ? window.location.href = '/' : window.location.href = '/tasks'}} type={'button'} />
         
         </Col>
 
         <Col md={7} xs={12} className='d-flex flex-row justify-content-md-end justify-content-center align-items-center mt-2 mb-2'>
 
 
-            <motion.div onClick={() => {window.location.href = socialArr[0].link}} whileHover={{color: '#FF6600', scale: 1.02}} className={[styles.header_info_title, 'd-flex'].join(' ')}>Что то не работает? Пишите.</motion.div>
+            <motion.div onClick={() => {window.location.href = socialArr[0].link}} whileHover={{color: '#FF6600', scale: 1.02}} className={[styles.header_info_title, 'd-flex'].join(' ')}>Что-то не работает? Пишите.</motion.div>
 
             {
             

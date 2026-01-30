@@ -197,8 +197,8 @@ const branchSelectorsArr: MenuType[] = [
   },
   {
     id: 10,
-    label: 'Нижегородский филиал',
-    value: 'Нижегородский филиал',
+    label: 'Нижегородский филиал + Рязань',
+    value: 'Нижегородский филиал + Рязань',
   },
   {
     id: 11,
@@ -357,7 +357,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                   <Col md={12}>
 
                     <div className={styles.title}>
-                      Вы находитесь на вкладке для создания заявки в
+                      Вы находитесь на вкладке для создания технического задания в
                       <div className={styles.subtitle}>{currentDepartment?.label}</div>
                     </div>
 
@@ -377,7 +377,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                       {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(marketing.subdivision, (e: any) => {setMarketing({...marketing, subdivision: e.target.value})})}
                       {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(marketing.tgId, (e: any) => {setMarketing({...marketing, tgId: e.target.value})})}
 
-                      <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
+                      <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'} target='_blank'>@getmyid_bot</Link></div>
 
                       {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(marketing.leader, (e: any) => {setMarketing({...marketing, leader: e.target.value})})}
                     
@@ -494,16 +494,23 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
 
 
                     <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-3'>
-                      <Col className='d-flex flex-column justify-content-center align-items-center mt-3 mb-3'>
-                            <div className={styles.info_title}>ТЗ, в которых будет указано желаемое время «Сегодня», приниматься не будут!<br/>Минимальный срок создания посадочной страницы / сайта — 5–7 рабочих дней<br/>(в зависимости от объёма ТЗ, срочности и нагрузки).</div>
+                      <Col md={12} className='d-flex flex-column justify-content-center align-items-center mt-3 mb-3'>
+                            <div className={styles.info_title}></div>
+
+                            <div className={styles.info_title}>ТЗ, в которых будет указано желаемое время «Сегодня», приниматься не будут!.</div>
+
+                            <div className={styles.info_title}>Минимальный срок создания одностраничного сайта — 5 рабочих дней</div>
+                            <div className={styles.info_title}>Минимальный срок создания многостраничного сайта — 14 рабочих дней</div>
+                            <div className={styles.info_title}>(в зависимости от объёма ТЗ, срочности и нагрузки)</div>
+
 
                             <hr />
 
-                            <div className={styles.info_title}>Если вы устанавливаете срок реализации ТЗ менее 5 дней, необходимо обоснование срочности (потеря дохода, угроза репутации и т.д.).<br/><br/>(Срочность указывается для компании, не для вас лично.)</div>
+                            <div className={styles.info_title}>Если вы устанавливаете срок реализации ТЗ менее 5 дней, необходимо обоснование срочности (потеря дохода, угроза репутации и т.д.). Срочность указывается для компании, не для вас лично.</div>
 
                             <hr />
 
-                            <div className={styles.info_title}>ТЗ принимается и передаётся в работу в течение суток. Ответственным за приём ТЗ является Мельников Алексей<br/><br/>Далее ТЗ попадает в очередь к сотруднику. Вы можете увидеть статус выполнения вашей задачи во вкладке по ссылке.<br/><br/>Мы готовы к вашей обратной связи. Если что — пишите мне: @alexey_prosmm <br/> Хорошего дня!</div>
+                            <div className={styles.info_title}>ТЗ принимается и передаётся в работу в течение суток. Ответственным за приём ТЗ является Мельников Алексей<br/><br/>Далее ТЗ попадает в очередь к сотруднику. Вы можете увидеть статус выполнения вашей задачи во вкладке по ссылке.<br/><br/>Мы готовы к вашей обратной связи. Если что — пишите мне: <a href="https://t.me/alexey_prosmm" target='_blank'>@alexey_prosmm</a> <br/> Хорошего дня!</div>
                       </Col>
                     </Row>
 

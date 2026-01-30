@@ -157,7 +157,7 @@ const page: FC = () => {
                     <ModalSubmit
                       image={<BsCheckCircle
                       style={{width: '60px', color: '#51c947'}}/>}
-                      title={`Заявка ${department} успешно отправлена`}
+                      title={`Заявка в ${department} успешно отправлена`}
                       type={'success'}
                       modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
                       modalError={{modalSubmitError, setModalSubmitError}}

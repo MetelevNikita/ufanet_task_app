@@ -29,8 +29,9 @@
 
 
 .info_title {
-  font-size: 14px;
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 10px;
 }
