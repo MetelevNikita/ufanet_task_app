@@ -137,7 +137,9 @@ const page: FC = () => {
           <div className={styles.bg_left_wrapper}>
 
               <div className={styles.left_title}>Сервис приема заявок <br></br> в PR-службу</div>
-              <div className={styles.left_subtitle}>При заполнении заявки необходимо заполнять все поля, в случаи их не заполнения заявка не будет отправлена исполнителю</div>
+              <div className={styles.left_subtitle}>Все запросы в PR-службу принимаются через данный сервис.</div>
+              <div className={styles.left_subtitle_past}>Чтобы ваша задача была решена быстро и точно:<br></br>1. Выберите отдел из списка, соответствующий вашему запросу.
+              <br></br>2. Подробно опишите задачу в специальной форме.</div> 
 
               {
                 (menu.length > 1 ) && menu.map((item: MenuType, index: number) => {

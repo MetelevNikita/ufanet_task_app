@@ -55,6 +55,15 @@
 
   /*  */
 
+  margin-bottom: 5px;
+}
+
+.left_subtitle_past {
+    font-size: 12px;
+  font-weight: 300;
+
+  /*  */
+
   margin-bottom: 15px;
 }
 
