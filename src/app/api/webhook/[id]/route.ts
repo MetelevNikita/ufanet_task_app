@@ -37,7 +37,7 @@ async function getCacheProjects (YouGileKey: string): Promise<any> {
     let projects = ygCache.get(CACHE_DATA.PROJECTS)
     console.log('ДАННЫЕ ПРОЕКТОВ ', projects)
 
-    if (!projects) {
+    if (projects === undefined || projects === null) {
       console.log('Не удалось получить данные ПРОЕКТОВ из кэша дергаю АПИ')
       projects = await getYGProjects(YouGileKey)
       ygCache.set(CACHE_DATA.PROJECTS, projects)
@@ -59,7 +59,7 @@ async function getCacheBoards (YouGileKey: string, projectId: string): Promise<a
     let boards = ygCache.get(CACHE_DATA.BOARDS)
     console.log('ДАННЫЕ ДОСОК ', boards)
 
-    if (!boards) {
+    if (boards === undefined || boards === null) {
       console.log('Не удалось получить данные ДОСОК из кэша дергаю АПИ')
       boards = await getBoardCompany(YouGileKey, projectId)
       ygCache.set(CACHE_DATA.BOARDS, boards)
@@ -79,7 +79,7 @@ async function getCacheColumns (YouGileKey: string, boards: any): Promise<any> {
 
     let columns = ygCache.get(CACHE_DATA.COLUMNS)
 
-    if (!columns) {
+    if (columns === undefined || columns === null) {
 
       console.log('Не удалось получить данные КОЛОНОК из кэша, дергаю АПИ')
       let arrColumns: any[] = []
