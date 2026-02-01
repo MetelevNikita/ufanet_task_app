@@ -78,7 +78,6 @@ async function getCacheColumns (YouGileKey: string, boardId: string): Promise<an
   try {
 
     let columns = ygCache.get(CACHE_DATA.COLUMNS)
-    console.log('ДАННЫЕ КОЛНОК ', columns)
 
     if (!columns) {
       console.log('Не удалось получить данные КОЛОНОК из кэша дергаю АПИ')
@@ -209,6 +208,9 @@ export const POST = async (req: Request) => {
     const description = event.payload.description ?? ''
     const columnId = event.payload.columnId ?? ''
     const assignedUsers = event.payload.assigned ?? []
+
+
+    console.log(event)
 
 
     const tgId = description.split('<br /><br />').find((item: string) => {
