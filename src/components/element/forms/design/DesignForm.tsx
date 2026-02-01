@@ -36,7 +36,7 @@ import { typeSelectorArr } from '@/data/designData'
 
 // class
 
- class MyField {
+  class MyField {
 
     title: string
     placeholder: string
@@ -53,10 +53,10 @@ import { typeSelectorArr } from '@/data/designData'
     }
 
 
-    createFiled(data: string, setData: any): React.ReactNode {
+    createFiled(data: string, setData: any, error?: boolean): React.ReactNode {
 
       return  <Col md={12} className='mt-2 mb-2'>
-                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data}/>
+                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data} error={error}/>
               </Col>
     }
   }
@@ -135,17 +135,16 @@ import { typeSelectorArr } from '@/data/designData'
       this.name = name
   }
 
-  createTextArea(data: string, setData: any): React.ReactNode {
+  createTextArea(data: string, setData: any, error?: boolean): React.ReactNode {
 
     return (
             <Col md={12} className='mt-2 mb-2'>
-              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} />
+              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} error={error}/>
             </Col>
             )
   }
 
-}
-
+  }
 
 // selector arr
 
@@ -210,7 +209,7 @@ const branchSelectorsArr: MenuType[] = [
 // 
 
 
-interface AdvertisingFormsProps {
+interface DesignFormsProps {
   departmentData: {
     department: string,
     setDepartment: (department: string) => void
@@ -234,8 +233,10 @@ interface AdvertisingFormsProps {
   }
 }
 
-const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
+const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
 
+
+  const [isEmpty, setIsImpty] = useState<Boolean>(false)
 
   // modals
 
@@ -262,9 +263,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   }, [department])
 
 
-  console.log(currentDepartment)
-
-
   // type field
 
   const typeSelector = new MySelector('Тип заявки', 'type', typeSelectorArr)
@@ -280,7 +278,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
 
   const currentType = typeSelectorArr.find((type: any) => type.label === design.type)
-  console.log(currentType)
 
 
   
@@ -289,12 +286,28 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
         if (Object.entries(message).length < 1) {
           alert('Все поля должны быть заполнены')
+          setIsImpty(true)
           return
         }
 
+
         if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader) {
           alert('Все поля должны быть заполнены')
+          setIsImpty(true)
           return
+        }
+
+
+
+        for (let field of currentField) {
+          if (field.type === 'text' || field.type === 'area') {
+            if (!message[field.name]) {
+              console.log('поле не найдено ', field.name)
+              alert('Все поля должны быть заполнены')
+              setIsImpty(true)
+              return
+            }
+          }
         }
 
 
@@ -314,8 +327,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
             id: currentType.reconciliator.id,
           },
         }
-
-        console.log(newData)
   
 
         const data = await postTask(newData, department)
@@ -374,13 +385,13 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(design.fio, (e: any) => {setDesign({...design, fio: e.target.value})})}
+                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(design.fio, (e: any) => {setDesign({...design, fio: e.target.value})}, isEmpty as boolean)}
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(design.branch, (e: any) => {setDesign({...design, branch: e.target.value})})}
-                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(design.subdivision, (e: any) => {setDesign({...design, subdivision: e.target.value})})}
-                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(design.tgId, (e: any) => {setDesign({...design, tgId: e.target.value})})}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(design.subdivision, (e: any) => {setDesign({...design, subdivision: e.target.value})}, isEmpty as boolean)}
+                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(design.tgId, (e: any) => {setDesign({...design, tgId: e.target.value})}, isEmpty as boolean)}
 
                       <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
-                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(design.leader, (e: any) => {setDesign({...design, leader: e.target.value})})}
+                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(design.leader, (e: any) => {setDesign({...design, leader: e.target.value})}, isEmpty as boolean )}
                     
                     </Col>
                   </Row>
@@ -426,12 +437,12 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                                 case 'area':
                                   return new MyTextAreaField(field.title, field.placeholder, field.name).createTextArea(
                                     design[field.name],
-                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.value }) }
+                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.value })}, isEmpty as boolean
                                   );
                                 case 'text':
                                   return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
                                     design[field.name],
-                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.value }) }
+                                    (e: any) => { setDesign({ ...design, [field.name]: e.target.value })}, isEmpty as boolean
                                   );
                                 case 'date':
                                   return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
@@ -466,32 +477,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   }
 
 
-
-
-                  {/*  */}
-
-
-                  {/* <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
-                        <Col className='mb-3' md={6}>
-                          <MyButton
-                            text={'Создать заявку'}
-                            onClick={() => {
-                              submitMessage(design)
-                            }}
-                            type={'button'}
-                          />
-                        </Col>
-
-                        <Col className='mb-3' md={6}>
-                          <MyButton
-                            text={'На главную'}
-                            onClick={() => {window.location.href = '/'}}
-                            type={'button'}
-                          />
-                        </Col>
-                    </Row> */}
-
-
                   <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
                         <Col className='mb-3' md={12}>
                           <MyButton
@@ -521,4 +506,4 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   )
 }
 
-export default AdvertisingForms
+export default DesignForms

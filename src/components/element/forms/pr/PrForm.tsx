@@ -36,7 +36,7 @@ import { typeSelectorArr } from '@/data/prData'
 
 // class
 
- class MyField {
+  class MyField {
 
     title: string
     placeholder: string
@@ -53,10 +53,10 @@ import { typeSelectorArr } from '@/data/prData'
     }
 
 
-    createFiled(data: string, setData: any): React.ReactNode {
+    createFiled(data: string, setData: any, error?: boolean): React.ReactNode {
 
       return  <Col md={12} className='mt-2 mb-2'>
-                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data}/>
+                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data} error={error}/>
               </Col>
     }
   }
@@ -135,16 +135,16 @@ import { typeSelectorArr } from '@/data/prData'
       this.name = name
   }
 
-  createTextArea(data: string, setData: any): React.ReactNode {
+  createTextArea(data: string, setData: any, error?: boolean): React.ReactNode {
 
     return (
             <Col md={12} className='mt-2 mb-2'>
-              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} />
+              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} error={error}/>
             </Col>
             )
   }
 
-}
+  }
 
 // selector arr
 
@@ -209,7 +209,7 @@ const branchSelectorsArr: MenuType[] = [
 // 
 
 
-interface AdvertisingFormsProps {
+interface PrFormsProps {
   departmentData: {
     department: string,
     setDepartment: (department: string) => void
@@ -232,8 +232,9 @@ interface AdvertisingFormsProps {
   }
 }
 
-const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
+const PrForms: FC<PrFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
 
+  const [isEmpty, setIsImpty] = useState<Boolean>(false)
 
   // modals
 
@@ -274,20 +275,35 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
 
   const currentType = typeSelectorArr.find((type: any) => type.label === pr.type)
-  console.log(currentType)
   
   
   const submitMessage = async (message: any) => {
       try {
 
-        if (Object.entries(message).length < 1) {
+if (Object.entries(message).length < 1) {
           alert('Все поля должны быть заполнены')
+          setIsImpty(true)
           return
         }
 
+
         if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader) {
           alert('Все поля должны быть заполнены')
+          setIsImpty(true)
           return
+        }
+
+
+
+        for (let field of currentField) {
+          if (field.type === 'text' || field.type === 'area') {
+            if (!message[field.name]) {
+              console.log('поле не найдено ', field.name)
+              alert('Все поля должны быть заполнены')
+              setIsImpty(true)
+              return
+            }
+          }
         }
 
         setModalInfoDownload(true)
@@ -306,7 +322,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
           },
         }
 
-        console.log(newData)
 
 
         const data = await postTask(newData, department)
@@ -365,14 +380,14 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(pr.fio, (e: any) => {setPr({...pr, fio: e.target.value})})}
+                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(pr.fio, (e: any) => {setPr({...pr, fio: e.target.value})}, isEmpty as boolean)}
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(pr.branch, (e: any) => {setPr({...pr, branch: e.target.value})})}
-                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(pr.subdivision, (e: any) => {setPr({...pr, subdivision: e.target.value})})}
-                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(pr.tgId, (e: any) => {setPr({...pr, tgId: e.target.value})})}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(pr.subdivision, (e: any) => {setPr({...pr, subdivision: e.target.value})}, isEmpty as boolean)}
+                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(pr.tgId, (e: any) => {setPr({...pr, tgId: e.target.value})}, isEmpty as boolean)}
 
                       <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
 
-                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(pr.leader, (e: any) => {setPr({...pr, leader: e.target.value})})}
+                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(pr.leader, (e: any) => {setPr({...pr, leader: e.target.value})}, isEmpty as boolean)}
                     
                     </Col>
                   </Row>
@@ -417,12 +432,12 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                                 case 'area':
                                   return new MyTextAreaField(field.title, field.placeholder, field.name).createTextArea(
                                     pr[field.name],
-                                    (e: any) => { setPr({ ...pr, [field.name]: e.target.value }) }
+                                    (e: any) => { setPr({ ...pr, [field.name]: e.target.value }) }, isEmpty as boolean
                                   );
                                 case 'text':
                                   return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
                                     pr[field.name],
-                                    (e: any) => { setPr({ ...pr, [field.name]: e.target.value }) }
+                                    (e: any) => { setPr({ ...pr, [field.name]: e.target.value }) }, isEmpty as boolean
                                   );
                                 case 'date':
                                   return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
@@ -445,26 +460,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   }
                   {/*  */}
 
-
-                  {/* <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
-                        <Col className='mb-3' md={6}>
-                          <MyButton
-                            text={'Создать заявку'}
-                            onClick={() => {
-                              submitMessage(pr)
-                            }}
-                            type={'button'}
-                          />
-                        </Col>
-
-                        <Col className='mb-3' md={6}>
-                          <MyButton
-                            text={'На главную'}
-                            onClick={() => {window.location.href = '/'}}
-                            type={'button'}
-                          />
-                        </Col>
-                    </Row> */}
 
 
                     <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
@@ -496,4 +491,4 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   )
 }
 
-export default AdvertisingForms
+export default PrForms

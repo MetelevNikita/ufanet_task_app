@@ -33,11 +33,10 @@ import { postTask } from '@/lib/postTask'
 // data
 
 import { typeSelectorArr } from '@/data/advertisingData'
-import { a, div } from 'motion/react-client'
 
 // class
 
- class MyField {
+  class MyField {
 
     title: string
     placeholder: string
@@ -54,10 +53,10 @@ import { a, div } from 'motion/react-client'
     }
 
 
-    createFiled(data: string, setData: any): React.ReactNode {
+    createFiled(data: string, setData: any, error?: boolean): React.ReactNode {
 
       return  <Col md={12} className='mt-2 mb-2'>
-                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data}/>
+                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data} error={error}/>
               </Col>
     }
   }
@@ -136,16 +135,16 @@ import { a, div } from 'motion/react-client'
       this.name = name
   }
 
-  createTextArea(data: string, setData: any): React.ReactNode {
+  createTextArea(data: string, setData: any, error?: boolean): React.ReactNode {
 
     return (
             <Col md={12} className='mt-2 mb-2'>
-              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} />
+              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} error={error}/>
             </Col>
             )
   }
 
-}
+  }
 
 
 // selector arr
@@ -239,6 +238,7 @@ interface AdvertisingFormsProps {
 
 const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
 
+  const [isEmpty, setIsImpty] = useState<Boolean>(false)
 
   // modals
 
@@ -279,8 +279,6 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   const data = typeSelectorArr.find((type: any) => type.label === advertising.type)
   const currentField = (!data) ? [] : data.field
 
-  console.log(data)
-
 
 
 
@@ -295,14 +293,29 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
          if (Object.entries(message).length < 1) {
           alert('Все поля должны быть заполнены')
+          setIsImpty(true)
           return
         }
+
 
         if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader) {
           alert('Все поля должны быть заполнены')
+          setIsImpty(true)
           return
         }
 
+
+
+        for (let field of currentField) {
+          if (field.type === 'text' || field.type === 'area') {
+            if (!message[field.name]) {
+              console.log('поле не найдено ', field.name)
+              alert('Все поля должны быть заполнены')
+              setIsImpty(true)
+              return
+            }
+          }
+        }
 
         setModalInfoDownload(true)
 
@@ -376,14 +389,14 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(advertising.fio, (e: any) => {setAdvertising({...advertising, fio: e.target.value})})}
+                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(advertising.fio, (e: any) => {setAdvertising({...advertising, fio: e.target.value})}, isEmpty as boolean)}
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(advertising.branch, (e: any) => {setAdvertising({...advertising, branch: e.target.value})})}
-                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(advertising.subdivision, (e: any) => {setAdvertising({...advertising, subdivision: e.target.value})})}
-                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(advertising.tgId, (e: any) => {setAdvertising({...advertising, tgId: e.target.value})})}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(advertising.subdivision, (e: any) => {setAdvertising({...advertising, subdivision: e.target.value})}, isEmpty as boolean)}
+                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(advertising.tgId, (e: any) => {setAdvertising({...advertising, tgId: e.target.value})}, isEmpty as boolean)}
 
                       <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
 
-                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(advertising.leader, (e: any) => {setAdvertising({...advertising, leader: e.target.value})})}
+                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(advertising.leader, (e: any) => {setAdvertising({...advertising, leader: e.target.value})}, isEmpty as boolean)}
                     
                     </Col>
                   </Row>
@@ -427,12 +440,12 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
                                   case 'area':
                                     return new MyTextAreaField(field.title, field.placeholder, field.name).createTextArea(
                                       advertising[field.name],
-                                      (e: any) => { setAdvertising({ ...advertising, [field.name]: e.target.value }) }
+                                      (e: any) => { setAdvertising({ ...advertising, [field.name]: e.target.value }) }, isEmpty as boolean
                                     );
                                   case 'text':
                                     return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
                                       advertising[field.name],
-                                      (e: any) => { setAdvertising({ ...advertising, [field.name]: e.target.value }) }
+                                      (e: any) => { setAdvertising({ ...advertising, [field.name]: e.target.value }) }, isEmpty as boolean
                                     );
                                   case 'date':
                                     return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(

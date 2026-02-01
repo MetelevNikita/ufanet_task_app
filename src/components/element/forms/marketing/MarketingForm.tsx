@@ -53,10 +53,10 @@ import MySelectMulti from '@/components/UI/MySelectMulti/MySelectMulti'
     }
 
 
-    createFiled(data: string, setData: any): React.ReactNode {
+    createFiled(data: string, setData: any, error?: boolean): React.ReactNode {
 
       return  <Col md={12} className='mt-2 mb-2'>
-                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data}/>
+                  <MyInput name={this.name} placeholder={this.placeholder} type={this.type} title={this.title} onChange={setData} value={data} error={error}/>
               </Col>
     }
   }
@@ -135,16 +135,16 @@ import MySelectMulti from '@/components/UI/MySelectMulti/MySelectMulti'
       this.name = name
   }
 
-  createTextArea(data: string, setData: any): React.ReactNode {
+  createTextArea(data: string, setData: any, error?: boolean): React.ReactNode {
 
     return (
             <Col md={12} className='mt-2 mb-2'>
-              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} />
+              <MyTextArea title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} error={error}/>
             </Col>
             )
   }
 
-}
+  }
 
 
 // selector arr
@@ -236,6 +236,11 @@ interface MarketingFormsProps {
 const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
 
 
+
+
+
+  const [isEmpty, setIsImpty] = useState<Boolean>(false)
+
   // modals
 
   const { modalSubmitSuccess, setModalSubmitSuccess } = modalSuccess
@@ -260,7 +265,6 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
     }
   }, [department])
 
-    console.log(currentDepartment)
 
 
   // type field
@@ -278,7 +282,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
 
 
   const currentType = typeSelectorArr.find((type: any) => type.label === marketing.type)
-  console.log(currentType)
+
   
   
    const submitMessage = async (message: any) => {
@@ -287,14 +291,29 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
 
         if (Object.entries(message).length < 1) {
           alert('Все поля должны быть заполнены')
+          setIsImpty(true)
           return
         }
 
-        if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader || !message.deadline) {
+
+        if (!message.fio || !message.title || !message.subdivision || !message.tgId || !message.branch || !message.leader) {
           alert('Все поля должны быть заполнены')
+          setIsImpty(true)
           return
         }
-  
+
+
+
+        for (let field of currentField) {
+          if (field.type === 'text' || field.type === 'area') {
+            if (!message[field.name]) {
+              alert('Все поля должны быть заполнены')
+              setIsImpty(true)
+              return
+            }
+          }
+        }
+
         setModalInfoDownload(true)
 
         if (!currentType) {
@@ -310,10 +329,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
             id: currentType?.reconciliator?.id,
           },
         }
-
-        console.log(newData)
   
-
         const data = await postTask(newData, department)
         console.log(data)
 
@@ -372,14 +388,14 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(marketing.fio, (e: any) => {setMarketing({...marketing, fio: e.target.value})})}
+                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(marketing.fio, (e: any) => {setMarketing({...marketing, fio: e.target.value})}, isEmpty as boolean)}
                       {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(marketing.branch, (e: any) => {setMarketing({...marketing, branch: e.target.value})})}
-                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(marketing.subdivision, (e: any) => {setMarketing({...marketing, subdivision: e.target.value})})}
-                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(marketing.tgId, (e: any) => {setMarketing({...marketing, tgId: e.target.value})})}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(marketing.subdivision, (e: any) => {setMarketing({...marketing, subdivision: e.target.value})}, isEmpty as boolean)}
+                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(marketing.tgId, (e: any) => {setMarketing({...marketing, tgId: e.target.value})}, isEmpty as boolean)}
 
                       <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'} target='_blank'>@getmyid_bot</Link></div>
 
-                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(marketing.leader, (e: any) => {setMarketing({...marketing, leader: e.target.value})})}
+                      {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(marketing.leader, (e: any) => {setMarketing({...marketing, leader: e.target.value})}, isEmpty as boolean)}
                     
                     </Col>
                   </Row>
@@ -423,12 +439,12 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                                 case 'area':
                                   return new MyTextAreaField(field.title, field.placeholder, field.name).createTextArea(
                                     marketing[field.name],
-                                    (e: any) => { setMarketing({ ...marketing, [field.name]: e.target.value }) }
+                                    (e: any) => { setMarketing({ ...marketing, [field.name]: e.target.value })}, isEmpty as boolean
                                   );
                                 case 'text':
                                   return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
                                     marketing[field.name],
-                                    (e: any) => { setMarketing({ ...marketing, [field.name]: e.target.value }) }
+                                    (e: any) => { setMarketing({ ...marketing, [field.name]: e.target.value })}, isEmpty as boolean
                                   );
                                 case 'date':
                                   return new MyField(field.title, field.placeholder, field.type, field.name).createFiled(
@@ -450,33 +466,6 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
                     })
                   }
 
-
-                  {/*  */}
-
-
-
-
-
-                  {/* <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>
-                        <Col className='mb-3' md={6}>
-                          <MyButton
-                            text={'Создать заявку'}
-                            onClick={() => {
-                              console.log('SEND MESSAG#')
-                              submitMessage(marketing)
-                            }}
-                            type={'button'}
-                          />
-                        </Col>
-
-                        <Col className='mb-3' md={6}>
-                          <MyButton
-                            text={'На главную'}
-                            onClick={() => {window.location.href = '/'}}
-                            type={'button'}
-                          />
-                        </Col>
-                    </Row> */}
 
 
                   <Row className='d-flex flex-row justify-content-center align-items-center mt-3'>

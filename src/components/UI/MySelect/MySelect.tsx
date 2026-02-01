@@ -26,9 +26,6 @@ interface MySelectProps {
 
 const MySelect: FC<MySelectProps> = ({title, options, name, value, onChange }) => {
 
-  console.log(value)
-
-
   return (
 
     <div className={styles.select_container}>

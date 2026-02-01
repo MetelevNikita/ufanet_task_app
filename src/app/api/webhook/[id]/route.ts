@@ -295,8 +295,6 @@ export const POST = async (req: Request) => {
     const departmentName = department.split(' ').slice(2).join(' ')
 
     const projects = await getCacheProjects(YouGileKey)
-    console.log('ПОЛУЧАЕМ ПРОЕКТЫ ИЗ ФУНКЦИИ С КЭШЕМ ', projects)
-
     const currentProjects = projects.content.find((project: any) => {
       if (project.title == departmentName) {
         return project
@@ -313,8 +311,6 @@ export const POST = async (req: Request) => {
         allColums.push(column)
       }
     }
-
-    console.log('ПОЛУЧАЕМ КОЛОНКИ ИЗ ФУНКЦИИ С КЭШЕМ ', allColums)
 
 
     const findColumn = allColums.find((column: any) => {
@@ -351,7 +347,9 @@ export const POST = async (req: Request) => {
     }
       
     const bot = await getBot()
-    bot.sendMessage(tgId.split('-')[1].trim(), messageFromUser as string) 
+    bot.sendMessage(tgId.split('-')[1].trim(), messageFromUser as string)
+
+    console.log('ВЕБХУК ОТРАБОТАЛ')
 
     return NextResponse.json({
       message: 'Cообщение отправлено',
