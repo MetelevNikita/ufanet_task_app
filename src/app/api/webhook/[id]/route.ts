@@ -306,7 +306,7 @@ export const POST = async (req: Request) => {
     let allColums = []
 
     for (const board of boards.content) {
-      const columns = await getYGColumns(YouGileKey, board.id)
+      const columns = await getCacheColumns(YouGileKey, board.id)
       for (const column of columns.content) {
         allColums.push(column)
       }
