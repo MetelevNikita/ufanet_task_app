@@ -85,12 +85,19 @@ export const getBot = async () => {
               bot.sendMessage(chatId, 'Привет! Я бот для уведомлений из YouGile.', {
                 reply_markup: {
                   keyboard: [
-                    [{ text: 'Помощь', request_contact: false, request_location: false }],
+                      [{ text: 'Инфо', request_contact: false, request_location: false }, { text: 'Помощь', request_contact: false, request_location: false}],
+                      [{ text: 'Ссылка на сайт если потеряли', request_contact: false, request_location: false}, { text: 'Найти мой Telegram ID', request_contact: false, request_location: false}], 
                   ],
                 }
               })
+            } else if (msg.text === 'Инфо') {
+              bot.sendMessage(chatId, 'Данный бот создан для утверждения и контроля над задачами созданными в PR Отдел')
+            } else if (msg.text === 'Ссылка на сайт если потеряли') {
+              bot.sendMessage(chatId, 'https://pr-tz.ru не теряй')
             } else if (msg.text === 'Помощь') {
-              bot.sendMessage(chatId, 'Данный бот создан для утверждения заявок')
+              bot.sendMessage(chatId, 'В случае если бот не отправляет вам уведомления о состоянии вашей задачи, вам необходимо обратиться к руководителю отдела куда была заведена заявка для проверки вписанного вами TelegramID')
+            } else if (msg.text === 'Найти мой Telegram ID') {
+              bot.sendMessage(chatId, 'Вы можете посмотреть свой Telegram ID на корпоративном сайте или воспользоватеься ботом @Getmyid_bot')
             } else {
               bot.sendMessage(chatId, 'Еще что то спросить хотите.....')
             }

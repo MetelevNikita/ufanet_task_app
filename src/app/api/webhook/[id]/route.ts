@@ -166,6 +166,12 @@ export const POST = async (req: Request) => {
       return item.includes('Телеграм id') ?? item
     })
 
+
+    if (!tgId && !columnId) {
+      console.log('=== ЗАДАЧА НЕ СОЗДАНА НА САЙТЕ PR-TZ ===')
+      return
+    }
+
     const department = description.split('<br /><br />').find((item: string) => {
       if (item.includes('Отдел')) {
         return item
