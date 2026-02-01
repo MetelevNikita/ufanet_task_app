@@ -20,68 +20,11 @@ import { getBot } from '@/telegramBot/telegramBot'
 const prisma = new PrismaClient()
 
 
-const ygCache = new NodeCache({
-  stdTTL: 600,
-  checkperiod: 300
-})
 
-const CACHE_DATA = {
-  PROJECTS: 'CACHE_PROJECTS',
-  BOARDS: 'CACHE_BOARDS',
-  COLUMNS: 'CACHE_COLUMNS'
-}
+// 
 
-async function getCacheProjects (YouGileKey: string): Promise<any> {
+async function getCurrentColumns (YouGileKey: string, boards: any, columnId: string): Promise<any> {
   try {
-
-    let projects = ygCache.get(CACHE_DATA.PROJECTS)
-    console.log('ДАННЫЕ ПРОЕКТОВ ', projects)
-
-    if (projects === undefined || projects === null) {
-      console.log('Не удалось получить данные ПРОЕКТОВ из кэша дергаю АПИ')
-      projects = await getYGProjects(YouGileKey)
-      ygCache.set(CACHE_DATA.PROJECTS, projects)
-    }
-
-    console.log('ДАННЫЕ ПРОЕКТОВ ПОЛУЧЕНЫ ИЗ КЭША')
-    return projects
-    
-  } catch (error) {
-    console.error(error)
-    return []
-  }
-}
-
-
-async function getCacheBoards (YouGileKey: string, projectId: string): Promise<any> {
-  try {
-
-    let boards = ygCache.get(CACHE_DATA.BOARDS)
-    console.log('ДАННЫЕ ДОСОК ', boards)
-
-    if (boards === undefined || boards === null) {
-      console.log('Не удалось получить данные ДОСОК из кэша дергаю АПИ')
-      boards = await getBoardCompany(YouGileKey, projectId)
-      ygCache.set(CACHE_DATA.BOARDS, boards)
-    }
-
-    console.log('ДАННЫЕ ДОСОК ПОЛУЧЕНЫ ИЗ КЭША')
-    return boards
-    
-  } catch (error) {
-    console.log(error)
-    return []
-  }
-}
-
-async function getCacheColumns (YouGileKey: string, boards: any): Promise<any> {
-  try {
-
-    let columns = ygCache.get(CACHE_DATA.COLUMNS)
-
-    if (columns === undefined || columns === null) {
-
-      console.log('Не удалось получить данные КОЛОНОК из кэша, дергаю АПИ')
       let arrColumns: any[] = []
 
       for (const board of boards.content) {
@@ -90,29 +33,21 @@ async function getCacheColumns (YouGileKey: string, boards: any): Promise<any> {
           arrColumns.push(column)
         }
       }
+      
+      const findColumn = arrColumns.find((column: any) => {
+        if (column.id == columnId) {
+          return column
+        }
+      })
 
-      columns = arrColumns
-      ygCache.set(CACHE_DATA.COLUMNS, columns)
-      console.log('ДАННЫЕ КОЛОНОК СОХРАНЕНЫ В КЭШ')
-    }
+      return findColumn
 
-    console.log('ДАННЫЕ КОЛОНОК ПОЛУЧЕНЫ ИЗ КЭША')
-    return columns
     
   } catch (error) {
     console.log(error)
-    return []
+    return {}
   }
 }
-
-
-
-
-// cache
-
-
-
-
 
 const changeStatusTaskDB = async (department: string, title: string, key: string, value: any) => {
   try {
@@ -216,6 +151,9 @@ const findCurrentStiacker = (findSteakers: any, status: any, state: any) => {
 export const POST = async (req: Request) => {
   try {
 
+
+    console.log('=== НАЧАЛО ОБРАБОТКИ ВЕБХУКА ===')
+
     const event = await req.json()
 
     const title = event.payload.title ?? ''
@@ -310,32 +248,26 @@ export const POST = async (req: Request) => {
 
     const departmentName = department.split(' ').slice(2).join(' ')
 
-    const projects = await getCacheProjects(YouGileKey)
+    const projects = await getYGProjects(YouGileKey)
     const currentProjects = projects.content.find((project: any) => {
       if (project.title == departmentName) {
         return project
       }
     })
 
-    const boards = await getCacheBoards(YouGileKey, currentProjects.id)
-    const columns = await getCacheColumns(YouGileKey, boards)
+    const boards = await getBoardCompany(YouGileKey, currentProjects.id)
+    const findColumn = await getCurrentColumns(YouGileKey, boards, columnId) ?? null
+
+
+    console.log('НАЙДЕННАЯ КОЛОНКА!!!! ', findColumn)
     
   
-    const findColumn = columns.find((column: any) => {
-      if (column.id == columnId) {
-        return column
-      }
-    })
-
-    console.log('COLUMNS!!!!!! ', findColumn)
-  
-
 
     // change status DB
 
     const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'status', findColumn)
 
-    //
+    
 
     let messageFromUser = '';
 
