@@ -74,15 +74,26 @@ async function getCacheBoards (YouGileKey: string, projectId: string): Promise<a
   }
 }
 
-async function getCacheColumns (YouGileKey: string, boardId: string): Promise<any> {
+async function getCacheColumns (YouGileKey: string, boards: any): Promise<any> {
   try {
 
     let columns = ygCache.get(CACHE_DATA.COLUMNS)
 
     if (!columns) {
-      console.log('Не удалось получить данные КОЛОНОК из кэша дергаю АПИ')
-      columns = await getYGColumns(YouGileKey, boardId)
+
+      console.log('Не удалось получить данные КОЛОНОК из кэша, дергаю АПИ')
+      let arrColumns: any[] = []
+
+      for (const board of boards.content) {
+        const columns = await getYGColumns(YouGileKey, board.id)
+        for (const column of columns.content) {
+          arrColumns.push(column)
+        }
+      }
+
+      columns = arrColumns
       ygCache.set(CACHE_DATA.COLUMNS, columns)
+      console.log('ДАННЫЕ КОЛОНОК СОХРАНЕНЫ В КЭШ')
     }
 
     console.log('ДАННЫЕ КОЛОНОК ПОЛУЧЕНЫ ИЗ КЭША')
@@ -112,6 +123,9 @@ const changeStatusTaskDB = async (department: string, title: string, key: string
           title: title,
         }
       })
+
+
+      console.log(findTask)
 
       if (!findTask) {
         return NextResponse.json({
@@ -210,9 +224,6 @@ export const POST = async (req: Request) => {
     const assignedUsers = event.payload.assigned ?? []
 
 
-    console.log(event)
-
-
     const tgId = description.split('<br /><br />').find((item: string) => {
       return item.includes('Телеграм id') ?? item
     })
@@ -306,23 +317,18 @@ export const POST = async (req: Request) => {
       }
     })
 
-
     const boards = await getCacheBoards(YouGileKey, currentProjects.id)
-    let allColums = []
-
-    for (const board of boards.content) {
-      const columns = await getCacheColumns(YouGileKey, board.id)
-      for (const column of columns.content) {
-        allColums.push(column)
-      }
-    }
-
-
-    const findColumn = allColums.find((column: any) => {
+    const columns = await getCacheColumns(YouGileKey, boards)
+    
+  
+    const findColumn = columns.find((column: any) => {
       if (column.id == columnId) {
         return column
       }
     })
+
+    console.log('COLUMNS!!!!!! ', findColumn)
+  
 
 
     // change status DB
