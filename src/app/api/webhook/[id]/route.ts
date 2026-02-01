@@ -35,6 +35,7 @@ async function getCacheProjects (YouGileKey: string): Promise<any> {
   try {
 
     let projects = ygCache.get(CACHE_DATA.PROJECTS)
+    console.log('ДАННЫЕ ПРОЕКТОВ ', projects)
 
     if (!projects) {
       console.log('Не удалось получить данные ПРОЕКТОВ из кэша дергаю АПИ')
@@ -56,6 +57,7 @@ async function getCacheBoards (YouGileKey: string, projectId: string): Promise<a
   try {
 
     let boards = ygCache.get(CACHE_DATA.BOARDS)
+    console.log('ДАННЫЕ ДОСОК ', boards)
 
     if (!boards) {
       console.log('Не удалось получить данные ДОСОК из кэша дергаю АПИ')
@@ -72,14 +74,15 @@ async function getCacheBoards (YouGileKey: string, projectId: string): Promise<a
   }
 }
 
-async function getCacheColumns (yougile: string, boardId: string): Promise<any> {
+async function getCacheColumns (YouGileKey: string, boardId: string): Promise<any> {
   try {
 
     let columns = ygCache.get(CACHE_DATA.COLUMNS)
+    console.log('ДАННЫЕ КОЛНОК ', columns)
 
     if (!columns) {
       console.log('Не удалось получить данные КОЛОНОК из кэша дергаю АПИ')
-      columns = await getYGColumns(yougile, boardId)
+      columns = await getYGColumns(YouGileKey, boardId)
       ygCache.set(CACHE_DATA.COLUMNS, columns)
     }
 
