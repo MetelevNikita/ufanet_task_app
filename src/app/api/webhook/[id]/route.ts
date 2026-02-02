@@ -169,7 +169,9 @@ export const POST = async (req: Request) => {
 
     if (!tgId && !columnId) {
       console.log('=== ЗАДАЧА НЕ СОЗДАНА НА САЙТЕ PR-TZ ===')
-      return
+      return NextResponse.json({
+        message: '=== ЗАДАЧА НЕ СОЗДАНА НА САЙТЕ PR-TZ ==='
+      })
     }
 
     const department = description.split('<br /><br />').find((item: string) => {

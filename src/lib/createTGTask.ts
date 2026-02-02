@@ -11,8 +11,6 @@ export const createTGTask = async (department: string, data: any, descriptionTas
     const bot = await getBot();
     const id = taskDB.id as number
 
-    console.log("ID ДЛЯ TELEGRAM", id)
-
 
     const sendTgBot = bot.sendMessage(
       tgId as string,
@@ -23,6 +21,7 @@ export const createTGTask = async (department: string, data: any, descriptionTas
             [
               { text: 'Согласовать', callback_data: buildCB('approve', department, id.toString())},
               { text: 'Отклонить', callback_data: buildCB('reject', department, id.toString())},
+              { text: 'Согласовать с комментарием', callback_data: buildCB('comment', department, id.toString())},
             ]
           ]
         }

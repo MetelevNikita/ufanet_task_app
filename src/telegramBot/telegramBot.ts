@@ -5,6 +5,10 @@ import TelegramBot from 'node-telegram-bot-api'
 dotenv.config()
 
 
+const forceReplyMap = new Map();
+
+
+
 // sendAnswerMessage
 
 const sendAnswerMessage = async (status: string, department: string, id: any) => {
@@ -77,9 +81,28 @@ export const getBot = async () => {
   // подписываемся на сообщения только один раз
 
       if (bot.listenerCount('message') === 0) {
+
+
+
+        // Основа БОТА
+
         bot.on('message', (msg) => {
         
           const chatId = msg.chat.id
+          const text = msg.text
+          const userId = msg.from?.id;
+          const isReply = msg.reply_to_message;
+
+          console.log(isReply, 'это ответ на сообщение')
+
+          if (isReply && text && userId) {
+            console.log(text, 'ЭТО СООБЩЕНИЕ В ОТВЕТ')
+
+            const replyData = forceReplyMap.get(msg.reply_to_message!.message_id);
+            console.log(replyData)
+          }
+
+          
 
             if (msg.text === '/start') {
               bot.sendMessage(chatId, 'Привет! Я бот для уведомлений из YouGile.', {
@@ -103,8 +126,11 @@ export const getBot = async () => {
             }
         })
 
+        // ОТВЕТ НЕ КНОПКАХ
 
         bot.on('callback_query', async (query) => {
+
+          // 
 
           const chatId = query.message?.chat.id as number;
           const messageId = query.message?.message_id as number;
@@ -136,11 +162,44 @@ export const getBot = async () => {
                 message_id: messageId
               });
 
-          } 
-              
+          } else if (status === 'comment') {
 
+            if (!query.message) return
+
+            const message = query.message.text as string
+            const splitMessage = message.split('\n').filter((item) => item.length > 1).find((item) => item.startsWith('Телеграм')) as string
+            const tgId = splitMessage.split(' ')[3]
+            console.log(tgId)
+
+            await bot.sendMessage(chatId, 'Данная функция в процессе разработке')
+  
+            // // 
+
+            // await bot.answerCallbackQuery(query.id);
+            // const forceData =  await bot.sendMessage(
+            //     chatId,
+            //     'Напишите комментарий к этой задаче:',
+            //     {
+            //         reply_to_message_id: messageId,  // ID сообщения с кнопкой
+            //         reply_markup: {
+            //           force_reply: true,
+            //           selective: true,
+            //           input_field_placeholder: 'Ваш комментарий...'
+            //         }
+            //     }
+            // );
+
+
+            // forceReplyMap.set(forceData.message_id, {
+            //   department: department,
+            //   taskId: id,
+            //   userId: query.from.id,
+            //   chatId: chatId,
+            //   tgId_author: tgId
+            // });
+
+          }
         })
-
       }
 
 

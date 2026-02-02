@@ -111,7 +111,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
     const sendAnswerMessage = await bot.sendMessage(
-      335412211,
+      getTask.tgId,
       `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,
     )
 
@@ -135,7 +135,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
     const sendAnswerMessage = await bot.sendMessage(
-      335412211,
+      getTask.tgId,
       `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,
     )
 
