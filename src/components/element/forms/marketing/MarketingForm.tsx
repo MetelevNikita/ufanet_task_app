@@ -230,10 +230,14 @@ interface MarketingFormsProps {
   modalDownload: {
     modalInfoDownload: boolean,
     setModalInfoDownload: (e: boolean) => void
+  },
+  modalTgError: {
+    modalTGError: boolean,
+    setModalTGError: (e: boolean) => void
   }
 }
 
-const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
+const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError }) => {
 
 
 
@@ -247,7 +251,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
   const { modalSubmitError, setModalSubmitError } = modalError
   const { modalBackInfo, setModalBackInfo } = modalInfo
   const { modalInfoDownload, setModalInfoDownload } = modalDownload
-
+  const { modalTGError, setModalTGError } = modalTgError
   // 
 
   const [activeOther, setActiveOther] = useState(false)
@@ -316,6 +320,8 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
 
         setModalInfoDownload(true)
 
+
+
         if (!currentType) {
           alert('Ошибка получение данных формы для определения согласователя, попробуйте позже...')
           return
@@ -333,15 +339,24 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
         const data = await postTask(newData, department)
         console.log(data)
 
+        setModalInfoDownload(false)
+
+        
+
         if (data) {
           if (data.status === 'success') {
             setModalInfoDownload(false)
             setModalSubmitSuccess(true)
             return 
           }
-          if (data.status === 'abort' || !data) {
+          if (data.status === 'abort') {
             setModalInfoDownload(false)
             setModalSubmitError(true)
+            return
+          }
+
+          if (data.status === 'abort_tg_id') {
+            setModalTGError(true)
             return
           }
         }

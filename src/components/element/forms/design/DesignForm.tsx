@@ -230,10 +230,14 @@ interface DesignFormsProps {
   modalDownload: {
     modalInfoDownload: boolean,
     setModalInfoDownload: (e: boolean) => void
+  },
+  modalTgError: {
+    modalTGError: boolean,
+    setModalTGError: (e: boolean) => void
   }
 }
 
-const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
+const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError }) => {
 
 
   const [isEmpty, setIsImpty] = useState<Boolean>(false)
@@ -244,6 +248,7 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
   const { modalSubmitError, setModalSubmitError } = modalError
   const { modalBackInfo, setModalBackInfo } = modalInfo
   const { modalInfoDownload, setModalInfoDownload } = modalDownload
+  const { modalTGError, setModalTGError } = modalTgError
 
   // 
 
@@ -343,6 +348,10 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
           if (data.status === 'abort') {
             setModalInfoDownload(false)
             setModalSubmitError(true)
+            return
+          }
+          if (data.status === 'abort_tg_id') {
+            setModalTGError(true)
             return
           }
         }

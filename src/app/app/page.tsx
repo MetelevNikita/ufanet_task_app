@@ -65,6 +65,7 @@ const page: FC = () => {
   const [modalSubmitError, setModalSubmitError] = useState<boolean>(false)
   const [modalBackInfo, setModalBackInfo] = useState<boolean>(false)
   const [modalInfoDownload, setModalInfoDownload] = useState<boolean>(false)
+  const [modalTGError, setModalTGError] = useState<boolean>(false)
 
   //
 
@@ -90,6 +91,7 @@ const page: FC = () => {
             modalError={{modalSubmitError, setModalSubmitError}}
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
+            modalTgError={{modalTGError, setModalTGError}}
         />
       case 'Отдел дизайна':
         console.log('design')
@@ -99,6 +101,7 @@ const page: FC = () => {
             modalError={{modalSubmitError, setModalSubmitError}}
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
+            modalTgError={{modalTGError, setModalTGError}}
         />
 
       case 'Отдел рекламы':
@@ -108,6 +111,7 @@ const page: FC = () => {
             modalError={{modalSubmitError, setModalSubmitError}}
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
+            modalTgError={{modalTGError, setModalTGError}}
         />
       case 'Отдел интернет-маркетинга':
         return <MarketingForms
@@ -116,6 +120,7 @@ const page: FC = () => {
             modalError={{modalSubmitError, setModalSubmitError}}
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
+            modalTgError={{modalTGError, setModalTGError}}
             />
     }
   }
@@ -132,6 +137,23 @@ const page: FC = () => {
 
               <Row className='d-flex flex-row'>
                 <Col md={12} className='d-flex justify-content-center align-items-center'>
+
+                {
+                  (modalTGError) && (
+                    <ModalInfo
+                      title={'Ошибка! Проверьте правильность введенного Telegram ID, его можно посмотреть в боте.'}
+                      btnTitleOne={'Продолжить'}
+                      image={<BsInfoCircle style={{width: '60px', color: '#FC9B32'}}/>}
+                      onClickOne={() => {
+                        setModalTGError(false)
+                      }}
+                      onClickTwo={
+                        () => {
+                          setModalTGError(false)
+                        }}
+                      />
+                  )
+                }
 
                 {
                   (modalBackInfo) && (

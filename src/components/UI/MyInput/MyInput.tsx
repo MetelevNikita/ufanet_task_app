@@ -19,10 +19,6 @@ interface MyInputProps {
 
 const MyInput:FC<MyInputProps> = ({ type, title, placeholder, onChange, value, name, error = false }) => {
 
-
-
-  console.log(error)
-
   let isAString = ''
 
   if (typeof value === 'string') {

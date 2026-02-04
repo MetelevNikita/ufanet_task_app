@@ -27,11 +27,8 @@ const MyTextArea: FC<MyTextAreaProps> = ({ title, placeholder, name, value, onCh
   let errorField;
 
   if (error && isAString.length < 1) {
-
-    console.log('ПОЛЯ ПУСТОЕ')
     errorField = {border: '2px solid red'}
   } else {
-    console.log('ПОЛЯ НЕ ПУСТОЕ')
     errorField = {}
   }
 

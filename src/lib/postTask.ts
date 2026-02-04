@@ -42,7 +42,12 @@ export const postTask = async (data: any, department: string) => {
 
     const fromEntries = Object.fromEntries(newData) as any
 
-    console.log('ДАННЫЕ из POST TASK')
+    if (isNaN(parseInt(fromEntries.tgId))) {
+      return {
+        status: 'abort_tg_id',
+        message: 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)',
+      }
+    }
 
     const responce = await fetch (`/api/task/${department}`, {
       method: 'POST',

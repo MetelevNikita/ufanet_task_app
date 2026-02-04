@@ -229,10 +229,14 @@ interface PrFormsProps {
   modalDownload: {
     modalInfoDownload: boolean,
     setModalInfoDownload: (e: boolean) => void
+  },
+  modalTgError: {
+    modalTGError: boolean,
+    setModalTGError: (e: boolean) => void
   }
 }
 
-const PrForms: FC<PrFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload }) => {
+const PrForms: FC<PrFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError }) => {
 
   const [isEmpty, setIsImpty] = useState<Boolean>(false)
 
@@ -242,6 +246,7 @@ const PrForms: FC<PrFormsProps> = ({ departmentData, modalSuccess, modalError, m
   const { modalSubmitError, setModalSubmitError } = modalError
   const { modalBackInfo, setModalBackInfo } = modalInfo
   const { modalInfoDownload, setModalInfoDownload } = modalDownload
+  const { modalTGError, setModalTGError } = modalTgError
 
   // 
 
@@ -339,6 +344,10 @@ if (Object.entries(message).length < 1) {
           if (data.status === 'abort') {
             setModalInfoDownload(false)
             setModalSubmitError(true)
+            return
+          }
+          if (data.status === 'abort_tg_id') {
+            setModalTGError(true)
             return
           }
         }
