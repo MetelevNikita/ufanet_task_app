@@ -30,7 +30,7 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
   }
 
   // 2) Мероприятие — внешнее
-  if (type === 'Мероприятие — внешнее') {
+  if (type === 'Мероприятие - внешнее (для партнеров, абонентов, жителей)') {
     const bodyYG =
       row('Название мероприятия:', data.title) +
       row('Описание мероприятия:', data.description) +

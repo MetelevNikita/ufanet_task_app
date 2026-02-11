@@ -33,7 +33,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Размер:', data.size) +
       row('Другое:', data.size_other) +
       row('Ориентация:', data.orientation) +
-      row('Файл макета:', data.file) +
+      row('Файл макета:', data.maket_file) +
       row('Дата сдачи:', data.deadline);
     const bodyTG =
       row('Название:', data.title, '\n') +
@@ -41,7 +41,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Размер:', data.size, '\n') +
       row('Другое:', data.size_other, '\n') +
       row('Ориентация:', data.orientation, '\n') +
-      row('Файл макета:', data.file, '\n') +
+      row('Файл макета:', data.maket_file, '\n') +
       row('Дата сдачи:', data.deadline, '\n');
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
