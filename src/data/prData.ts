@@ -27,7 +27,7 @@ export const typeSelectorArr = [
 
   {
     id: 3,
-    label: 'Мероприятие - внутреннее (для сотрудников)',
+    label: 'Мероприятие — внутреннее (для сотрудников)',
     value: 'event_internal',
     reconciliator: {
       name: 'PR согласование',
@@ -37,7 +37,6 @@ export const typeSelectorArr = [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
       { id: 2,  title: 'Описание мероприятия', placeholder: 'Расскажите подробно про мероприятие: Какой формат? Программа мероприятия?Для кого оно (ЦА)? Какая наша цель/роль?', typeField: 'area',  type: 'area',  name: 'description' },
       { id: 3,  title: 'Цель проведения мероприятия', placeholder: 'Для чего проводится', typeField: 'text',  type: 'text',  name: 'goal' },
-      { id: 4,  title: 'Лидер мероприятия', placeholder: 'Ответственный/лидер', typeField: 'text',  type: 'text',  name: 'leader' },
       { id: 5,  title: 'Что необходимо сделать?', placeholder: 'Список задач', typeField: 'area',  type: 'area',  name: 'todo' },
       { id: 6,  title: 'Дата мероприятия', placeholder: 'Дата проведения', typeField: 'date',  type: 'date',  name: 'deadline' },
       { id: 7,  title: 'Место проведения мероприятия', placeholder: 'Адрес/площадка', typeField: 'text',  type: 'text',  name: 'place' }
@@ -56,7 +55,6 @@ export const typeSelectorArr = [
       { id: 1,  title: 'Название мероприятия', placeholder: 'Укажите название', typeField: 'text',  type: 'text',  name: 'title' },
       { id: 2,  title: 'Описание мероприятия', placeholder: 'Расскажите подробно про мероприятие: Какой формат? Программа мероприятия?Для кого оно (ЦА)? Какая наша цель/роль?', typeField: 'area',  type: 'area',  name: 'description' },
       { id: 3,  title: 'Цель проведения мероприятия', placeholder: 'Для чего проводится', typeField: 'text',  type: 'text',  name: 'goal' },
-      { id: 4,  title: 'Лидер мероприятия', placeholder: 'Ответственный/лидер', typeField: 'text',  type: 'text',  name: 'leader' },
       { id: 5,  title: 'Что необходимо сделать?', placeholder: 'Список задач', typeField: 'area',  type: 'area',  name: 'todo' },
       { id: 6,  title: 'Дата мероприятия', placeholder: 'Дата проведения', typeField: 'date',  type: 'date',  name: 'deadline' },
       { id: 7,  title: 'Место проведения мероприятия', placeholder: 'Адрес/площадка', typeField: 'text',  type: 'text',  name: 'place' }

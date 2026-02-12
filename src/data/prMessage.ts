@@ -35,7 +35,6 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('Название мероприятия:', data.title) +
       row('Описание мероприятия:', data.description) +
       row('Цель проведения мероприятия:', data.goal) +
-      row('Лидер мероприятия:', data.leader) +
       row('Что необходимо сделать:', data.todo) +
       row('Дата мероприятия:', data.date) +
       row('Место проведения мероприятия:', data.place);
@@ -44,7 +43,6 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('Название мероприятия:', data.title, '\n') +
       row('Описание мероприятия:', data.description, '\n') +
       row('Цель проведения мероприятия:', data.goal, '\n') +
-      row('Лидер мероприятия:', data.leader, '\n') +
       row('Что необходимо сделать:', data.todo, '\n') +
       row('Дата мероприятия:', data.date, '\n') +
       row('Место проведения мероприятия:', data.place, '\n');
