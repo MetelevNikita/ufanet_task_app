@@ -180,6 +180,8 @@ export const POST = async (req: Request) => {
       }
     })
 
+    console.log("ДЕПАРТАМЕНТ ", department)
+
     // yougile
 
     const YouGileKey = process.env.YOGILE_KEY_INSTANCE as string
@@ -213,13 +215,10 @@ export const POST = async (req: Request) => {
     console.log("ПОЛЬЗОВАТЕЛЬ!!!!! ИЗМЕНИЛСЯ", compressionAssigned)
 
     
-
-
     // comparison steacker
 
     let comprassionSteacker: boolean
     const allSticker = await getYGStickers(YouGileKey) ?? []
-
 
 
     if (!allSticker) {
@@ -255,16 +254,22 @@ export const POST = async (req: Request) => {
     //
 
     const departmentName = department.split(' ').slice(2).join(' ')
+    console.log('"department name" ', departmentName)
 
     const projects = await getYGProjects(YouGileKey)
+    console.log(projects)
     const currentProjects = projects.content.find((project: any) => {
       if (project.title == departmentName) {
         return project
       }
     })
 
+    console.log(currentProjects)
+
     const boards = await getBoardCompany(YouGileKey, currentProjects.id)
+    console.log(boards)
     const findColumn = await getCurrentColumns(YouGileKey, boards, columnId) ?? null
+    console.log(findColumn)
 
 
     console.log('НАЙДЕННАЯ КОЛОНКА!!!! ', findColumn)

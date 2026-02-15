@@ -27,9 +27,6 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
       stage: 'В очереди'
     }
 
-    console.log(databaseCard)
-
-
     const task = await prisma.task.create({
       data: databaseCard
     })

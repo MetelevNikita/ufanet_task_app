@@ -20,7 +20,6 @@ export const registerBot = async () => {
 
 export const getAllWebHooks = async () => {
   console.log('Registering yougile webhook instrumentation');
-  console.log('NEXT_RUNTIME', process.env.NEXT_RUNTIME);
 
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
 
@@ -34,8 +33,6 @@ export const getAllWebHooks = async () => {
 
 
 export const getYouGileWebHook = async () => {
-  console.log('Registering yougile webhook instrumentation');
-  console.log('NEXT_RUNTIME', process.env.NEXT_RUNTIME);
 
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
 
@@ -44,7 +41,7 @@ export const getYouGileWebHook = async () => {
   const { createYGWebhook } = await import('@/functions/createYGWebhook')
 
   const webhook = await createYGWebhook(youGileKey)
-  console.log(webhook)
+  console.log('Зарегестрированный Webhook Yougile ', webhook)
 
 }
 
@@ -56,10 +53,8 @@ export const getYGData = async () => {
     console.log('NEXT_RUNTIME', process.env.NEXT_RUNTIME);
 
     if (process.env.NEXT_RUNTIME !== 'nodejs') return;
-
-
     const companyName = process.env.COMPANY_NAME as string
-    console.log('COMPANY NAME', companyName)
+
 
     const { getYGCompany } = await import('@/functions/getYGCompany')
     const { getYGKeys } = await import('@/functions/getYGKeys')

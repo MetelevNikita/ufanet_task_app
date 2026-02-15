@@ -10,6 +10,7 @@ export const deleteAllYouGileWebhook = async (key: string) => {
     })
 
     const data = await responceAllHooks.json()
+    console.log('ТЕКУЩИЕ ВЕРСИИ WEBHOOK ', data)
 
     for (const hook of data) {
 

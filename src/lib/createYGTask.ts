@@ -29,10 +29,6 @@ export const createYGTask = async (department: string, data: any, descriptionTas
       return project.title === department
     })
 
-
-    console.log('CURRENT PROJECT YOUGILE ', currentProject)
-
-
     // 
 
     const board = await getBoardCompany(yougileKey, currentProject.id);
@@ -66,8 +62,10 @@ export const createYGTask = async (department: string, data: any, descriptionTas
       return
     }
 
+    console.log(statusSticker.states)
 
-    const currentState = statusSticker.states.find((item: any) => item.name === 'В очереди') ?? {}
+
+    const currentState = statusSticker.states.find((item: any) => item.name === 'не принято') ?? {}
 
     // 
 

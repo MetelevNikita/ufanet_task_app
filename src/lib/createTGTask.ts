@@ -3,8 +3,11 @@ import { getBot } from "@/telegramBot/telegramBot";
 // 
 
 
-export const createTGTask = async (department: string, data: any, descriptionTask: string, taskDB: any, tgId: any) => {
-  const buildCB = (status: string, department: string, cardId: any) => `${status}|${department}|${cardId}`
+export const createTGTask = async (department: string, descriptionTask: string, taskDB: any, tgIdGroup: string) => {
+  const buildCB = (status: string, department: string, cardId: any, ygId: string, tgid: string ) => `${status}|${department}|${taskDB.id}|${taskDB.ygId}|${taskDB.tgId}`
+
+  console.log('WORK TG')
+  console.log(taskDB)
 
   try {
 
@@ -13,15 +16,14 @@ export const createTGTask = async (department: string, data: any, descriptionTas
 
 
     const sendTgBot = bot.sendMessage(
-      tgId as string,
+      tgIdGroup as string,
       `Новое сообщение с доски - ${department}\n\n\n${descriptionTask}`,
       {
         reply_markup: {
           inline_keyboard: [
             [
-              { text: 'Согласовать', callback_data: buildCB('approve', department, id.toString())},
-              { text: 'Отклонить', callback_data: buildCB('reject', department, id.toString())},
-              { text: 'Согласовать с комментарием', callback_data: buildCB('comment', department, id.toString())},
+              { text: 'Согласовать', callback_data: buildCB('approve', department, taskDB.id, taskDB.ygId, taskDB.tgId)},
+              { text: 'Отклонить', callback_data: buildCB('reject', department, taskDB.id, taskDB.ygId, taskDB.tgId)},
             ]
           ]
         }

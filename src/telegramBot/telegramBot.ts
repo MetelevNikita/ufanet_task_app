@@ -2,6 +2,13 @@ import dotenv from 'dotenv'
 import path from 'path'
 import TelegramBot from 'node-telegram-bot-api'
 
+// YG
+
+import { getYGTaskFromId } from '@/functions/getYGTaskFromId'
+import { editYGTaskFromId } from '@/functions/editYGTaskFromId'
+
+
+
 dotenv.config()
 
 
@@ -46,6 +53,72 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
   }
 }
 
+// sendCommentMessageFromYG
+
+
+const sendCommentMessage = async (text: string, ygTaskID: string) => {
+  try {
+
+    const YG_KEY = process.env.YOGILE_KEY_INSTANCE as string
+
+    const data = await getYGTaskFromId(YG_KEY, ygTaskID)
+
+    if (!data) {
+      console.error(`Ошибка получения задачи из yougile по ID`)
+      return {
+              success: false,
+              message: `Ошибка получения задачи из yougile по ID`,
+              title: ``,
+              comment: ''
+            }
+    }
+
+
+    const taskTitle = `${new Date().toLocaleString('ru', { dateStyle: 'short', timeStyle: 'short' })} КОММЕНТАРИЙ К ЗАДАЧЕ - ${data.title}`
+    const taskDescription = `${data.description}<br><br>${new Date().toLocaleString('ru', { dateStyle: 'short', timeStyle: 'short' })}<br><br><br><br>${text}`
+    const taskColumnId = data.columnId
+
+    const editYGTask = await editYGTaskFromId(YG_KEY, ygTaskID, taskTitle, taskColumnId, taskDescription)
+
+    if (!editYGTask) {
+      console.error(`Ошибка изменения задачи из yougile по ID`)
+      return {
+              success: false,
+              message: `Ошибка изменения задачи из yougile по ID`,
+              title: ``,
+              comment: ''
+            }
+    }
+
+    return {
+      success: true,
+      message: '',
+      title: taskTitle,
+      comment: text
+    }
+    
+  } catch (error: Error | unknown) {
+    if (error instanceof Error) {
+      console.error('Ошибка отправки ответа от телеграмм в yougile: ', error.message);
+      return {
+              success: false,
+              message: `Ошибка изменения задачи из yougile по ID`,
+              title: ``,
+              comment: ''
+            }
+    }
+
+    console.error('Неизвестная ошибка отправки ответа от телеграмм в yougile');
+    return {
+              success: false,
+              message: `Ошибка изменения задачи из yougile по ID`,
+              title: ``,
+              comment: ''
+            }
+
+  }
+}
+
 
 
 declare global {
@@ -82,30 +155,52 @@ export const getBot = async () => {
 
       if (bot.listenerCount('message') === 0) {
 
-
-
         // Основа БОТА
 
-        bot.on('message', (msg) => {
+        bot.on('message', async (msg) => {
         
           const chatId = msg.chat.id
           const text = msg.text
           const userId = msg.from?.id;
           const isReply = msg.reply_to_message;
 
-          console.log(isReply, 'это ответ на сообщение')
+          // ответ на комментарий
 
-          if (isReply && text && userId) {
-            console.log(text, 'ЭТО СООБЩЕНИЕ В ОТВЕТ')
+          if (isReply) {
+            if (!msg.reply_to_message) return
 
-            const replyData = forceReplyMap.get(msg.reply_to_message!.message_id);
-            console.log(replyData)
+            const titleText = msg.reply_to_message.text
+
+            if (!titleText) return
+
+            const splitText = titleText.split(' ')
+            console.log(splitText)
+
+            const ygId = splitText[2]
+            const tgId = splitText[splitText.length - 1]
+
+            const sendToYG = await sendCommentMessage(text as string, ygId)
+
+            if (!sendToYG.success) {
+              await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
+              return
+            }
+
+
+            const sendToTg = await bot.sendMessage(tgId, `\n\n${sendToYG.title}\n\n${text}`)
+
+            if (!sendToYG.success) {
+              await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
+              return
+            }
+
+            return await bot.sendMessage(chatId, 'ℹ️ Комментарий отмечен в задаче и направлен автору задачи')
           }
 
-          
+          // 
 
             if (msg.text === '/start') {
-              bot.sendMessage(chatId, 'Привет! Я бот для уведомлений из YouGile.', {
+              await bot.sendMessage(chatId, 'Привет! Я бот для уведомлений из YouGile.', {
                 reply_markup: {
                   keyboard: [
                       [{ text: 'Инфо', request_contact: false, request_location: false }, { text: 'Помощь', request_contact: false, request_location: false}],
@@ -114,15 +209,15 @@ export const getBot = async () => {
                 }
               })
             } else if (msg.text === 'Инфо') {
-              bot.sendMessage(chatId, 'Данный бот создан для утверждения и контроля над задачами созданными в PR Отдел')
+              await bot.sendMessage(chatId, 'Данный бот создан для утверждения и контроля над задачами созданными в PR Отдел')
             } else if (msg.text === 'Ссылка на сайт если потеряли') {
-              bot.sendMessage(chatId, 'https://pr-tz.ru не теряй')
+              await bot.sendMessage(chatId, 'https://pr-tz.ru не теряй')
             } else if (msg.text === 'Помощь') {
-              bot.sendMessage(chatId, 'В случае если бот не отправляет вам уведомления о состоянии вашей задачи, вам необходимо обратиться к руководителю отдела куда была заведена заявка для проверки вписанного вами TelegramID')
+              await bot.sendMessage(chatId, 'В случае если бот не отправляет вам уведомления о состоянии вашей задачи, вам необходимо обратиться к руководителю отдела куда была заведена заявка для проверки вписанного вами TelegramID')
             } else if (msg.text === 'Найти мой Telegram ID') {
-              bot.sendMessage(chatId, 'Вы можете посмотреть свой Telegram ID на корпоративном сайте или воспользоватеься ботом @Getmyid_bot')
+              await bot.sendMessage(chatId, 'Вы можете посмотреть свой Telegram ID на корпоративном сайте или воспользоватеься ботом @Getmyid_bot')
             } else {
-              bot.sendMessage(chatId, 'Еще что то спросить хотите.....')
+              await bot.sendMessage(chatId, 'Еще что то спросить хотите.....')
             }
         })
 
@@ -141,62 +236,26 @@ export const getBot = async () => {
 
           const status = data[0]
           const department = data[1]
-          const id = data[2]
-
+          const cardId = data[2]
+          const ygId = data[3]
+          const tgId = data[4]
 
           if (status === 'approve') {
 
-              console.log('query', query.data)
-
-              await sendAnswerMessage(status, department, id)
-              await bot.editMessageText(`Заявка #${query.id}: ✅ согласовано`, {
+              await sendAnswerMessage(status, department, cardId)
+              await bot.editMessageText(`Заявка # ${ygId} : ✅ согласована. Автор сообщения # ${tgId}`, {
                 chat_id: chatId,
-                message_id: messageId
+                message_id: messageId,
               });
 
           } else if (status === 'reject') {
 
-              await sendAnswerMessage(status, department, id)
-              await bot.editMessageText(`Заявка #${query.id}: ❌ отклонено`, {
+              await sendAnswerMessage(status, department, cardId)
+              await bot.editMessageText(`Заявка # ${ygId} : ❌ отклонена. Автор сообщения # ${tgId}`, {
                 chat_id: chatId,
-                message_id: messageId
+                message_id: messageId,
               });
 
-          } else if (status === 'comment') {
-
-            if (!query.message) return
-
-            const message = query.message.text as string
-            const splitMessage = message.split('\n').filter((item) => item.length > 1).find((item) => item.startsWith('Телеграм')) as string
-            const tgId = splitMessage.split(' ')[3]
-            console.log(tgId)
-
-            await bot.sendMessage(chatId, 'Данная функция в процессе разработке')
-  
-            // // 
-
-            // await bot.answerCallbackQuery(query.id);
-            // const forceData =  await bot.sendMessage(
-            //     chatId,
-            //     'Напишите комментарий к этой задаче:',
-            //     {
-            //         reply_to_message_id: messageId,  // ID сообщения с кнопкой
-            //         reply_markup: {
-            //           force_reply: true,
-            //           selective: true,
-            //           input_field_placeholder: 'Ваш комментарий...'
-            //         }
-            //     }
-            // );
-
-
-            // forceReplyMap.set(forceData.message_id, {
-            //   department: department,
-            //   taskId: id,
-            //   userId: query.from.id,
-            //   chatId: chatId,
-            //   tgId_author: tgId
-            // });
 
           }
         })
@@ -216,6 +275,3 @@ export const getBot = async () => {
 
   return creatingBotCashe;
 }
-
-
-

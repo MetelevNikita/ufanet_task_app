@@ -62,7 +62,6 @@ const writeFileData = async (data: string | null, url: string, folder: string) =
     const buffer = Buffer.from(data, 'base64')
 
     const fileType = await fileTypeFromBuffer(buffer)
-    console.log('РАСШИРЕНИЕ ФАЙЛА ', fileType)
 
     if (!fileType) return
 
@@ -159,9 +158,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     console.log('Начинаем обработку данных')
 
     const { department } = await context.params 
-
-    console.log("ОТДЕЛ ", department)
-
     const currentDepartment = directions.data.find((item: MenuType): Boolean => item.label.toLocaleLowerCase() == department.toLocaleLowerCase())
 
     if (!currentDepartment) {
@@ -209,14 +205,11 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
     const ygId = newTaskYougile.id
 
-    console.log('YOU GILE DATA ', newTaskYougile)
-
     if (!newTaskYougile) {
       return NextResponse.json({ message: `Ошибка создания задачи в YouGile.ru` }, { status: 500 });
     }
 
     console.info(`Задача в YouGile Создана ${ygId}`)
-
 
     //
 
@@ -233,7 +226,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     //
 
 
-    const TelegramRes = await createTGTask(departmentLabel, data, messageTG, newDatabaseTask, formData.reconciliator.id)
+    const TelegramRes = await createTGTask(departmentLabel, messageTG, newDatabaseTask, formData.reconciliator.id)
 
     if (!TelegramRes) {
       return NextResponse.json({ message: `Ошибка создания задачи в телеграмм` }, { status: 500 });

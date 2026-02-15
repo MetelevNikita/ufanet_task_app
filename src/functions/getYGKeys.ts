@@ -18,7 +18,6 @@ export const getYGKeys = async (id: string) => {
   }
 
   const data = await responce.json();
-  console.log('Ключи YOUGILE', data)
   return data;
     
   } catch (error) {
