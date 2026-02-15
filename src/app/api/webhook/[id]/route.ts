@@ -180,7 +180,6 @@ export const POST = async (req: Request) => {
       }
     })
 
-    console.log("ДЕПАРТАМЕНТ ", department)
 
     // yougile
 
@@ -254,17 +253,14 @@ export const POST = async (req: Request) => {
     //
 
     const departmentName = department.split(' ').slice(2).join(' ')
-    console.log('"department name" ', departmentName)
 
     const projects = await getYGProjects(YouGileKey)
-    console.log(projects)
     const currentProjects = projects.content.find((project: any) => {
       if (project.title == departmentName) {
         return project
       }
     })
 
-    console.log(currentProjects)
 
     const boards = await getBoardCompany(YouGileKey, currentProjects.id)
     console.log(boards)
@@ -283,6 +279,10 @@ export const POST = async (req: Request) => {
     
 
     let messageFromUser = '';
+
+    if (!findColumn?.title) {
+        return; // ничего не отправляем, если нет title
+    }
 
 
     if (findColumn.title === 'Согласовано') {
