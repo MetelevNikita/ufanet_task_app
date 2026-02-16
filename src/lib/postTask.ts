@@ -67,12 +67,12 @@ export const postTask = async (data: any, department: string) => {
       const data = await responce.json();
       console.log(data)
       return {
-        status: 'success',
+        sucess: true,
         message: 'Задача успешно добавлена',
       }
     } else if (responce.status === 400) {
       return {
-        status: 'abort',
+        sucess: false,
         message: 'Задача не добавлена',
       }
     }
@@ -83,16 +83,17 @@ export const postTask = async (data: any, department: string) => {
     if (error instanceof Error) {
       console.error(`Ошибка при добавлении задачи: ${error.message}`)
 
-      throw new Error(
-        JSON.stringify({
-          status: 'error',
-          message: `Ошибка при добавлении задачи: ${error.message}`
-        })
-      )
+      return {
+        success: false,
+        message: 'Ошибка при добавлении задачи',
+      }
     }
 
       console.error(`Ошибка при добавлении задачи: ${error}`)
-      throw new Error(`Ошибка при добавлении задачи: ${error}`);
+      return {
+        sucess: false,
+        message: 'Ошибка при добавлении задачи',
+      }
     
   }
 }

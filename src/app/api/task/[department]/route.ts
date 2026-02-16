@@ -206,7 +206,10 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const ygId = newTaskYougile.id
 
     if (!newTaskYougile) {
-      return NextResponse.json({ message: `Ошибка создания задачи в YouGile.ru` }, { status: 500 });
+      return NextResponse.json({
+        success: false,
+        message: `Ошибка создания задачи в YouGile.ru`
+      }, { status: 500 });
     }
 
     console.info(`Задача в YouGile Создана ${ygId}`)
@@ -217,7 +220,10 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
 
     if (!newDatabaseTask) {
-      return NextResponse.json({ message: `Ошибка создания задачи в базе данных` }, { status: 500 });
+      return NextResponse.json({
+        success: false,
+        message: `Ошибка создания задачи в базе данных`
+      }, { status: 500 });
     }
 
 
@@ -229,18 +235,25 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const TelegramRes = await createTGTask(departmentLabel, messageTG, newDatabaseTask, formData.reconciliator.id)
 
     if (!TelegramRes) {
-      return NextResponse.json({ message: `Ошибка создания задачи в телеграмм` }, { status: 500 });
+      return NextResponse.json({
+        success: false,
+        message: `Ошибка создания задачи в телеграмм`
+      }, { status: 500 });
     }
 
     console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
 
-    return NextResponse.json({message: `Сообщение в отдел ${department} отправлено на согласование`}, { status: 200 });
+    return NextResponse.json({
+      success: true,
+      message: `Сообщение в отдел ${department} отправлено на согласование`
+    }, { status: 200 });
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      return NextResponse.json(
-        { message: error.message},
-        { status: 500 }
+      return NextResponse.json({
+        success: false,
+        message: `Ошибка создания задачи попробуйте позже`
+      }, { status: 500 }
       );
     }
   }

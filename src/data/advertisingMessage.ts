@@ -1,6 +1,6 @@
 export const advertisingMessage = async (department: string, data: any): Promise<any> => {
   const headYG = (extra: string) =>
-    `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id - ${data.tgId}<br><br>Тип услуги - ${data.type}<br><br>${extra}`;
+    `<strong>Отдел - </strong>${department}<br><br><strong>Имя -</strong> ${data.fio}<br><br><strong>Город -</strong> ${data.branch}<br><br><strong>Отдел автора -</strong> ${data.subdivision}<br><br><strong>Телеграм id - </strong>${data.tgId}<br><br><strong>Тип услуги -</strong> ${data.type}<br><br>${extra}`;
 
 
   const headTG = (extra: string) =>
@@ -15,9 +15,9 @@ export const advertisingMessage = async (department: string, data: any): Promise
   // 1) Первичное обращение
   if (type === 'Первичное обращение по задаче (полное описание)' || data.value === 'primary') {
     const bodyYG =
-      row('Название проекта:', data.title) +
-      `Первичное описание проекта<br><br>${data.description || ''}` +
-      row('<br>Желаемая дата сдачи:', data.deadline);
+      row('<strong>Название проекта:</strong>', data.title) +
+      `<strong>Первичное описание проекта</strong><br><br>${data.description || ''}` +
+      row('<br><strong>Желаемая дата сдачи:</strong>', data.deadline);
     const bodyTG =
       row('Название проекта:', data.title, '\n') +
       `Первичное описание проекта\n\n${data.description || ''}\n` +

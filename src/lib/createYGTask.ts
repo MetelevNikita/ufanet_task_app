@@ -45,7 +45,8 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     // 
 
     if (!inboxColumn) {
-      return `Столбец Входящие не найден в доске ${department}`
+      console.error(`Столбец Входящие не найден в доске ${department}`)
+      return null
     }
 
 
@@ -88,7 +89,8 @@ export const createYGTask = async (department: string, data: any, descriptionTas
 
     if (!respoonceYouGile.ok) {
       if (respoonceYouGile.status === 400) {
-        throw new Error(`Ошибка создания задачи в YG ${respoonceYouGile.statusText} - ${respoonceYouGile.status}`);
+        console.error(`Ошибка создания задачи в YG ${respoonceYouGile.statusText} - ${respoonceYouGile.status}`)
+        return null
       }
     }
 
@@ -98,7 +100,9 @@ export const createYGTask = async (department: string, data: any, descriptionTas
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       console.log(error.message)
+      return null
     }
     console.log(error)
+    return null
   }
 }

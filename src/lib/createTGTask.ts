@@ -38,7 +38,9 @@ export const createTGTask = async (department: string, descriptionTask: string, 
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       console.log(error.message)
-      throw new Error(error.message);
+      return null
     }
+
+    return null
   }
 }
