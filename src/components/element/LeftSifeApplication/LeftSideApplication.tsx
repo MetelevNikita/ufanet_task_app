@@ -116,7 +116,6 @@ const LeftSideApplication: FC<LeftSideApplicationProps> = ({ departmentData }) =
                           title={item.label}
                           image={(department === item.label) ? item.icon : item.iconActive}
                           onClick={() => {
-                              console.log(item.value)
                               router.push(`/app?department=${item.label}`)
                             }}
                           menuActive={{department, setDepartment}}/>

@@ -281,18 +281,15 @@ export const POST = async (req: Request) => {
     let messageFromUser = '';
 
     if (!findColumn?.title) {
-        return; // ничего не отправляем, если нет title
+        return;
+    }
+
+    if (findColumn.title === 'Согласовано' || findColumn.title === 'Не согласовано') {
+      return
     }
 
 
-    if (findColumn.title === 'Согласовано') {
-      messageFromUser = `Ваша задача «${title}» согласована.\n\nДальше задача будет назначена исполнителю.\n\nСледите за изменениями в БОТЕ`;
-    } else if (findColumn.title === 'Не согласовано') {
-      messageFromUser = `Ваша задача «${title}» отклонена. Свяжитесь с руководителем направления для получения информации об отказе.`;
-    } else if (findColumn.title === 'Согласовано с замечаниями') {
-      messageFromUser = `Ваша задача «${title}» согласована с замечаниями. Свяжитесь с руководителем направления.\n\nПосле этого задача поступит к исполнителю.\n\nСледите за изменениями в БОТЕ`;
-    } else {
-      if (comprassionSteacker && currentSteaker.name) {
+    if (comprassionSteacker && currentSteaker.name) {
       const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'stage', currentSteaker.name)
       messageFromUser = `НОВЫЙ СТАТУС!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен статус «${currentSteaker.name}».\n\nСледите за изменениями в БОТЕ`;
       } else if (compressionAssigned) {
@@ -300,7 +297,7 @@ export const POST = async (req: Request) => {
       } else {
         messageFromUser = `Ваша задача «${title}» перемещена в «${findColumn.title}».\n\nСледите за изменениями в БОТЕ`;
       }
-    }
+
       
     const bot = await getBot()
     bot.sendMessage(tgId.split('-')[1].trim(), messageFromUser as string)

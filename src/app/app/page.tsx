@@ -94,7 +94,6 @@ const page: FC = () => {
             modalTgError={{modalTGError, setModalTGError}}
         />
       case 'Отдел дизайна':
-        console.log('design')
         return <DesignForm
             departmentData={{department, setDepartment}}
             modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}

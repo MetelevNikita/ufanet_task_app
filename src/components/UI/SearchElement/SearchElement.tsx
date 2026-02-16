@@ -36,9 +36,6 @@ const SearchElement: FC<SearchElementProps> = ({ status, title, date, department
     } else if (status === 'Отклонено' || status === 'reject') {
       statusText = 'Отклонено'
       statusColor = '#C24444'
-    } else if (status === 'Комментарий' || status === 'comment') {
-      statusText = 'Замечания'
-      statusColor = '#D7A54A'
     } else {
       statusText = status
       statusColor = '#3D8F8F'
@@ -70,7 +67,7 @@ const SearchElement: FC<SearchElementProps> = ({ status, title, date, department
     } else if (stage === 'На согласовании') {
       stageText = '#e3db46'
       stageColor = '#e3db46'
-    } else if (stage === 'Отмененео') {
+    } else if (stage === 'Отменено') {
       stageText = '#e34646'
       stageColor = '#e34646'
     } else if (stage === 'Заморожено') {
@@ -98,19 +95,18 @@ const SearchElement: FC<SearchElementProps> = ({ status, title, date, department
         </Col>
 
         <Col md={10} className='d-flex align-items-md-center align-items-start flex-md-row flex-column mt-3 mb-3'>
-          <Col className='mt-1 mb-1'>
+          <Col md={6} className='mt-1 mb-1'>
             <div className={styles.search_status_author}>Автор: {author}</div>
-          </Col>
-
-          <Col md={2} className='mt-1 mb-1'>
             <div className={styles.search_status_title}>Задача: {title}</div>
           </Col>
 
-          <Col className='mt-1 mb-1'>
-            <div style={{backgroundColor: stageText}} className={styles.search_status_stage}>Cостояние: {(stage === '') ? 'В очереди' : stage}</div>
-          </Col>
+
 
           <Col className='mt-1 mb-1'>
+            <div style={{backgroundColor: stageText}} className={styles.search_status_stage}>Cостояние: {(stage === '') ? 'Не принято' : stage}</div>
+          </Col>
+
+          <Col md={2} className='mt-1 mb-1'>
             <div className={styles.search_status_date}>Дата: {newDate}</div>
           </Col>
         </Col>

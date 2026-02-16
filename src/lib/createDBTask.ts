@@ -24,7 +24,7 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
       deadline: data.deadline,
       message: JSON.stringify(currentMessageOBJ, null, 3),
       status: 'Входящие',
-      stage: 'В очереди'
+      stage: 'Не принято'
     }
 
     const task = await prisma.task.create({

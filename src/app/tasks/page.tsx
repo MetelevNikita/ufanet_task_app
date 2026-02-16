@@ -80,9 +80,6 @@ const page: FC = () => {
     const getFilterTasks = async () => {
 
       const data = await getTask()
-
-      console.log(data)
-      
       let filter = data
 
       if (department) {
@@ -123,8 +120,6 @@ const page: FC = () => {
     const current = tasks.filter((task: any) => {
       return task.name.toLowerCase() == name.toLowerCase()
     })
-
-    console.log(current)
     setTasks(current)
   }
 

@@ -56,12 +56,14 @@
   width: 100%;
   height: max-content;
   font-size: 12px;
+  font-weight: 600;
 }
 
 .search_status_title {
   width: 100%;
   height: max-content;
   font-size: 12px;
+  font-weight: 400;
 }
 
 .search_status_stage {
