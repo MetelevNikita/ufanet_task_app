@@ -55,7 +55,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('Каким ты видишь будущий макет?:', data.vision, '\n') +
       row('Где будет размещаться макет?:', data.placement, '\n') +
       row('Фотография места размещения:', data.place_file, '\n') +
-      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? `https://t.me/${data.client_tg.slice(1)}` : data.client_tg, '\n') +
+      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? data.client_tg.slice(1) : data.client_tg, '\n') +
       row('Желаемая дата готовности макета:', data.deadline, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
@@ -76,7 +76,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('Название мероприятия / проекта / услуги:', data.title, '\n') +
       row('Исходный файл:', data.target_file, '\n') +
       row('Что нужно исправить?:', data.changes, '\n') +
-      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? `https://t.me/${data.client_tg.slice(1)}` : data.client_tg, '\n') +
+      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? data.client_tg.slice(1) : data.client_tg, '\n') +
       row('Желаемая дата готовности макета:', data.deadline, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
