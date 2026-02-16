@@ -44,7 +44,7 @@ export const postTask = async (data: any, department: string) => {
 
     if (isNaN(parseInt(fromEntries.tgId))) {
       return {
-        status: 'abort_tg_id',
+        sucess: false,
         message: 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)',
       }
     }
@@ -58,9 +58,10 @@ export const postTask = async (data: any, department: string) => {
     })
 
     if (!responce.ok) {
-      if (responce.status === 400) {
-        throw new Error(`Ошибка при добавлении задачи: ${responce.statusText} - ${responce.status}`);
-      }
+        return {
+          sucess: false,
+          message: `Ошибка при добавлении задачи: ${responce.statusText} - ${responce.status}`,
+        }
     }
 
     if (responce.status === 200) {

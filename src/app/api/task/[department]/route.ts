@@ -205,6 +205,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
     const ygId = newTaskYougile.id
 
+    console.log(newTaskYougile)
+
     if (!newTaskYougile) {
       return NextResponse.json({
         success: false,
@@ -252,7 +254,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     if (error instanceof Error) {
       return NextResponse.json({
         success: false,
-        message: `Ошибка создания задачи попробуйте позже`
+        message: `Ошибка создания задачи попробуйте позже ${error.message}`
       }, { status: 500 }
       );
     }

@@ -26,24 +26,21 @@ export const designMessage = async (department: string, data: any): Promise<{mes
   /* 1) Разработка с нуля */
   if (type === 'Разработка с нуля') {
     const bodyYG =
-      row('<strong>Название проекта / мероприятия / услуги:</strong>', data.title) +
-      row('<strong>Описание проекта / мероприятия / услуги:</strong>', data.project_description) +
-      row('<strong>Дата мероприятия:</strong>', data.event_date) +
-      row('<strong>Цель макета:</strong>', data.goal) +
-      row('<strong>Целевая аудитория макета:</strong>', data.audience) +
-      row('<strong>Что требуется разработать?:</strong>', data.what_to_make) +
-      row('<strong>Размер макета:</strong>', data.size) +
-      row('<strong>Ориентация:</strong>', data.orientation_direction) +
-      row('<strong>Форма:</strong>', data.orientation_shape) +
-      row('<strong>Каким ты видишь будущий макет?:</strong>', data.vision) +
-      row('<strong>Где будет размещаться макет?:</trong>', data.placement) +
-      row('<strong>Фотография места размещения:</strong>', `<a target="_blank" rel="noopener noreferrer" href=${data.place_file}>${data.place_file}</a>`) +
-      row('<strong>Желаемая дата готовности макета:</strong>', data.deadline) +
-      row('<strong>Имя фамилия заказчика макета:</strong>', data.client_name) +
-      row('<strong>Номер телефона заказчика макета:</strong>', data.client_phone) +
-      row('<strong>Телеграм заказчика макета:</strong>', (data.client_tg.startsWith('@')) ? `<a target="_blank" rel="noopener noreferrer" href=${data.client_tg}>${data.client_tg}</a>` : data.client_tg) +
-      row('<strong>Город:<strong>', data.city) +
-      row('<strong>Дополнительно:</strong>', data.extra);
+      row('<strong>Название проекта / мероприятия / услуги:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Описание проекта / мероприятия / услуги:</strong><br>', data.project_description, '<br><br>') +
+      row('<strong>Дата мероприятия:</strong><br>', data.event_date, '<br><br>') +
+      row('<strong>Цель макета:</strong><br>', data.goal, '<br><br>') +
+      row('<strong>Целевая аудитория макета:</strong><br>', data.audience, '<br><br>') +
+      row('<strong>Что требуется разработать?:</strong><br>', data.what_to_make, '<br><br>') +
+      row('<strong>Размер макета:</strong><br>', data.size, '<br><br>') +
+      row('<strong>Ориентация:</strong><br>', data.orientation_direction, '<br><br>') +
+      row('<strong>Форма:</strong><br>', data.orientation_shape, '<br><br>') +
+      row('<strong>Каким ты видишь будущий макет?:</strong><br>', data.vision, '<br><br>') +
+      row('<strong>Где будет размещаться макет?:</strong><br>', data.placement, '<br><br>') +
+      row('<strong>Фотография места размещения:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.place_file}>${data.place_file}</a>`, '<br><br>') +
+      row('<strong>Телеграм заказчика макета:</strong><br>', (data.client_tg.startsWith('@')) ? `<a target="_blank" rel="noopener noreferrer" href=https://t.me/${data.client_tg.slice(1)}>${data.client_tg}</a>` : data.client_tg, '<br><br>') +
+      row('<strong>Желаемая дата готовности макета:</strong><br>', data.deadline, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra);
 
     const bodyTG =
       row('Название проекта / мероприятия / услуги:', data.title, '\n') +
@@ -58,11 +55,8 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('Каким ты видишь будущий макет?:', data.vision, '\n') +
       row('Где будет размещаться макет?:', data.placement, '\n') +
       row('Фотография места размещения:', data.place_file, '\n') +
+      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? `https://t.me/${data.client_tg.slice(1)}` : data.client_tg, '\n') +
       row('Желаемая дата готовности макета:', data.deadline, '\n') +
-      row('Имя фамилия заказчика макета:', data.client_name, '\n') +
-      row('Номер телефона заказчика макета:', data.client_phone, '\n') +
-      row('Телеграм заказчика макета:', data.client_tg, '\n') +
-      row('Город:', data.city, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
@@ -71,25 +65,19 @@ export const designMessage = async (department: string, data: any): Promise<{mes
   /* 2) Адаптация и внесение изменений в макет */
   if (type === 'Адаптация и внесение изменений в макет') {
     const bodyYG =
-      row('<strong>Название мероприятия / проекта / услуги:</strong>', data.title) +
-      row('<strong>Исходный файл: - </strong>', + `<a target="_blank" rel="noopener noreferrer" href=${data.target_file}>${data.target_file}</a>`) +
-      row('<strong>Что нужно исправить?:</strong>', data.changes) +
-      row('<strong>Желаемая дата готовности макета:</strong>', data.deadline) +
-      row('<strong>Имя фамилия заказчика макета:</strong>', data.client_name) +
-      row('<strong>Номер телефона заказчика макета:</strong>', data.client_phone) +
-      row('<strong>Телеграм заказчика макета:</strong>', (data.client_tg.startsWith('@')) ? `<a target="_blank" rel="noopener noreferrer" href=${data.client_tg}>${data.client_tg}</a>` : data.client_tg) +
-      row('<strong>Город:</strong>', data.city) +
-      row('<strong>Дополнительно:</strong>', data.extra);
+      row('<strong>Название мероприятия / проекта / услуги:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Исходный файл: - </strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.target_file}>${data.target_file}</a>`, '<br><br>') +
+      row('<strong>Что нужно исправить?:</strong><br>', data.changes, '<br><br>') +
+      row('<strong>Телеграм заказчика макета:</strong><br>', (data.client_tg.startsWith('@')) ? `<a target="_blank" rel="noopener noreferrer" href=https://t.me/${data.client_tg.slice(1)}>${data.client_tg}</a>` : data.client_tg, '<br><br>') +
+      row('<strong>Желаемая дата готовности макета:</strong><br>', data.deadline, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra);
 
     const bodyTG =
       row('Название мероприятия / проекта / услуги:', data.title, '\n') +
       row('Исходный файл:', data.target_file, '\n') +
       row('Что нужно исправить?:', data.changes, '\n') +
+      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? `https://t.me/${data.client_tg.slice(1)}` : data.client_tg, '\n') +
       row('Желаемая дата готовности макета:', data.deadline, '\n') +
-      row('Имя фамилия заказчика макета:', data.client_name, '\n') +
-      row('Номер телефона заказчика макета:', data.client_phone, '\n') +
-      row('Телеграм заказчика макета:', data.client_tg, '\n') +
-      row('Город:', data.city, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
@@ -98,14 +86,14 @@ export const designMessage = async (department: string, data: any): Promise<{mes
   /* 3) Другое */
   if (type === 'Другое') {
     const bodyYG =
-      row('<strong>Что требуется разработать?:</strong>', data.what_to_make) +
-      row('<strong>Размер макета:</strong>', data.size) +
-      row('<strong>Ориентация:</strong>', data.orientation_direction) +
-      row('<strong>Форма:</strong>', data.orientation_shape) +
-      row('<strong>Каким ты видишь будущий макет?:</strong>', data.vision) +
-      row('<strong>Где будет размещаться макет?:</strong>', data.placement) +
-      row('<strong>Фотография места размещения:</strong>', `<a target="_blank" rel="noopener noreferrer" href=${data.place_file}>${data.place_file}</a>`) +
-      row('<strong>Желаемая дата готовности макета:</strong>', data.deadline) +
+      row('<strong>Что требуется разработать?:</strong><br>', data.what_to_make, '<br><br>') +
+      row('<strong>Размер макета:</strong><br>', data.size, '<br><br>') +
+      row('<strong>Ориентация:</strong><br>', data.orientation_direction, '<br><br>') +
+      row('<strong>Форма:</strong><br>', data.orientation_shape, '<br><br>') +
+      row('<strong>Каким ты видишь будущий макет?:</strong><br>', data.vision, '<br><br>') +
+      row('<strong>Где будет размещаться макет?:</strong><br>', data.placement, '<br><br>') +
+      row('<strong>Фотография места размещения:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.place_file}>${data.place_file}</a>`) +
+      row('<strong>Желаемая дата готовности макета:</strong><br>', data.deadline, '<br><br>') +
       row('<strong>Дополнительно:</strong>', data.extra);
 
     const bodyTG =

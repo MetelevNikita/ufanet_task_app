@@ -477,7 +477,7 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
 
 
                   {
-                    (activeOther) && new MyTextAreaField('Дополнительно', 'Что ещё важно учесть?', 'extra').createTextArea(design.other, (e: any) => {setDesign({...design, other: e.target.value})})
+                    (activeOther) && new MyTextAreaField('Дополнительно', 'Что ещё важно учесть?', 'extra').createTextArea(design.extra, (e: any) => {setDesign({...design, extra: e.target.value})})
                   }
 
 

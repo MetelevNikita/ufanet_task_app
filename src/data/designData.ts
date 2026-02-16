@@ -21,14 +21,15 @@ export const typeSelectorArr = [
       // О проекте
       { id: 1, title: 'Название проекта / мероприятия / услуги', placeholder: 'Реклама, бренд-пакет, мероприятие…', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Описание проекта / мероприятия / услуги', placeholder: 'Краткое описание задачи/контекста', typeField: 'area', type: 'area', name: 'project_description' },
-      { id: 3, title: 'Цель макета', placeholder: 'Увеличение охвата, информирование, навигация…', typeField: 'text', type: 'text', name: 'goal' },
-      { id: 4, title: 'Целевая аудитория макета', placeholder: 'Кто увидит макет? (сотрудники, гости, клиенты и т.д.)', typeField: 'text', type: 'text', name: 'audience' },
-      { id: 5, title: 'Что требуется разработать?', placeholder: 'Афиша, баннер, табличка, брендинг…', typeField: 'area', type: 'area', name: 'what_to_make' },
-      { id: 6, title: 'Размер макета', placeholder: 'Напр.: A4, A3, 3×6 м и т.п.', typeField: 'text', type: 'text', name: 'size' },
+      { id: 3, title: 'Дата мероприятия', placeholder: 'Дата', typeField: 'date', type: 'date', name: 'event_date' },
+      { id: 4, title: 'Цель макета', placeholder: 'Увеличение охвата, информирование, навигация…', typeField: 'text', type: 'text', name: 'goal' },
+      { id: 5, title: 'Целевая аудитория макета', placeholder: 'Кто увидит макет? (сотрудники, гости, клиенты и т.д.)', typeField: 'text', type: 'text', name: 'audience' },
+      { id: 6, title: 'Что требуется разработать?', placeholder: 'Афиша, баннер, табличка, брендинг…', typeField: 'area', type: 'area', name: 'what_to_make' },
+      { id: 7, title: 'Размер макета', placeholder: 'Напр.: A4, A3, 3×6 м и т.п.', typeField: 'text', type: 'text', name: 'size' },
 
       // Ориентация — селекторы с картинки
       {
-        id: 7,
+        id: 8,
         title: 'Ориентация',
         placeholder: 'Выберите ориентацию',
         typeField: 'selector_multi',
@@ -40,7 +41,7 @@ export const typeSelectorArr = [
         ]
       },
       {
-        id: 8,
+        id: 9,
         title: 'Форма',
         placeholder: 'Выберите форму',
         typeField: 'selector_multi',
@@ -52,10 +53,11 @@ export const typeSelectorArr = [
         ]
       },
 
-      { id: 9, title: 'Каким ты видишь будущий макет?', placeholder: 'Прикрепите черновые наброски/референсы/описание', typeField: 'area', type: 'area', name: 'vision' },
-      { id: 10, title: 'Где будет размещаться макет?', placeholder: 'В офисе, на инфостенде, лифте, баннер и т.п.', typeField: 'text', type: 'text', name: 'placement' },
-      { id: 11, title: 'Прикрепите фотографию места размещения макета', placeholder: 'Фото/скриншот места', typeField: 'file', type: 'file', name: 'place_file' },
-      { id: 12, title: 'Желаемая дата готовности макета', placeholder: 'К какому сроку нужен макет', typeField: 'date', type: 'date', name: 'deadline' },
+      { id: 10, title: 'Каким ты видишь будущий макет?', placeholder: 'Прикрепите черновые наброски/референсы/описание', typeField: 'area', type: 'area', name: 'vision' },
+      { id: 11, title: 'Где будет размещаться макет?', placeholder: 'В офисе, на инфостенде, лифте, баннер и т.п.', typeField: 'text', type: 'text', name: 'placement' },
+      { id: 12, title: 'Прикрепите фотографию места размещения макета', placeholder: 'Фото/скриншот места', typeField: 'file', type: 'file', name: 'place_file' },
+      { id: 13, title: 'Телеграм заказчика макета', placeholder: 'Имя пользователя должно начинаться с @, например @IvanIvanon', typeField: 'text', type: 'text', name: 'client_tg' },
+      { id: 14, title: 'Желаемая дата готовности макета', placeholder: 'К какому сроку нужен макет', typeField: 'date', type: 'date', name: 'deadline' },
     ]
   },
 
@@ -72,7 +74,8 @@ export const typeSelectorArr = [
       { id: 1, title: 'Название мероприятия / проекта / услуги', placeholder: 'Как называется задача', typeField: 'text', type: 'text', name: 'title' },
       { id: 2, title: 'Прикрепить файл в исходном виде', placeholder: 'Загрузите исходник (PSD/AI/PDF и т.п.)', typeField: 'file', type: 'file', name: 'target_file' },
       { id: 3, title: 'Что нужно исправить?', placeholder: 'Опишите изменения, правки, адаптации', typeField: 'area', type: 'area', name: 'changes' },
-      { id: 4, title: 'Желаемая дата готовности макета', placeholder: 'К какому сроку', typeField: 'date', type: 'date', name: 'deadline' },
+      { id: 4, title: 'Телеграм заказчика макета', placeholder: 'Имя пользователя должно начинаться с @, например @IvanIvanon', typeField: 'text', type: 'text', name: 'client_tg' },
+      { id: 5, title: 'Желаемая дата готовности макета', placeholder: 'К какому сроку', typeField: 'date', type: 'date', name: 'deadline' },
     ]
   },
 
