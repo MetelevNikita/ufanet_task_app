@@ -12,7 +12,6 @@ import { editYGTaskFromId } from '@/functions/editYGTaskFromId'
 dotenv.config()
 
 
-const forceReplyMap = new Map();
 
 
 
@@ -38,7 +37,6 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
     }
 
     const data = await responce.json();
-    console.log('data', data);
     return data;
     
   } catch (error: Error | unknown) {
@@ -237,21 +235,21 @@ export const getBot = async () => {
           const status = data[0]
           const department = data[1]
           const cardId = data[2]
-          const ygId = data[3]
-          const tgId = data[4]
+  
+
 
           if (status === 'approve') {
 
-              await sendAnswerMessage(status, department, cardId)
-              await bot.editMessageText(`Заявка # ${ygId} : ✅ согласована. Автор сообщения # ${tgId}`, {
+              const YGCARD = await sendAnswerMessage(status, department, cardId)
+              await bot.editMessageText(`Заявка # ${YGCARD.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.tgId}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
 
           } else if (status === 'reject') {
 
-              await sendAnswerMessage(status, department, cardId)
-              await bot.editMessageText(`Заявка # ${ygId} : ❌ отклонена. Автор сообщения # ${tgId}`, {
+              const YGCARD = await sendAnswerMessage(status, department, cardId)
+              await bot.editMessageText(`Заявка # ${YGCARD.ygId} : ❌ отклонена. Автор сообщения # ${YGCARD.tgId}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });

@@ -4,10 +4,11 @@ import { getBot } from "@/telegramBot/telegramBot";
 
 
 export const createTGTask = async (department: string, descriptionTask: string, taskDB: any, tgIdGroup: string) => {
-  const buildCB = (status: string, department: string, cardId: any, ygId: string, tgid: string ) => `${status}|${department}|${taskDB.id}|${taskDB.ygId}|${taskDB.tgId}`
+  const buildCB = (status: string, department: string, cardId: string ) => `${status}|${department}|${taskDB.id}`
 
   console.log('WORK TG')
-  console.log(taskDB)
+  console.log(tgIdGroup)
+
 
   try {
 
@@ -15,21 +16,23 @@ export const createTGTask = async (department: string, descriptionTask: string, 
     const id = taskDB.id as number
 
 
-    const sendTgBot = bot.sendMessage(
+    const sendTgBot = await bot.sendMessage(
       tgIdGroup as string,
       `Новое сообщение с доски - ${department}\n\n\n${descriptionTask}`,
       {
         reply_markup: {
           inline_keyboard: [
             [
-              { text: 'Согласовать', callback_data: buildCB('approve', department, taskDB.id, taskDB.ygId, taskDB.tgId)},
-              { text: 'Отклонить', callback_data: buildCB('reject', department, taskDB.id, taskDB.ygId, taskDB.tgId)},
+              { text: 'Согласовать', callback_data: buildCB('approve', department, taskDB.id)},
+              { text: 'Отклонить', callback_data: buildCB('reject', department, taskDB.id)},
             ]
           ]
         }
       }
     )
 
+
+    console.log(sendTgBot)
     return sendTgBot
     
   } catch (error: Error | unknown) {

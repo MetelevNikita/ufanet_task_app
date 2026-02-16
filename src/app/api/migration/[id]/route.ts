@@ -7,6 +7,7 @@ import { PrismaClient } from "../../../../../generated/prisma";
 import { getYGProjects } from "@/functions/getYGProjects";
 import { getBoardCompany } from "@/functions/getBoardCompany";
 import { getYGColumns } from "@/functions/getYGColumns";
+import { getYGTaskFromId } from '@/functions/getYGTaskFromId'
 
 // 
 
@@ -83,6 +84,9 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
+    const getCardFromYG = await getYGTaskFromId(yougileKey, getTask.ygId)
+
+
     const sendAnswerMessage = await bot.sendMessage(
       getTask.tgId,
       `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Согласовано`,
@@ -93,8 +97,15 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         { message: 'Ошибка перемещения задачи в YouGile' },
       )
     }
-    
+
     console.log(`Задача ${getTask.title} перемещена в столбец Согласовано`)
+    return NextResponse.json({
+      title: getTask.title,
+      ygId: getTask.ygId,
+      tgId: getTask.tgId
+    })
+    
+    
 
 
   } else if (status === 'reject') {
@@ -110,6 +121,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
+    const getCardFromYG = await getYGTaskFromId(yougileKey, getTask.ygId)
+    
     const sendAnswerMessage = await bot.sendMessage(
       getTask.tgId,
       `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,
@@ -122,30 +135,12 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     }
     
     console.log(`Задача ${getTask.title} перемещена в столбец Отклонено`)
+    return NextResponse.json({
+      title: getTask.title,
+      ygId: getTask.ygId,
+      tgId: getTask.tgId
+    })
 
-  } else if (status === 'comment') {
-    const correctColumns = columns.content.find((column: {title: string}) => column.title === 'Согласовано с замечаниями').id
-
-
-    if (!correctColumns) {
-      NextResponse.json(
-        { message: 'Столбец согласовано не найден' },
-      )
-    }
-
-    const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
-    const sendAnswerMessage = await bot.sendMessage(
-      getTask.tgId,
-      `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,
-    )
-
-    if (!moveTask || !sendAnswerMessage) {
-      NextResponse.json(
-        { message: 'Ошибка перемещения задачи' },
-      )
-    }
-    
-    console.log(`Задача ${getTask.title} перемещена в столбец Согласовано с замечаниями`)
   } else {
     return NextResponse.json(
       { message: 'Статус задачи не указан' },
