@@ -262,4 +262,29 @@ export const POST = async (req: Request, context: {params: {department: string}}
 }
 
 
+export const GET = async (req: Request, context: {params: {department: string}}) => {
+  try {
+
+    const { department } = await context.params
+
+    const getDepartmentTask = await prisma.task.findMany({
+      where: {
+        department: department
+      }
+    })
+
+    if (!getDepartmentTask) {
+      return NextResponse.json({
+        message: 'Задачи не найдены'
+      })
+    }
+
+    return NextResponse.json(getDepartmentTask)
+    
+  } catch (error) {
+    
+  }
+}
+
+
 

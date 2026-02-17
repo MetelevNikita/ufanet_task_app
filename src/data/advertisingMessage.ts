@@ -1,6 +1,6 @@
 export const advertisingMessage = async (department: string, data: any): Promise<any> => {
   const headYG = (extra: string) =>
-    `<strong>Отдел - </strong>${department}<br><br><strong>Имя -</strong> ${data.fio}<br><br><strong>Город -</strong> ${data.branch}<br><br><strong>Отдел автора -</strong> ${data.subdivision}<br><br><strong>Телеграм id - </strong>${data.tgId}<br><br><strong>Тип услуги -</strong> ${data.type}<br><br>${extra}`;
+    `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id - ${data.tgId}<br><br>Тип услуги - ${data.type}<br><br>${extra}`;
 
 
   const headTG = (extra: string) =>

@@ -240,7 +240,12 @@ export const getBot = async () => {
 
           if (status === 'approve') {
 
+              console.log('approve')
+
               const YGCARD = await sendAnswerMessage(status, department, cardId)
+
+              console.log(YGCARD)
+
               await bot.editMessageText(`Заявка # ${YGCARD.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.tgId}`, {
                 chat_id: chatId,
                 message_id: messageId,

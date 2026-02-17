@@ -7,7 +7,6 @@ import { PrismaClient } from "../../../../../generated/prisma";
 import { getYGProjects } from "@/functions/getYGProjects";
 import { getBoardCompany } from "@/functions/getBoardCompany";
 import { getYGColumns } from "@/functions/getYGColumns";
-import { getYGTaskFromId } from '@/functions/getYGTaskFromId'
 
 // 
 
@@ -17,6 +16,8 @@ import { MoveTaskFromId } from "@/functions/MoveTaskFromId";
 //
 
 import { getBot } from "@/telegramBot/telegramBot";
+
+// 
 
 const prisma = new PrismaClient();
 
@@ -84,9 +85,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
-    const getCardFromYG = await getYGTaskFromId(yougileKey, getTask.ygId)
-
-
     const sendAnswerMessage = await bot.sendMessage(
       getTask.tgId,
       `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Согласовано`,
@@ -121,8 +119,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
-    const getCardFromYG = await getYGTaskFromId(yougileKey, getTask.ygId)
-    
     const sendAnswerMessage = await bot.sendMessage(
       getTask.tgId,
       `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,
@@ -141,13 +137,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       tgId: getTask.tgId
     })
 
-  } else {
-    return NextResponse.json(
-      { message: 'Статус задачи не указан' },
-    )
-  }
-
-
+  } 
 
   // chande TASK STATUS
 
