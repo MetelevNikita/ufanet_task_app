@@ -152,7 +152,7 @@ export const POST = async (req: Request) => {
   try {
 
 
-    console.log('=== НАЧАЛО ОБРАБОТКИ ВЕБХУКА ===')
+    console.info(`WEBHOOK FROM TASK IS START`)
 
     const event = await req.json()
 
@@ -168,9 +168,10 @@ export const POST = async (req: Request) => {
 
 
     if (!tgId && !columnId) {
-      console.log('=== ЗАДАЧА НЕ СОЗДАНА НА САЙТЕ PR-TZ ===')
+
+      console.info(`TASK NOT CREATE FROM PR-TZ-APP`)
       return NextResponse.json({
-        message: '=== ЗАДАЧА НЕ СОЗДАНА НА САЙТЕ PR-TZ ==='
+        message: `TASK NOT CREATE FROM PR-TZ-APP`
       })
     }
 
@@ -211,7 +212,7 @@ export const POST = async (req: Request) => {
 
 
     const users = (event.payload.assigned) ? await getYGUsersID(event.payload.assigned[0], YouGileKey) : null
-    console.log("ПОЛЬЗОВАТЕЛЬ!!!!! ИЗМЕНИЛСЯ", compressionAssigned)
+    console.log("USER CHANGE ", compressionAssigned)
 
     
     // comparison steacker
@@ -254,7 +255,7 @@ export const POST = async (req: Request) => {
 
     const departmentName = department.split(' ').slice(2).join(' ')
 
-    console.log(departmentName)
+    console.log('DEPARTMENT NAME ', departmentName)
 
     const projects = await getYGProjects(YouGileKey)
 
@@ -265,12 +266,10 @@ export const POST = async (req: Request) => {
     })
 
     const boards = await getBoardCompany(YouGileKey, currentProjects.id)
-    console.log(boards)
     const findColumn = await getCurrentColumns(YouGileKey, boards, columnId) ?? null
-    console.log(findColumn)
 
 
-    console.log('НАЙДЕННАЯ КОЛОНКА!!!! ', findColumn)
+    console.log('FIND COLLUMN ', findColumn)
     
   
 
@@ -305,7 +304,7 @@ export const POST = async (req: Request) => {
     const bot = await getBot()
     bot.sendMessage(tgId.split('-')[1].trim(), messageFromUser as string)
 
-    console.log('ВЕБХУК ОТРАБОТАЛ')
+    console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
 
     return NextResponse.json({
       message: 'Cообщение отправлено',

@@ -34,21 +34,37 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
       body: JSON.stringify({ status, department }),
     })
 
-    // if (!responce.ok) {
-    //   throw new Error(`Ошибка отправки ответа от телеграмм в yougile: ${responce.statusText}`);
-    // }
+    if (!responce.ok) {
+      return {
+        succees: false,
+        message: `Ошибка отправки ответа от телеграмм в yougile: ${responce.statusText}`,
+        data: null
+      }
+    }
 
     const data = await responce.json();
-    return data;
+    return {
+        sucess: false,
+        message: `Ошибка отправки ответа от телеграмм в yougile: ${responce.statusText}`,
+        data: data
+      }
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       console.error('Ошибка отправки ответа от телеграмм в yougile: ', error.message);
-      return
+      return {
+        sucess: false,
+        message: `Ошибка отправки ответа от телеграмм в yougile: ${error.message}`,
+        data: null
+      }
     }
 
     console.error('Неизвестная ошибка отправки ответа от телеграмм в yougile');
-    return;
+    return {
+        sucess: false,
+        message: `Ошибка отправки ответа от телеграмм в yougile: ${error}`,
+        data: null
+    }
 
   }
 }
@@ -250,22 +266,52 @@ export const getBot = async () => {
 
               console.log(YGCARD, "FROM TG BOT")
 
-              await bot.editMessageText(`Заявка # ${YGCARD.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.tgId}`, {
+              if (YGCARD.sucess === false ) {
+
+                await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
+
+                return {
+                  sucess: false,
+                  message: 'ERROR'
+                }
+              }
+
+              await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.data.tgId}\n\nTitle # ${YGCARD.data.title}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
 
-              return
+              return {
+                  sucess: true,
+                  message: 'MESSAGE APPROVE'
+              }
 
           } else if (status === 'reject') {
 
               const YGCARD = await sendAnswerMessage(status, department, cardId)
-              await bot.editMessageText(`Заявка # ${YGCARD.ygId} : ❌ отклонена. Автор сообщения # ${YGCARD.tgId}`, {
+
+              console.log(YGCARD, "FROM TG BOT")
+
+              if (YGCARD.sucess === false ) {
+
+                await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
+
+                return {
+                  sucess: false,
+                  message: 'ERROR'
+                }
+              }
+              
+
+              await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ❌ отклонена. Автор сообщения # ${YGCARD.data.tgId}\n\nTitle # ${YGCARD.data.title}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
 
-              return
+              return {
+                  sucess: true,
+                  message: 'MESSAGE REJECT'
+              }
 
 
           }

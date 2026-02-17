@@ -77,15 +77,14 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
   }
 
 
+    console.log('TASK ID', getTask.id)
+
+
   if (status === 'approve') {
 
-    console.log('appreove!!!!!!')
-
-    console.log('getTask', getTask)
 
     const correctColumns = columns.content.find((column: {title: string}) => column.title === 'Согласовано').id
-
-    console.log('correctColumns', correctColumns)
+    console.log('correctColumns from APPROVE', correctColumns)
 
     if (!correctColumns) {
       return NextResponse.json(
@@ -95,10 +94,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
-
-
-    console.log('MOVE TASK ', moveTask)
-
+    console.log('CARD IS MOVE ', moveTask)
 
     const sendAnswerMessage = await bot.sendMessage(
       getTask.tgId,
@@ -112,8 +108,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         { message: 'Ошибка перемещения задачи в YouGile ', moveTask },
       )
     }
-
     console.log(`Задача ${getTask.title} перемещена в столбец Согласовано`)
+
     return NextResponse.json({
       title: getTask.title,
       ygId: getTask.ygId,
@@ -126,6 +122,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
   } else if (status === 'reject') {
 
     const correctColumns = columns.content.find((column: {title: string}) => column.title === 'Отклонено').id
+    console.log('correctColumns from APPROVE', correctColumns)
 
 
     if (!correctColumns) {
@@ -136,6 +133,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
+    console.log('CARD IS MOVE ', moveTask)
+
     const sendAnswerMessage = await bot.sendMessage(
       getTask.tgId,
       `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,
@@ -148,6 +147,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     }
     
     console.log(`Задача ${getTask.title} перемещена в столбец Отклонено`)
+
     return NextResponse.json({
       title: getTask.title,
       ygId: getTask.ygId,
