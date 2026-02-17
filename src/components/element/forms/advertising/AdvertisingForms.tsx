@@ -344,18 +344,18 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
         setModalInfoDownload(false)
   
         if (data) {
-          if (data.status === 'success') {
+          if (data.sucess === true) {
             setModalInfoDownload(false)
             setModalSubmitSuccess(true)
             return 
           }
-          if (data.status === 'abort') {
+          if (data.sucess === false) {
             setModalInfoDownload(false)
             setModalSubmitError(true)
             return
           }
 
-          if (data.status === 'abort_tg_id') {
+          if (data.sucess === false) {
             setModalTGError(true)
             return
           }

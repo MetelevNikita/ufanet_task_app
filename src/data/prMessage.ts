@@ -13,11 +13,11 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
   // 1) Проекты и продвижение услуг
   if (type === 'Проекты и продвижение услуг') {
     const bodyYG =
-      row('Название проекта / услуги:', data.title) +
-      row('Описание проекта / услуги:', data.description) +
-      row('Цель:', data.goal) +
-      row('Что необходимо сделать:', data.todo) +
-      row('Дата мероприятия:', data.deadline);
+      row('<strong>Название проекта / услуги:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Описание проекта / услуги:</strong><br>', data.description, '<br><br>') +
+      row('<strong>Цель:</strong><br>', data.goal, '<br><br>') +
+      row('<strong>Что необходимо сделать:</strong><br>', data.todo, '<br><br>') +
+      row('<strong>Дата мероприятия:</strong><br>', data.deadline);
 
     const bodyTG =
       row('Название проекта / услуги:', data.title, '\n') +
@@ -32,12 +32,12 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
   // 2) Мероприятие — внешнее
   if (type === 'Мероприятие - внешнее (для партнеров, абонентов, жителей)') {
     const bodyYG =
-      row('Название мероприятия:', data.title) +
-      row('Описание мероприятия:', data.description) +
-      row('Цель проведения мероприятия:', data.goal) +
-      row('Что необходимо сделать:', data.todo) +
-      row('Дата мероприятия:', data.date) +
-      row('Место проведения мероприятия:', data.place);
+      row('<strong>Название мероприятия:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Описание мероприятия:</strong><br>', data.description, '<br><br>') +
+      row('<strong>Цель проведения мероприятия:</strong><br>', data.goal, '<br><br>') +
+      row('<strong>Что необходимо сделать:</strong><br>', data.todo, '<br><br>') +
+      row('<strong>Дата мероприятия:</strong><br>', data.date, '<br><br>') +
+      row('<strong>Место проведения мероприятия:</strong><br>', data.place, '<br><br>');
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
@@ -53,13 +53,13 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
   // 3) Мероприятие — внутреннее (для сотрудников)
   if (type === 'Мероприятие — внутреннее (для сотрудников)') {
     const bodyYG =
-      row('Название мероприятия:', data.title) +
-      row('Описание мероприятия:', data.description) +
-      row('Цель проведения мероприятия:', data.goal) +
-      row('Лидер мероприятия:', data.leader) +
-      row('Что необходимо сделать:', data.todo) +
-      row('Дата мероприятия:', data.date) +
-      row('Место проведения мероприятия:', data.place);
+      row('<strong>Название мероприятия:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Описание мероприятия:</strong><br>', data.description, '<br><br>') +
+      row('<strong>Цель проведения мероприятия:</strong><br>', data.goal, '<br><br>') +
+      row('<strong>Лидер мероприятия:</strong><br>', data.leader, '<br><br>') +
+      row('<strong>Что необходимо сделать:</strong><br>', data.todo, '<br><br>') +
+      row('<strong>Дата мероприятия:</strong><br>', data.date, '<br><br>') +
+      row('<strong>Место проведения мероприятия:</strong><br>', data.place);
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
@@ -76,15 +76,15 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
   // 4) Выставки / выезды / конференции
   if (type === 'Выставки, выезды, конференции') {
     const bodyYG =
-      row('Название мероприятия:', data.title) +
-      row('Описание мероприятия:', data.description) +
-      row('Сайт мероприятия:', data.site) +
-      row('Дата мероприятия:', data.date) +
-      row('Место проведения мероприятия:', data.place) +
-      row('Цель участия:', data.goal) +
-      row('Лидер выставки/поездки:', data.leader) +
-      row('Список участников:', data.participants) +
-      row('Что необходимо сделать:', data.todo);
+      row('<strong>Название мероприятия:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Описание мероприятия:</strong><br>', data.description, '<br><br>') +
+      row('<strong>Сайт мероприятия:</strong><br>', data.site, '<br><br>') +
+      row('<strong>Дата мероприятия:</strong><br>', data.date, '<br><br>') +
+      row('<strong>Место проведения мероприятия:</strong><br>', data.place, '<br><br>') +
+      row('<strong>Цель участия:</strong><br>', data.goal, '<br><br>') +
+      row('<strong>Лидер выставки/поездки:</strong><br>', data.leader, '<br><br>') +
+      row('<strong>Список участников:</strong><br>', data.participants, '<br><br>') +
+      row('<strong>Что необходимо сделать:</strong><br>', data.todo);
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
@@ -103,10 +103,10 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
   // 5) Прочее
   if (type === 'Прочее') {
     const bodyYG =
-      row('Название мероприятия:', data.title) +
-      row('Что необходимо сделать:', data.todo) +
-      row('Цель — для чего это нужно:', data.goal) +
-      row('Дата мероприятия:', data.deadline);
+      row('<strong>Название мероприятия:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Что необходимо сделать:</strong><br>', data.todo, '<br><br>') +
+      row('<strong>Цель — для чего это нужно:</strong><br>', data.goal, '<br><br>') +
+      row('<strong>Дата мероприятия:</strong><br>', data.deadline, '<br><br>');
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
