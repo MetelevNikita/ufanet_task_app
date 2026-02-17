@@ -235,21 +235,25 @@ export const getBot = async () => {
           const status = data[0]
           const department = data[1]
           const cardId = data[2]
+
+          console.log(query)
   
 
 
           if (status === 'approve') {
 
-              console.log('approve')
+              console.log('approve FROM TG BOT')
 
               const YGCARD = await sendAnswerMessage(status, department, cardId)
 
-              console.log(YGCARD)
+              console.log(YGCARD, "FROM TG BOT")
 
               await bot.editMessageText(`Заявка # ${YGCARD.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.tgId}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
+
+              return
 
           } else if (status === 'reject') {
 
@@ -258,6 +262,8 @@ export const getBot = async () => {
                 chat_id: chatId,
                 message_id: messageId,
               });
+
+              return
 
 
           }

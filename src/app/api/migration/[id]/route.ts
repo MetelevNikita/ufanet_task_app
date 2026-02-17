@@ -84,8 +84,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     console.log('correctColumns', correctColumns)
 
     if (!correctColumns) {
-      NextResponse.json(
-        { message: 'Столбец согласовано не найден' },
+      return NextResponse.json(
+        { message: 'Столбец согласовано не найден ', correctColumns},
       )
     }
 
@@ -104,8 +104,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     console.log(sendAnswerMessage)
 
     if (!moveTask) {
-      NextResponse.json(
-        { message: 'Ошибка перемещения задачи в YouGile' },
+      return NextResponse.json(
+        { message: 'Ошибка перемещения задачи в YouGile ', moveTask },
       )
     }
 
@@ -138,8 +138,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     )
 
     if (!moveTask || !sendAnswerMessage) {
-      NextResponse.json(
-        { message: 'Ошибка перемещения задачи' },
+      return NextResponse.json(
+        { message: 'Ошибка перемещения задачи ', moveTask},
       )
     }
     

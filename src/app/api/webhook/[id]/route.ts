@@ -258,17 +258,11 @@ export const POST = async (req: Request) => {
 
     const projects = await getYGProjects(YouGileKey)
 
-    console.log(projects)
-
-
     const currentProjects = projects.content.find((project: any) => {
       if (project.title == departmentName) {
         return project
       }
     })
-
-    console.log(currentProjects)
-
 
     const boards = await getBoardCompany(YouGileKey, currentProjects.id)
     console.log(boards)
@@ -285,7 +279,6 @@ export const POST = async (req: Request) => {
     const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'status', findColumn)
 
     
-
     let messageFromUser = '';
 
     if (!findColumn?.title) {
