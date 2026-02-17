@@ -293,7 +293,9 @@ export const POST = async (req: Request) => {
     }
 
     if (findColumn.title === 'Согласовано' || findColumn.title === 'Не согласовано') {
-      return
+      return NextResponse.json({
+        message: 'Данное сообщение уже отправлено'
+      }, {status: 200})
     }
 
 

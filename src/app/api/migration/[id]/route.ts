@@ -75,7 +75,13 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
   if (status === 'approve') {
 
+    console.log('appreove!!!!!!')
+
+    console.log('getTask', getTask)
+
     const correctColumns = columns.content.find((column: {title: string}) => column.title === 'Согласовано').id
+
+    console.log('correctColumns', correctColumns)
 
     if (!correctColumns) {
       NextResponse.json(
@@ -85,10 +91,17 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
+
+
+    console.log('MOVE TASK ', moveTask)
+
+
     const sendAnswerMessage = await bot.sendMessage(
       getTask.tgId,
       `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Согласовано`,
     )
+
+    console.log(sendAnswerMessage)
 
     if (!moveTask) {
       NextResponse.json(
