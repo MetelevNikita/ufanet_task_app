@@ -44,7 +44,7 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
 
     const data = await responce.json();
     return {
-        sucess: false,
+        sucess: true,
         message: `Ошибка отправки ответа от телеграмм в yougile: ${responce.statusText}`,
         data: data
       }
