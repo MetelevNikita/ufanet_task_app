@@ -30,6 +30,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     console.log('Передача карточки')
 
     const { id } = await params;
+
+    console.log('ID MIGRATION', id)
   
     // 
 
@@ -40,6 +42,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
           id: Number(id)
         }
       })
+
+      console.log('GET TASK FROM MIGRATION', getTask)
 
 
     if (!getTask) {

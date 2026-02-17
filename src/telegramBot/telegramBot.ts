@@ -20,6 +20,8 @@ dotenv.config()
 const sendAnswerMessage = async (status: string, department: string, id: any) => {
   try {
 
+    console.log('ID FROM sendAnswerMessage ', id)
+
     if (!process.env.API_URL) {
       throw new Error('API_URL не задан в переменных окружения');
     }
@@ -32,9 +34,9 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
       body: JSON.stringify({ status, department }),
     })
 
-    if (!responce.ok) {
-      throw new Error(`Ошибка отправки ответа от телеграмм в yougile: ${responce.statusText}`);
-    }
+    // if (!responce.ok) {
+    //   throw new Error(`Ошибка отправки ответа от телеграмм в yougile: ${responce.statusText}`);
+    // }
 
     const data = await responce.json();
     return data;
