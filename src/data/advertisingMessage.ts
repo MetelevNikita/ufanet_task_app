@@ -1,3 +1,5 @@
+import {createImageMessageList} from '@/lib/createImageMessageList'
+
 export const advertisingMessage = async (department: string, data: any): Promise<any> => {
   const headYG = (extra: string) =>
     `Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id - ${data.tgId}<br><br>Тип услуги - ${data.type}<br><br>${extra}`;
@@ -34,7 +36,10 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Размер:</strong><br>', data.size, '<br><br>') +
       row('<strong>Другое:</strong><br>', data.size_other, '<br><br>') +
       row('<strong>Ориентация:</strong><br>', data.orientation, '<br><br>') +
-      row('<strong>Файл макета:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.maket_file}>${data.maket_file}</a>`, '<br><br>') +
+
+      row('<strong>Файл макета:</strong><br>', `Список`, '<br><br>') +
+      createImageMessageList('yg', data.maket_file) +
+
       row('<strong>Дата сдачи:</strong><br>', data.deadline, '<br><br>');
     const bodyTG =
       row('Название:', data.title, '\n') +
@@ -42,7 +47,10 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Размер:', data.size, '\n') +
       row('Другое:', data.size_other, '\n') +
       row('Ориентация:', data.orientation, '\n') +
-      row('Файл макета:', data.maket_file, '\n') +
+
+      row('Файл макета:', `Список`, '\n') +
+      createImageMessageList('tg', data.maket_file) +
+
       row('Дата сдачи:', data.deadline, '\n');
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -56,8 +64,13 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Даты и время:</strong><br>', data.dates, '<br><br>') +
       row('<strong>Адрес/место проведения:</strong><br>', data.place, '<br><br>') +
       row('<strong>Предварительная смета:</strong><br>', data.budget, '<br><br>') +
-      row('<strong>Файл сметы</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.smeta_file}>${data.smeta_file}</a>`, '<br><br>') +
-      row('<strong>Дополнительные файлы</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.additionally_file}>${data.additionally_file}</a>`, '<br><br>') +
+
+      row('<strong>Файл сметы:</strong><br>', `Список`, '<br><br>') +
+      createImageMessageList('yg', data.smeta_file) +
+
+      row('<strong>Дополнительные файлы</strong><br>', `Список`, '<br><br>') +
+      createImageMessageList('yg', data.additionally_file) +
+
       row('<strong>Дата готовности ТЗ:</strong><br>', data.deadline, '<br><br>');
 
     const bodyTG =
@@ -67,8 +80,13 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Даты и время:', data.dates, '\n') +
       row('Адрес/место проведения:', data.place, '\n') +
       row('Предварительная смета:', data.budget, '\n') +
-      row('Файл сметы', data.smeta_file, '\n') +
-      row('Дополнительные файлы', data.additionally_file, '\n') +
+
+      row('Файл сметы:</strong>', `Список`, '\n') +
+      createImageMessageList('tg', data.smeta_file) +
+
+      row('Дополнительные файлы', `Список`, '\n') +
+      createImageMessageList('tg', data.additionally_file) +
+
       row('Дата готовности ТЗ:', data.deadline, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
@@ -81,7 +99,11 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Описание/назначение оплаты:</strong><br>', data.description, '<br><br>') +
       row('<strong>Поставщик:</strong><br>', data.vendor, '<br><br>') +
       row('<strong>Сумма и валюта:</strong><br>', data.amount, '<br><br>') +
-      row('<strong>Файл счета:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.invoiceFile}>${data.invoiceFile}</a>`, '<br><br>') +
+
+      row('<strong>Файл счета:</strong><br>', `Список`, '<br><br>') +
+      createImageMessageList('yg', data.invoiceFile) +
+
+
       row('<strong>Ссылка на счет:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.invoiceLink}>${data.invoiceLink}</a>`, '<br><br>') +
       row('<strong>Комментарий:</strong><br>', data.comment, '<br><br>') +
       row('<strong>Срок оплаты:</strong><br>', data.deadline, '<br><br>')
@@ -91,7 +113,10 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Описание/назначение оплаты:', data.description, '\n') +
       row('Поставщик:', data.vendor, '\n') +
       row('Сумма и валюта:', data.amount, '\n') +
-      row('Файл счета:', data.invoiceFile, '\n') +
+
+      row('Файл счета:', `Список`, '\n') +
+      createImageMessageList('tg', data.invoiceFile) +
+
       row('Ссылка на счет:', data.invoiceLink, '\n') +
       row('Комментарий:', data.comment, '\n') +
       row('Срок оплаты:', data.deadline, '\n')
@@ -105,7 +130,10 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Название:</strong><br>', data.title, '<br><br>') +
       row('<strong>Предмет договора:</strong><br>', data.subject, '<br><br>') +
       row('<strong>Цель/описание:</strong><br>', data.description, '<br><br>') +
-      row('<strong>Файл проекта договора:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.draftFile}>${data.draftFile}</a>`, '<br><br>') +
+
+      row('<strong>Файл проекта договора:</strong><br>', `Список`, '<br><br>') +
+      createImageMessageList('yg', data.draftFile) +
+
       row('<strong>Контакт контрагента:</strong><br>', data.counterparty, '<br><br>') +
       row('<strong>Сроки:</strong><br>', data.deadline)
 
@@ -113,7 +141,10 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Название:', data.title, '\n') +
       row('Предмет договора:', data.subject, '\n') +
       row('Цель/описание:', data.description, '\n') +
-      row('Файл проекта договора:', data.draftFile, '\n') +
+
+      row('Файл проекта договора:', `Список`, '\n') +
+      createImageMessageList('tg', data.draftFile) +
+
       row('Контакт контрагента:', data.counterparty, '\n') +
       row('Сроки:', data.deadline)
 
@@ -146,7 +177,10 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Описание/повод:</strong><br>', data.description, '<br><br>') +
       row('<strong>Индивидуальный заказ:</strong><br>', data.category, '<br><br>') +
       row('<strong>Цвет:</strong><br>', data.color, '<br><br>') +
-      row('<strong>Макет</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.maket_file}>${data.maket_file}</a>`, '<br><br>') +
+
+      row('<strong>Макет</strong><br>', `Список`, '<br><br>') +
+      createImageMessageList('yg', data.maket_file) +
+
       row('<strong>Список награждаемых:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.awarded_file}>${data.awarded_file}</a>`, '<br><br>') +
       row('<strong>Количество:</strong><br>', data.qty, '<br><br>') +
       row('<strong>Сроки:</strong><br>', data.deadline, '<br><br>')
@@ -156,7 +190,10 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Описание/повод:', data.description, '\n') +
       row('Индивидуальный заказ:', data.category, '\n') +
       row('Цвет:', data.color, '\n') +
-      row('Маке:т', data.maket_file, '\n') +
+
+      row('Макет', `Список`, '\n') +
+      createImageMessageList('tg', data.maket_file) +
+
       row('Список награждаемых:', data.awarded_file, '\n') +
       row('Количество:', data.qty, '\n') +
       row('Сроки:', data.deadline, '\n')

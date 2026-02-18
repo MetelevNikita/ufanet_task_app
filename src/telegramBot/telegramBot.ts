@@ -91,10 +91,10 @@ const sendCommentMessage = async (text: string, ygTaskID: string) => {
 
 
     const taskTitle = `${new Date().toLocaleString('ru', { dateStyle: 'short', timeStyle: 'short' })} КОММЕНТАРИЙ К ЗАДАЧЕ - ${data.title}`
-    const taskDescription = `${data.description}<br><br>${new Date().toLocaleString('ru', { dateStyle: 'short', timeStyle: 'short' })}<br><br><br><br>${text}`
+    const taskDescription = `${data.description}<br><br>${new Date().toLocaleString('ru', { dateStyle: 'short', timeStyle: 'short' })}<br>Комментарий: ${text}`
     const taskColumnId = data.columnId
 
-    const editYGTask = await editYGTaskFromId(YG_KEY, ygTaskID, taskTitle, taskColumnId, taskDescription)
+    const editYGTask = await editYGTaskFromId(YG_KEY, ygTaskID, data.title, taskColumnId, taskDescription)
 
     if (!editYGTask) {
       console.error(`Ошибка изменения задачи из yougile по ID`)
@@ -190,10 +190,12 @@ export const getBot = async () => {
             if (!titleText) return
 
             const splitText = titleText.split(' ')
-            console.log(splitText)
 
             const ygId = splitText[2]
-            const tgId = splitText[splitText.length - 1]
+            const tgId = splitText[9]
+
+            console.log(ygId)
+            console.log(tgId)
 
             const sendToYG = await sendCommentMessage(text as string, ygId)
 
@@ -276,7 +278,7 @@ export const getBot = async () => {
                 }
               }
 
-              await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.data.tgId}\n\nTitle # ${YGCARD.data.title}`, {
+              await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.data.tgId} # \n\n Title: ${YGCARD.data.title}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
@@ -303,7 +305,7 @@ export const getBot = async () => {
               }
               
 
-              await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ❌ отклонена. Автор сообщения # ${YGCARD.data.tgId}\n\nTitle # ${YGCARD.data.title}`, {
+              await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ❌ отклонена. Автор сообщения # ${YGCARD.data.tgId} # \n\n Title: ${YGCARD.data.title}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });

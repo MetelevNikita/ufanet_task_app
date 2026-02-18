@@ -1,4 +1,6 @@
 export const editYGTaskFromId = async (key: string, id: string, title: string, columnId: any, description: string) => {
+
+
   try {
 
     const responce = await fetch(`https://ru.yougile.com/api-v2/tasks/${id}`, {
@@ -11,7 +13,8 @@ export const editYGTaskFromId = async (key: string, id: string, title: string, c
         deleted: false,
         title: title,
         columnId: columnId,
-        description: description
+        description: description,
+        stickers :{"c0e502fc-ad94-447c-8e9f-e0bc80bc0291": 'КОММЕНТАРИЙ'}
 
       })
     })

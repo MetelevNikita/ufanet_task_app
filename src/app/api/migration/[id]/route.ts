@@ -66,6 +66,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     const columns = await getYGColumns(yougileKey, currentBoard.id)
 
+    console.log('КОЛОНКИ ', columns)
+
 
   // TG
 
@@ -81,6 +83,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
   if (status === 'approve') {
+
+    console.log('status')
 
 
     const correctColumns = columns.content.find((column: {title: string}) => column.title === 'Согласовано').id

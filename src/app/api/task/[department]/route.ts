@@ -48,57 +48,71 @@ export const config = {
 
 
 
-// 
+//
+
+const createUploadFolder = (folder: string) => {
+  const folderId = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+  const departmentFolder = path.join(process.cwd(), 'src', 'app', 'uploads', folder);
+  const currentFolder = path.join(departmentFolder, `Folder_${folderId}`);
+  
+  // Создаем папку отдела если её нет
+  if (!fs.existsSync(departmentFolder)) {
+    fs.mkdirSync(departmentFolder, { recursive: true });
+  }
+  
+  // Создаем папку для текущей загрузки
+  if (!fs.existsSync(currentFolder)) {
+    fs.mkdirSync(currentFolder, { recursive: true });
+    console.log(`Создана папка для загрузки: Folder_${folderId}`);
+  }
+  
+  return {
+    folderPath: currentFolder,
+    folderName: `Folder_${folderId}`,
+    folderId: folderId
+  };
+};
 
 
-const writeFileData = async (data: string | null, url: string, folder: string) => {
+
+const writeFileData = async (
+  data: string | null, 
+  url: string, 
+  folderPath: string,  // Передаем полный путь к папке
+  folderName: string,  // Имя папки для URL
+  folderId: string,    // ID папки для имени файла
+  fileIndex?: number
+) => {
   try {
+    if (!data) return null;
 
-    const uuid = Date.now().toString()
+    const buffer = Buffer.from(data, 'base64');
+    const fileType = await fileTypeFromBuffer(buffer);
+    if (!fileType) return null;
 
+    // Формируем имя файла
+    const fileName = fileIndex !== undefined 
+      ? `${folderId}_${fileIndex}.${fileType.ext}`
+      : `${folderId}.${fileType.ext}`;
 
-    if (!data) return
+    // Полный путь к файлу
+    const filePath = path.join(folderPath, fileName);
+    
+    // Сохраняем файл
+    writeFileSync(filePath, buffer);
 
-    const buffer = Buffer.from(data, 'base64')
-
-    const fileType = await fileTypeFromBuffer(buffer)
-
-    if (!fileType) return
-
-
-    // folder
-
-
-    const departmentFolder = path.join(process.cwd(), 'src', 'app', 'uploads', folder)
-    if (!fs.existsSync(departmentFolder)) {
-      fs.mkdirSync(departmentFolder, {
-        recursive: true
-      })
-    }
-
-
-    const currentFolder = path.join(process.cwd(), 'src', 'app', 'uploads', folder, `Folder_${uuid}`)
-
-    if (!fs.existsSync(currentFolder)) {
-      fs.mkdirSync(currentFolder, { recursive: true })
-    }
-
-    writeFileSync(path.join(currentFolder, `${uuid}_${fileType.ext}.${fileType.ext}`), buffer)
-
-    console.log(`Файл ${uuid}_img.png успешно загружен`)
-    return `${url}/api/uploads/${folder}/Folder_${uuid}/${uuid}_${fileType.ext}.${fileType.ext}`
-
+    console.log(`Файл ${fileName} успешно загружен в папку ${folderName}`);
+    
+    // Возвращаем URL
+    return `${url}/api/uploads/${folderName}/${fileName}`;
     
   } catch (error: Error | unknown) {
-
     if (error instanceof Error) {
-      console.error(
-        `Не удалось загрузить файл: ${error.message}`
-      );
+      console.error(`Не удалось загрузить файл: ${error.message}`);
     }
-    console.error(`Не удалось загрузить файл: ${error}`);
+    return null; // Возвращаем null при ошибке
   }
-}
+};
 
 
 const createTGPhoto = async (department: string, data: any, descriptionTask: string, taskDB: any) => {
@@ -171,21 +185,40 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const formData = await req.json()
 
 
+    // 
+
+
+    let uploadFolderInfo: { folderPath: string; folderName: string; folderId: string } | null = null;
+
+
     const pairs = await Promise.all(
       Object.entries(formData).map(async ([key, value]: any) => {
         if (key.split('_')[1] === 'file') {
 
+          if (!uploadFolderInfo) {
+            uploadFolderInfo = createUploadFolder(currentDepartment.value);
+            console.log(`Папка создана: ${uploadFolderInfo.folderName}`);
+          }
+
           const urls = await Promise.all(
-            value.map((item: any) =>
+            value.map((item: any, index: number) =>
               writeFileData(
-                (item?.base64 ?? String(item)) as string,  // чистая base64
+                (item?.base64 ?? String(item)) as string,
                 process.env.WEBHOOK_URL as string,
-                currentDepartment.value
+                uploadFolderInfo!.folderPath,  // Передаем полный путь
+                uploadFolderInfo!.folderName,  // Передаем имя папки
+                uploadFolderInfo!.folderId,    // Передаем ID папки
+                index
               )
             )
           );
 
-          return [key, urls] as const; // один ключ → массив URL'ов
+          // Фильтруем null значения (ошибки загрузки)
+          const validUrls = urls.filter(url => url !== null);
+          
+          console.log(`Загружено файлов для ${key}: ${validUrls.length} из ${value.length}`);
+          
+          return [key, validUrls] as const;
 
         } else {
           return [key, value]
@@ -217,6 +250,10 @@ export const POST = async (req: Request, context: {params: {department: string}}
     console.info(`Задача в YouGile Создана ${ygId}`)
 
     //
+
+
+    console.log('DATA IMAGE ')
+    console.log(data)
 
     const newDatabaseTask = await createDBTask(ygId, departmentLabel, data)
 

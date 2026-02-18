@@ -55,7 +55,7 @@ export const typeSelectorArr = [
 
       { id: 10, title: 'Каким ты видишь будущий макет?', placeholder: 'Прикрепите черновые наброски/референсы/описание', typeField: 'area', type: 'area', name: 'vision' },
       { id: 11, title: 'Где будет размещаться макет?', placeholder: 'В офисе, на инфостенде, лифте, баннер и т.п.', typeField: 'text', type: 'text', name: 'placement' },
-      { id: 12, title: 'Прикрепите фотографию места размещения макета', placeholder: 'Фото/скриншот места', typeField: 'file', type: 'file', name: 'place_file' },
+      { id: 12, title: 'Прикрепите фотографию места размещения макета (не больше 3 изображений)', placeholder: 'Фото/скриншот места', typeField: 'file', type: 'file', name: 'place_file' },
       { id: 13, title: 'Телеграм заказчика макета', placeholder: 'Имя пользователя должно начинаться с @, например @IvanIvanon', typeField: 'text', type: 'text', name: 'client_tg' },
       { id: 14, title: 'Желаемая дата готовности макета', placeholder: 'К какому сроку нужен макет', typeField: 'date', type: 'date', name: 'deadline' },
     ]
@@ -72,7 +72,7 @@ export const typeSelectorArr = [
     },
     field: [
       { id: 1, title: 'Название мероприятия / проекта / услуги', placeholder: 'Как называется задача', typeField: 'text', type: 'text', name: 'title' },
-      { id: 2, title: 'Прикрепить файл в исходном виде', placeholder: 'Загрузите исходник (PSD/AI/PDF и т.п.)', typeField: 'file', type: 'file', name: 'target_file' },
+      { id: 2, title: 'Прикрепить файл в исходном виде (не больше 3 изображений)', placeholder: 'Загрузите исходник (PSD/AI/PDF и т.п.)', typeField: 'file', type: 'file', name: 'target_file' },
       { id: 3, title: 'Что нужно исправить?', placeholder: 'Опишите изменения, правки, адаптации', typeField: 'area', type: 'area', name: 'changes' },
       { id: 4, title: 'Телеграм заказчика макета', placeholder: 'Имя пользователя должно начинаться с @, например @IvanIvanon', typeField: 'text', type: 'text', name: 'client_tg' },
       { id: 5, title: 'Желаемая дата готовности макета', placeholder: 'К какому сроку', typeField: 'date', type: 'date', name: 'deadline' },
