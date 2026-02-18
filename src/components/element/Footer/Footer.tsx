@@ -45,8 +45,9 @@ const Footer: FC = () => {
         {/* line */}
 
 
-        <Col className='d-flex flex-row align-items-center justify-content-center mb-2'>
+        <Col className='d-flex flex-column align-items-center justify-content-center mb-2'>
           <div className={styles.footer_line}></div>
+          <div style={{marginTop: '2px', fontSize: '10px'}}>v1.0</div>
         </Col>
 
 
