@@ -82,7 +82,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
   const bot = await getBot()
   if (!bot) {
-    NextResponse.json(
+    return NextResponse.json(
       { message: 'Ошибка создания бота' },
     )
   }
@@ -96,7 +96,10 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     console.log('status')
 
 
-    const correctColumns = columns.content.find((column: {title: string}) => column.title === 'Согласовано').id
+    const column = columns.content.find((column: {title: string}) => column.title === 'Согласовано')
+    const correctColumns = column.id
+
+
     console.log('correctColumns from APPROVE', correctColumns)
 
     if (!correctColumns) {
@@ -119,11 +122,19 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
       try {
 
-        const sendAnswerMessage = await bot.sendMessage(
+
+
+        await bot.sendMessage(
           getTask.tgId,
           `Статус вашей задачи под именем "${getTask.title}" изменен на Согласовано`,
-        );
-        console.log('Telegram message sent:', sendAnswerMessage);
+        ).catch(error => {
+          if (error.code === 'ETELEGRAM' && error.message.includes('403')) {
+            console.log(`Пользователь ${getTask.tgId} не подписан на бота - пропускаем уведомление`);
+            } else {
+            console.error('Другая ошибка Telegram:', error);
+          }
+        });
+
 
       } catch (telegramError) {
 
@@ -153,8 +164,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
   } else if (status === 'reject') {
 
-    const correctColumns = columns.content.find((column: {title: string}) => column.title === 'Отклонено').id
-    console.log('correctColumns from APPROVE', correctColumns)
+    const column = columns.content.find((column: {title: string}) => column.title === 'Согласовано')
+    const correctColumns = column.id
 
 
     if (!correctColumns) {
@@ -176,11 +187,17 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
       try {
         
-        const sendAnswerMessage = await bot.sendMessage(
+        await bot.sendMessage(
           getTask.tgId,
           `Статус вашей задачи под именем "${getTask.title}" изменен на Согласовано`,
-        );
-        console.log('Telegram message sent:', sendAnswerMessage);
+        ).catch(error => {
+          if (error.code === 'ETELEGRAM' && error.message.includes('403')) {
+            console.log(`Пользователь ${getTask.tgId} не подписан на бота - пропускаем уведомление`);
+            } else {
+            console.error('Другая ошибка Telegram:', error);
+          }
+        })
+
 
       } catch (telegramError) {
 
@@ -205,23 +222,23 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
   // chande TASK STATUS
 
-  // console.log('status', status)
+  console.log('status', status)
 
-  // const changeTaskStatus = await prisma.task.update({
-  //   where: {
-  //     id: Number(id)
-  //   },
-  //   data: {
-  //     status
-  //   }
-  // })
+  const changeTaskStatus = await prisma.task.update({
+    where: {
+      id: Number(id)
+    },
+    data: {
+      status
+    }
+  })
 
 
-  // if (!changeTaskStatus) {
-  //   return NextResponse.json(
-  //     { message: 'Ошибка изменения статуса задачи' },
-  //   )
-  // }
+  if (!changeTaskStatus) {
+    return NextResponse.json(
+      { message: 'Ошибка изменения статуса задачи' },
+    )
+  }
 
 
   return NextResponse.json({
