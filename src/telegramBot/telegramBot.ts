@@ -90,7 +90,7 @@ const sendCommentMessage = async (text: string, ygTaskID: string) => {
     }
 
 
-    const taskTitle = `${new Date().toLocaleString('ru', { dateStyle: 'short', timeStyle: 'short' })} КОММЕНТАРИЙ К ЗАДАЧЕ - ${data.title}`
+    const taskTitle = `${new Date().toLocaleString('ru', { dateStyle: 'short', timeStyle: 'short' })} ${data.title}`
     const taskDescription = `${data.description}<br><br>${new Date().toLocaleString('ru', { dateStyle: 'short', timeStyle: 'short' })}<br>Комментарий: ${text}`
     const taskColumnId = data.columnId
 
@@ -205,7 +205,7 @@ export const getBot = async () => {
             }
 
 
-            const sendToTg = await bot.sendMessage(tgId, `\n\n${sendToYG.title}\n\n${text}`)
+            const sendToTg = await bot.sendMessage(tgId, `КОММЕНТАРИЙ к Задаче - \n\n${sendToYG.title}\n\n${text}`)
 
             if (!sendToYG.success) {
               await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
