@@ -1,6 +1,9 @@
 export function createImageMessageList (trigger: string, data: string[]) {
 
 
+  console.log('DATA FROM ARR ', data)
+
+
   try {
 
   // Хелпер: вывести строку, если значение есть

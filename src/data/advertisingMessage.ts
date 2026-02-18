@@ -101,7 +101,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Сумма и валюта:</strong><br>', data.amount, '<br><br>') +
 
       row('<strong>Файл счета:</strong><br>', `Список`, '<br><br>') +
-      createImageMessageList('yg', data.invoiceFile) +
+      createImageMessageList('yg', data.check_file) +
 
 
       row('<strong>Ссылка на счет:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.invoiceLink}>${data.invoiceLink}</a>`, '<br><br>') +
@@ -115,7 +115,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Сумма и валюта:', data.amount, '\n') +
 
       row('Файл счета:', `Список`, '\n') +
-      createImageMessageList('tg', data.invoiceFile) +
+      createImageMessageList('tg', data.check_file) +
 
       row('Ссылка на счет:', data.invoiceLink, '\n') +
       row('Комментарий:', data.comment, '\n') +
@@ -132,7 +132,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Цель/описание:</strong><br>', data.description, '<br><br>') +
 
       row('<strong>Файл проекта договора:</strong><br>', `Список`, '<br><br>') +
-      createImageMessageList('yg', data.draftFile) +
+      createImageMessageList('yg', data.document_file) +
 
       row('<strong>Контакт контрагента:</strong><br>', data.counterparty, '<br><br>') +
       row('<strong>Сроки:</strong><br>', data.deadline)
@@ -143,7 +143,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Цель/описание:', data.description, '\n') +
 
       row('Файл проекта договора:', `Список`, '\n') +
-      createImageMessageList('tg', data.draftFile) +
+      createImageMessageList('tg', data.document_file) +
 
       row('Контакт контрагента:', data.counterparty, '\n') +
       row('Сроки:', data.deadline)
@@ -193,6 +193,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
 
       row('Макет', `Список`, '\n') +
       createImageMessageList('tg', data.maket_file) +
+
 
       row('Список награждаемых:', data.awarded_file, '\n') +
       row('Количество:', data.qty, '\n') +

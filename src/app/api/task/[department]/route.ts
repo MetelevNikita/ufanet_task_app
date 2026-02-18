@@ -69,7 +69,8 @@ const createUploadFolder = (folder: string) => {
   return {
     folderPath: currentFolder,
     folderName: `Folder_${folderId}`,
-    folderId: folderId
+    folderId: folderId,
+    folderDepartment: folder
   };
 };
 
@@ -81,7 +82,8 @@ const writeFileData = async (
   folderPath: string,  // Передаем полный путь к папке
   folderName: string,  // Имя папки для URL
   folderId: string,    // ID папки для имени файла
-  fileIndex?: number
+  fileIndex?: number,
+  department?: string
 ) => {
   try {
     if (!data) return null;
@@ -104,7 +106,7 @@ const writeFileData = async (
     console.log(`Файл ${fileName} успешно загружен в папку ${folderName}`);
     
     // Возвращаем URL
-    return `${url}/api/uploads/${folderName}/${fileName}`;
+    return `${url}/api/uploads/${department}/${folderName}/${fileName}`;
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
@@ -208,7 +210,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
                 uploadFolderInfo!.folderPath,  // Передаем полный путь
                 uploadFolderInfo!.folderName,  // Передаем имя папки
                 uploadFolderInfo!.folderId,    // Передаем ID папки
-                index
+                index,
+                currentDepartment.value
               )
             )
           );
