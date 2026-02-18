@@ -164,7 +164,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
   } else if (status === 'reject') {
 
-    const column = columns.content.find((column: {title: string}) => column.title === 'Согласовано')
+    const column = columns.content.find((column: {title: string}) => column.title === 'Отклонено')
     const correctColumns = column.id
 
 
@@ -208,8 +208,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
       }
 
-
-    
     console.log(`Задача ${getTask.title} перемещена в столбец Отклонено`)
 
     return NextResponse.json({
