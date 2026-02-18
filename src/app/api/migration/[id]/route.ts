@@ -50,6 +50,15 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       return NextResponse.json({ message: `Задача с ID ${id} не найдена` }, { status: 404 });
     }
 
+
+    if (!getTask.ygId) {
+      console.error('Task is missing ygId:', getTask);
+      return NextResponse.json(
+        { message: 'Задача не имеет YouGile ID' },
+        { status: 400 }
+      );
+    }
+
     const yougileKey = process.env.YOGILE_KEY_INSTANCE as string
 
     const projects = await getYGProjects(yougileKey);
@@ -98,14 +107,33 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
+
+    if (!moveTask) {
+      return NextResponse.json(
+        { message: 'Ошибка перемещения задачи ', moveTask},
+      )
+    }
+
+
     console.log('CARD IS MOVE ', moveTask)
 
-    const sendAnswerMessage = await bot.sendMessage(
-      getTask.tgId,
-      `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Согласовано`,
-    )
+      try {
 
-    console.log(sendAnswerMessage)
+        const sendAnswerMessage = await bot.sendMessage(
+          getTask.tgId,
+          `Статус вашей задачи под именем "${getTask.title}" изменен на Согласовано`,
+        );
+        console.log('Telegram message sent:', sendAnswerMessage);
+
+      } catch (telegramError) {
+
+        console.error('Ошибка отправки сообщения в Telegram:', telegramError);
+        return NextResponse.json({
+          message: 'Ошибка отправки сообщения в Telegram ' + telegramError
+        })
+
+      }
+
 
     if (!moveTask) {
       return NextResponse.json(
@@ -137,18 +165,33 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     const moveTask = await MoveTaskFromId(yougileKey, getTask.ygId, correctColumns)
-    console.log('CARD IS MOVE ', moveTask)
 
-    const sendAnswerMessage = await bot.sendMessage(
-      getTask.tgId,
-      `Статус вашей задачи под именем \t ${getTask.title} \t изменен на Отклонено`,
-    )
-
-    if (!moveTask || !sendAnswerMessage) {
+    if (!moveTask) {
       return NextResponse.json(
         { message: 'Ошибка перемещения задачи ', moveTask},
       )
     }
+
+    console.log('CARD IS MOVE ', moveTask)
+
+      try {
+        
+        const sendAnswerMessage = await bot.sendMessage(
+          getTask.tgId,
+          `Статус вашей задачи под именем "${getTask.title}" изменен на Согласовано`,
+        );
+        console.log('Telegram message sent:', sendAnswerMessage);
+
+      } catch (telegramError) {
+
+        console.error('Ошибка отправки сообщения в Telegram:', telegramError);
+        return NextResponse.json({
+          message: 'Ошибка отправки сообщения в Telegram ' + telegramError
+        })
+
+      }
+
+
     
     console.log(`Задача ${getTask.title} перемещена в столбец Отклонено`)
 
@@ -162,23 +205,23 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
   // chande TASK STATUS
 
-  console.log('status', status)
+  // console.log('status', status)
 
-  const changeTaskStatus = await prisma.task.update({
-    where: {
-      id: Number(id)
-    },
-    data: {
-      status
-    }
-  })
+  // const changeTaskStatus = await prisma.task.update({
+  //   where: {
+  //     id: Number(id)
+  //   },
+  //   data: {
+  //     status
+  //   }
+  // })
 
 
-  if (!changeTaskStatus) {
-    NextResponse.json(
-      { message: 'Ошибка изменения статуса задачи' },
-    )
-  }
+  // if (!changeTaskStatus) {
+  //   return NextResponse.json(
+  //     { message: 'Ошибка изменения статуса задачи' },
+  //   )
+  // }
 
 
   return NextResponse.json({
