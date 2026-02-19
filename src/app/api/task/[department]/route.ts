@@ -230,9 +230,36 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     )
 
-    const data = Object.fromEntries(pairs)
+    const message = Object.fromEntries(pairs)
+    let data: Object = {}
 
     // message
+
+    console.log(departmentLabel)
+    console.log(data)
+
+
+    if (departmentLabel === 'Отдел дизайна') {
+
+
+      const taskDesign = await prisma.task.findMany({
+        where: {
+          department: department
+        }
+      })
+
+      const designId = taskDesign.length + 77
+
+      data = {
+        ...message,
+        title: `TЗ № ${designId} ${message.title}`
+      }
+    } else {
+
+      data = {...message}
+
+    }
+
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
 
