@@ -133,7 +133,7 @@ export const marketingMessage = async (
     const bodyYG =
       row('<strong>Назовите задачу так, чтобы сразу была понятна суть:</strong><br>', data.title, '<br><br>') +
       row('<strong>Укажите тип изменения (Можно выбрать несколько вариантов):</strong><br>', 
-          data.type_change && data.type_change.map.join(', '), '<br><br>') +
+          data.type_change && data.type_change.map, '<br><br>') +
       row('<strong>Прикрепите скриншот страницы, где необходимо внести изменения (необязательно, но желательно):</strong><br>', 
           data.screenshot_file ? `<a target="_blank" rel="noopener noreferrer" href=${data.screenshot_file}>${data.screenshot_file}</a>` : '', '<br><br>') +
       row('<strong>Ссылка на страницу, где нужно внести изменения: (укажите полный URL):</strong><br>', 
@@ -147,7 +147,7 @@ export const marketingMessage = async (
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
       row('Укажите тип изменения (Можно выбрать несколько вариантов):', 
-          data.type_change.join(', '), '\n') +
+          data.type_change, '\n') +
       row('Прикрепите скриншот страницы, где необходимо внести изменения (необязательно, но желательно):', data.screenshot_file, '\n') +
       row('Ссылка на страницу, где нужно внести изменения: (укажите полный URL):', data.url, '\n') +
       row('Есть ли у вас готовый текст / изображение / документ для размещения? (если да, приложите файл):', data.content_file, '\n') +
@@ -162,8 +162,8 @@ export const marketingMessage = async (
   if (type === 'ТЗ на запуск рекламы') {
     const bodyYG =
       row('<strong>Назовите задачу так, чтобы сразу была понятна суть:</strong><br>', data.title, '<br><br>') +
-      row('<strong>На какой площадке вы хотите запустить рекламу?(Можно выбрать несколько вариантов):</strong><br>', data.platforms && data.platforms.join(', '), '<br><br>') +
-      row('<strong>Цель рекламы (выберите одно или несколько):</strong><br>', data.ad_goals && data.ad_goals.map.join(', '), '<br><br>') +
+      row('<strong>На какой площадке вы хотите запустить рекламу?(Можно выбрать несколько вариантов):</strong><br>', data.platforms && data.platforms, '<br><br>') +
+      row('<strong>Цель рекламы (выберите одно или несколько):</strong><br>', data.ad_goals && data.ad_goals.map, '<br><br>') +
       row('<strong>Ссылка на сайт / лендинг / группу ВК, куда будет идти реклама (Необязательно):</strong><br>', data.landing_url ? `<a target="_blank" rel="noopener noreferrer" href=${data.landing_url}>${data.landing_url}</a>` : '', '<br><br>') +
       row('<strong>География размещения рекламы:</strong><br>', data.geo, '<br><br>') +
       row('<strong>Кто ваш клиент? Опишите целевую аудиторию максимально подробно: Возраст, пол, Социальный статус (работает, учится, пенсионер и т.д.) Род деятельности. Доход, интересы, поведение. Где чаще бывает онлайн:</strong><br>', data.target_audience, '<br><br>') +
@@ -187,9 +187,9 @@ export const marketingMessage = async (
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
       row('На какой площадке вы хотите запустить рекламу?(Можно выбрать несколько вариантов):', 
-          data.platforms && data.platforms.map.join(', '), '\n') +
+          data.platforms && data.platforms.map, '\n') +
       row('Цель рекламы (выберите одно или несколько):', 
-          data.ad_goals && data.ad_goals.map.join(', '), '\n') +
+          data.ad_goals && data.ad_goals.map, '\n') +
       row('Ссылка на сайт / лендинг / группу ВК, куда будет идти реклама (Необязательно):', data.landing_url, '\n') +
       row('География размещения рекламы:', data.geo, '\n') +
       row('Кто ваш клиент? Опишите целевую аудиторию максимально подробно: Возраст, пол, Социальный статус (работает, учится, пенсионер и т.д.) Род деятельности. Доход, интересы, поведение. Где чаще бывает онлайн:', data.target_audience, '\n') +
