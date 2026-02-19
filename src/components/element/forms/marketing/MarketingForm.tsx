@@ -287,6 +287,8 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
 
   const currentType = typeSelectorArr.find((type: any) => type.label === marketing.type)
 
+  console.log(marketing)
+
   
   
    const submitMessage = async (message: any) => {

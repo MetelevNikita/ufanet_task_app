@@ -26,10 +26,6 @@ interface MySelectMultiProps {
 const MySelectMulti: FC<MySelectMultiProps> = ({ title, options, onChange, name, data, remove }) => {
 
 
-
-
-
-
   return (
     <div className={styles.select_container}>
 

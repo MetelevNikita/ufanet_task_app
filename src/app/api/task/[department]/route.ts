@@ -254,10 +254,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     //
 
-
-    console.log('DATA IMAGE ')
-    console.log(data)
-
     const newDatabaseTask = await createDBTask(ygId, departmentLabel, data)
 
 
