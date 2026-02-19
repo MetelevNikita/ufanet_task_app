@@ -248,7 +248,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
         }
       })
 
-      const designId = taskDesign.length + 77
+      const designId = taskDesign.length + 54
 
       data = {
         ...message,
