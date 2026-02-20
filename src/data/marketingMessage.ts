@@ -133,7 +133,7 @@ export const marketingMessage = async (
     const bodyYG =
       row('<strong>Назовите задачу так, чтобы сразу была понятна суть:</strong><br>', data.title, '<br><br>') +
       row('<strong>Укажите тип изменения (Можно выбрать несколько вариантов):</strong><br>', 
-          data.type_change && data.type_change.map, '<br><br>') +
+          data.type_change && data.type_change, '<br><br>') +
       row('<strong>Прикрепите скриншот страницы, где необходимо внести изменения (необязательно, но желательно):</strong><br>', 
           data.screenshot_file ? `<a target="_blank" rel="noopener noreferrer" href=${data.screenshot_file}>${data.screenshot_file}</a>` : '', '<br><br>') +
       row('<strong>Ссылка на страницу, где нужно внести изменения: (укажите полный URL):</strong><br>', 
