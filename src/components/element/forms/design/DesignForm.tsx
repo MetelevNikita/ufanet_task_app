@@ -335,7 +335,7 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
   
 
         const data = await postTask(newData, department)
-        console.log(data)
+
 
         setModalInfoDownload(false)
   
@@ -344,6 +344,11 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
             setModalInfoDownload(false)
             setModalSubmitSuccess(true)
             return 
+          }
+          if (data.sucess === false || data.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
+            setModalInfoDownload(false)
+            setModalTGError(true)
+            return
           }
           if (data.sucess === false) {
             setModalInfoDownload(false)

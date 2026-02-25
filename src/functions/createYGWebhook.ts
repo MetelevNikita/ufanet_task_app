@@ -2,8 +2,6 @@ export const createYGWebhook = async (key: string) => {
   try {
 
 
-    console.log(process.env.WEBHOOK_URL)
-
     const responce = await fetch('https://yougile.com/api-v2/webhooks', {
       method: 'POST',
       headers: {

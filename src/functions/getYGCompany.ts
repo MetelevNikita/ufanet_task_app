@@ -23,9 +23,9 @@ export const getYGCompany = async () => {
       
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.log(`Ошибка получения списка компаний из YouGile: ${error.message}`);
+      console.error(`Ошибка получения списка компаний из YouGile: ${error.message}`);
       return null;
     }
-    console.log(`Ошибка получения списка компаний из YouGile: ${error}`);
+    console.error(`Ошибка получения списка компаний из YouGile: ${error}`);
   }
 }

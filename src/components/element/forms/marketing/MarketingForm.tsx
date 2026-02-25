@@ -255,8 +255,7 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
   // 
 
   const [activeOther, setActiveOther] = useState(false)
-  const [marketing, setMarketing] = useState<any>({
-  })
+  const [marketing, setMarketing] = useState<any>({})
 
 
   const { department, setDepartment } = departmentData
@@ -287,10 +286,8 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
 
   const currentType = typeSelectorArr.find((type: any) => type.label === marketing.type)
 
-  console.log(marketing)
 
-  
-  
+
    const submitMessage = async (message: any) => {
       try {
 
@@ -339,7 +336,6 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
         }
   
         const data = await postTask(newData, department)
-        console.log(data)
 
         setModalInfoDownload(false)
 
@@ -351,14 +347,14 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
             setModalSubmitSuccess(true)
             return 
           }
+          if (data.sucess === false || data.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
+            setModalInfoDownload(false)
+            setModalTGError(true)
+            return
+          }
           if (data.sucess === false) {
             setModalInfoDownload(false)
             setModalSubmitError(true)
-            return
-          }
-
-          if (data.sucess === false) {
-            setModalTGError(true)
             return
           }
         }

@@ -17,7 +17,17 @@ export const getYGtaskFromProject = async (key: string) => {
     const data = await responce.json()
     return data
     
-  } catch (error) {
-    console.error(error)
+  } catch (error: Error | unknown) {
+
+    if (error instanceof Error) {
+      console.error(`Ошибка получения задач из YG ${error.message}`)
+      return `Ошибка получения задач из YG ${error.message}`
+    }
+
+
+    console.error(`Ошибка получения задач из YG ${error}`)
+    return `Ошибка получения задач из YG ${error}`
+
+    
   }
 }

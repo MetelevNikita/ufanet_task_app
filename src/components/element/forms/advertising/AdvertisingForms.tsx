@@ -339,7 +339,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
 
 
         const data = await postTask(newData, department)
-        console.log(data)
+
 
         setModalInfoDownload(false)
   
@@ -349,14 +349,14 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
             setModalSubmitSuccess(true)
             return 
           }
+          if (data.sucess === false || data.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
+            setModalInfoDownload(false)
+            setModalTGError(true)
+            return
+          }
           if (data.sucess === false) {
             setModalInfoDownload(false)
             setModalSubmitError(true)
-            return
-          }
-
-          if (data.sucess === false) {
-            setModalTGError(true)
             return
           }
         }

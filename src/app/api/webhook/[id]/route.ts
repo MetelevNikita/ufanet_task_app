@@ -235,7 +235,6 @@ export const POST = async (req: Request) => {
     const statusName = statusSticker.id ?? ''
     const statusState = statusSticker.states ?? []
 
-
     const currentSteaker = findCurrentStiacker(event.payload?.stickers || {}, statusName, statusState)
     const prevSteaker = findCurrentStiacker(event.prevData?.stickers || {}, statusName, statusState)
 

@@ -12,7 +12,7 @@ export const getYGProjects = async (key: string) => {
 
     if (!responce.ok) {
       if (responce.status === 401) {
-        console.log('Ошибка получения проектов из YG. Необходимо обновить ключи');
+        console.error('Ошибка получения проектов из YG. Необходимо обновить ключи');
         return null;
       } else {
         throw new Error(`Ошибка получения проектов из YG ${responce.statusText} - ${responce.status}`);

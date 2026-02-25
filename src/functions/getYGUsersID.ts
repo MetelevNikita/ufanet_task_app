@@ -20,6 +20,16 @@ export const getYGUsersID = async (id: string, token: string) => {
     return data
     
   } catch (error: Error | unknown) {
-    console.error()
+
+    if (error instanceof Error) {
+      console.error(`Ошибка получения пользователя из YG ${error.message}`)
+      return `Ошибка получения пользователя из YG ${error.message}`
+    }
+
+
+    console.error(`Ошибка получения пользователя из YG ${error}`)
+    return `Ошибка получения пользователя из YG ${error}`
+
+    
   }
 }

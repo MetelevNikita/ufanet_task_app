@@ -22,7 +22,6 @@ export const createYGKey = async (id: string) => {
     }
 
     const data = await responce.json();
-    console.log(data)
     return data
     
   } catch (error: Error | unknown) {
