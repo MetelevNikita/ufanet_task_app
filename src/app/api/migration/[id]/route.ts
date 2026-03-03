@@ -41,7 +41,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         where: {
           id: Number(id)
         }
-      })
+    })
 
       console.log('GET TASK FROM MIGRATION', getTask)
 
@@ -75,7 +75,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     const columns = await getYGColumns(yougileKey, currentBoard.id)
 
-    console.log('КОЛОНКИ ', columns)
 
 
   // TG

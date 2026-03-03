@@ -44,8 +44,8 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
 
     const data = await responce.json();
     return {
-        sucess: true,
-        message: `Ошибка отправки ответа от телеграмм в yougile: ${responce.statusText}`,
+        success: true,
+        message: `Ответ от телеграмм в yougile: ${responce.statusText}`,
         data: data
       }
     
@@ -53,7 +53,7 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
     if (error instanceof Error) {
       console.error('Ошибка отправки ответа от телеграмм в yougile: ', error.message);
       return {
-        sucess: false,
+        success: false,
         message: `Ошибка отправки ответа от телеграмм в yougile: ${error.message}`,
         data: null
       }
@@ -61,7 +61,7 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
 
     console.error('Неизвестная ошибка отправки ответа от телеграмм в yougile');
     return {
-        sucess: false,
+        success: false,
         message: `Ошибка отправки ответа от телеграмм в yougile: ${error}`,
         data: null
     }
@@ -72,7 +72,7 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
 // sendCommentMessageFromYG
 
 
-const sendCommentMessage = async (text: string, ygTaskID: string) => {
+const sendCommentMessageYG = async (text: string, ygTaskID: string) => {
   try {
 
     const YG_KEY = process.env.YOGILE_KEY_INSTANCE as string
@@ -110,7 +110,8 @@ const sendCommentMessage = async (text: string, ygTaskID: string) => {
       success: true,
       message: '',
       title: taskTitle,
-      comment: text
+      comment: text,
+      originalTitle: data.title
     }
     
   } catch (error: Error | unknown) {
@@ -126,12 +127,53 @@ const sendCommentMessage = async (text: string, ygTaskID: string) => {
 
     console.error('Неизвестная ошибка отправки ответа от телеграмм в yougile');
     return {
-              success: false,
-              message: `Ошибка изменения задачи из yougile по ID`,
-              title: ``,
-              comment: ''
+            success: false,
+            message: `Ошибка изменения задачи из yougile по ID`,
+            title: ``,
+            comment: ''
             }
 
+  }
+}
+
+
+const sendCommentMessageDB = async (title: string | number, message: string) => {
+
+  try {
+
+      const responce = await fetch (`${process.env.WEBHOOK_URL as string}/api/comment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: title,
+        comment: message
+      })
+    })
+
+    const data = await responce.json()
+    console.log(data)
+    return data
+    
+  } catch (error: Error | unknown) {
+
+    if (error instanceof Error) {
+      console.error(`Ошибка создания комментарий ${error.message}`)
+      return {
+        success: false,
+        message: `Ошибка создания комментарий ${error.message}`
+      }
+    }
+
+
+      console.error(`Ошибка создания комментарий ${error}`)
+      return {
+        success: false,
+        message: `Ошибка создания комментарий ${error}`
+      }
+
+    
   }
 }
 
@@ -194,10 +236,17 @@ export const getBot = async () => {
             const ygId = splitText[2]
             const tgId = splitText[9]
 
-            console.log(ygId)
-            console.log(tgId)
 
-            const sendToYG = await sendCommentMessage(text as string, ygId)
+            const sendToYG = await sendCommentMessageYG(text as string, ygId)
+            console.info('Комментарий отправлен в YouGile')
+
+            // 
+
+            const sendToDB = await sendCommentMessageDB(sendToYG.originalTitle, text as string)
+            console.info('Комментарий отправлен в Базу Данных')
+
+            // 
+
 
             if (!sendToYG.success) {
               await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
@@ -256,8 +305,6 @@ export const getBot = async () => {
           const department = data[1]
           const cardId = data[2]
 
-          console.log(query)
-  
 
 
           if (status === 'approve') {
@@ -268,12 +315,12 @@ export const getBot = async () => {
 
               console.log(YGCARD, "FROM TG BOT")
 
-              if (YGCARD.sucess === false ) {
+              if (YGCARD.success === false ) {
 
                 await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
 
                 return {
-                  sucess: false,
+                  success: false,
                   message: 'ERROR'
                 }
               }
@@ -284,7 +331,7 @@ export const getBot = async () => {
               });
 
               return {
-                  sucess: true,
+                  success: true,
                   message: 'MESSAGE APPROVE'
               }
 
@@ -292,14 +339,12 @@ export const getBot = async () => {
 
               const YGCARD = await sendAnswerMessage(status, department, cardId)
 
-              console.log(YGCARD, "FROM TG BOT")
-
-              if (YGCARD.sucess === false ) {
+              if (YGCARD.success === false ) {
 
                 await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
 
                 return {
-                  sucess: false,
+                  success: false,
                   message: 'ERROR'
                 }
               }
@@ -311,7 +356,7 @@ export const getBot = async () => {
               });
 
               return {
-                  sucess: true,
+                  success: true,
                   message: 'MESSAGE REJECT'
               }
 

@@ -338,10 +338,12 @@ if (Object.entries(message).length < 1) {
 
         const data = await postTask(newData, department)
 
+        console.log(data)
+
         setModalInfoDownload(false)
   
         if (data) {
-          if (data.sucess === true) {
+          if (data.success === true) {
             setModalInfoDownload(false)
             setModalSubmitSuccess(true)
             return 
@@ -355,10 +357,11 @@ if (Object.entries(message).length < 1) {
           if (data.success === false || data.message === 'Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)') {
             setModalInfoDownload(false)
             setModalTgBotError(true)
+            return
           }
 
 
-          if (data.sucess === false) {
+          if (data.success === false) {
             setModalInfoDownload(false)
             setModalSubmitError(true)
             return

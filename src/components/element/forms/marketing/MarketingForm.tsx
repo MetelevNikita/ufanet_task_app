@@ -348,12 +348,12 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
         
 
         if (data) {
-          if (data.sucess === true) {
+          if (data.success === true) {
             setModalInfoDownload(false)
             setModalSubmitSuccess(true)
             return 
           }
-          if (data.sucess === false || data.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
+          if (data.success === false || data.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
             setModalInfoDownload(false)
             setModalTGError(true)
             return
@@ -361,8 +361,9 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
           if (data.success === false || data.message === 'Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)') {
             setModalInfoDownload(false)
             setModalTgBotError(true)
+            return
           }
-          if (data.sucess === false) {
+          if (data.success === false) {
             setModalInfoDownload(false)
             setModalSubmitError(true)
             return

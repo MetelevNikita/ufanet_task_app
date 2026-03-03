@@ -42,7 +42,7 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
     }
     
     return {
-      success: false,
+      success: true,
       message: `Ошибка создания задачи в базе данных`,
       data: task
     }

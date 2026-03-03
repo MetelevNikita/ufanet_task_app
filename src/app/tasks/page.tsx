@@ -124,6 +124,9 @@ const page: FC = () => {
   }
 
 
+  console.log(tasks)
+
+
 
 
 
@@ -174,7 +177,7 @@ const page: FC = () => {
               tasks.map((task: any, index: number): React.ReactNode => {
                 return (
                   <Col className='mb-2 mt-3' key={index+1}>
-                    <SearchElement status={task.status} title={task.title} date={task.deadline} department={task.department} author={task.fio} stage={(task.stage === '') ? '' : task.stage}/>
+                    <SearchElement status={task.status} title={task.title} date={task.deadline} department={task.department} author={task.fio} stage={(task.stage === '') ? '' : task.stage} comment={(task.comment) ? task.comment : null}/>
                   </Col>
                   )
                 }

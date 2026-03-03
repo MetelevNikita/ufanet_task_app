@@ -7,6 +7,7 @@ import {Row, Col} from 'react-bootstrap'
 // styles
 
 import styles from './SearchElement.module.css'
+import { div } from 'motion/react-client'
 
 // interfaces
 
@@ -17,9 +18,12 @@ interface SearchElementProps {
   date: string
   author: string
   stage: string
+  comment: string | null
 }
 
-const SearchElement: FC<SearchElementProps> = ({ status, title, date, department, author, stage }) => {
+const SearchElement: FC<SearchElementProps> = ({ status, title, date, department, author, stage, comment }) => {
+
+
 
 
   const newDate = new Date(date).toLocaleDateString()
@@ -98,11 +102,23 @@ const SearchElement: FC<SearchElementProps> = ({ status, title, date, department
           <Col md={6} className='mt-1 mb-1'>
             <div className={styles.search_status_author}>Автор: {author}</div>
             <div className={styles.search_status_title}>Задача: {title}</div>
+
+
+            {
+              (comment) && (
+                 <>
+                  <hr />
+
+                  <div className={styles.search_status_comment}>Комментарий {comment}</div>
+                 </>
+              )
+            }
+
           </Col>
 
 
 
-          <Col className='mt-1 mb-1'>
+          <Col className='d-flex justify-content-center  mt-1 mb-1'>
             <div style={{backgroundColor: stageText}} className={styles.search_status_stage}>Cостояние: {(stage === '') ? 'Не принято' : stage}</div>
           </Col>
 
@@ -112,6 +128,8 @@ const SearchElement: FC<SearchElementProps> = ({ status, title, date, department
         </Col>
 
       </Col>
+
+
     
     </Col>
   )

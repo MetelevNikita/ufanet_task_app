@@ -233,11 +233,13 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     const examination = await examinationTgMessage(formData.tgId)
 
+    console.log('EX ', examination)
+
     if (!examination.success) {
       return NextResponse.json({
         success: false,
         message: `Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)`
-      }, { status: 500 });
+      });
     }
 
 
@@ -319,6 +321,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     //
 
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
+    console.log('YG ', newTaskYougile)
 
 
     if (!newTaskYougile.success) {
@@ -335,6 +338,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     //
 
     const newDatabaseTask = await createDBTask(ygId, departmentLabel, data)
+    console.log('DB ', newDatabaseTask)
 
     if (!newDatabaseTask.success) {
       return NextResponse.json({
@@ -349,6 +353,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     //
 
     const TelegramRes = await createTGTask(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id)
+    console.log('TG ', TelegramRes)
 
     if (!TelegramRes.success) {
       return NextResponse.json({

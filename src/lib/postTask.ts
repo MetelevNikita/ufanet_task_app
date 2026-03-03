@@ -44,7 +44,7 @@ export const postTask = async (data: any, department: string) => {
 
     if (isNaN(parseInt(fromEntries.tgId))) {
       return {
-        sucess: false,
+        success: false,
         message: 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)',
       }
     }
@@ -59,27 +59,17 @@ export const postTask = async (data: any, department: string) => {
 
     if (!responce.ok) {
         return {
-          sucess: false,
+          success: false,
           message: `Ошибка при добавлении задачи: ${responce.statusText} - ${responce.status}`,
         }
     }
 
-    if (responce.status === 200) {
-      const data = await responce.json();
-      console.log(data)
-      return {
-        sucess: true,
-        message: 'Задача успешно добавлена',
-      }
-    } else if (responce.status === 400) {
-      return {
-        sucess: false,
-        message: 'Задача не добавлена',
-      }
-    }
+    const dataTask = await responce.json();
+    console.log(dataTask)
+    return dataTask
 
+   
 
-    
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       console.error(`Ошибка при добавлении задачи: ${error.message}`)
@@ -92,7 +82,7 @@ export const postTask = async (data: any, department: string) => {
 
       console.error(`Ошибка при добавлении задачи: ${error}`)
       return {
-        sucess: false,
+        success: false,
         message: 'Ошибка при добавлении задачи',
       }
     
