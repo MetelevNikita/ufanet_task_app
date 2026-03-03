@@ -14,14 +14,25 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     //
 
     if (!yougileKey) {
-      throw new Error('Yougile key not found');
+      console.error('Не найдены ключ yougile')
+      return {
+        success: false,
+        message: `Не найдены ключ yougile`,
+        data: null
+      }
     }
 
     const projects = await getYGProjects(yougileKey);
 
 
     if (!projects) {
-      throw new Error('Projects not found');
+      console.error('Не найдены проекты в yougile')
+      return {
+        success: false,
+        message: `Не найдены проекты в yougile`,
+        data: null
+      }
+      
     }
 
 
@@ -46,7 +57,11 @@ export const createYGTask = async (department: string, data: any, descriptionTas
 
     if (!inboxColumn) {
       console.error(`Столбец Входящие не найден в доске ${department}`)
-      return null
+      return {
+        success: false,
+        message: `Столбец Входящие не найден в доске ${department}`,
+        data: null
+      }
     }
 
 
@@ -57,14 +72,15 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     const statusSticker = stickers.content.find((item: {name: string}) => item.name === 'Статус') ?? {}
 
     if (!statusSticker) {
-      console.log(
+      console.error(
         'Стикер Статус не найден'
       )
-      return
+      return {
+        success: false,
+        message: `Стикер Статус не найден`,
+        data: null
+      }
     }
-
-    console.log(statusSticker.states)
-
 
     const currentState = statusSticker.states.find((item: any) => item.name === 'не принято') ?? {}
 
@@ -90,19 +106,35 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     if (!respoonceYouGile.ok) {
       if (respoonceYouGile.status === 400) {
         console.error(`Ошибка создания задачи в YG ${respoonceYouGile.statusText} - ${respoonceYouGile.status}`)
-        return null
+        return {
+          success: false,
+          message: `Сообщение в Yougile не создано`,
+          data: null
+        }
       }
     }
 
     const dataYougile = await respoonceYouGile.json()
-    return dataYougile
+    return {
+      success: true,
+      message: 'Сообщение в Yougile создано',
+      data: dataYougile
+    }
 
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       console.log(error.message)
-      return null
+      return {
+        success: false,
+        message: `Сообщение в Yougile не создано - ${error.message}`,
+        data: null
+      }
     }
     console.log(error)
-    return null
+    return {
+      success: false,
+      message: `Сообщение в Yougile не создано - ${error}`,
+      data: null
+    }
   }
 }

@@ -234,10 +234,14 @@ interface MarketingFormsProps {
   modalTgError: {
     modalTGError: boolean,
     setModalTGError: (e: boolean) => void
+  },
+  modalTGBotError: {
+    modalTgBotError: boolean,
+    setModalTgBotError: (e: boolean) => void
   }
 }
 
-const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError }) => {
+const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError, modalTGBotError }) => {
 
 
 
@@ -252,6 +256,8 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
   const { modalBackInfo, setModalBackInfo } = modalInfo
   const { modalInfoDownload, setModalInfoDownload } = modalDownload
   const { modalTGError, setModalTGError } = modalTgError
+  const { modalTgBotError, setModalTgBotError } = modalTGBotError
+
   // 
 
   const [activeOther, setActiveOther] = useState(false)
@@ -351,6 +357,10 @@ const MarketingForms: FC<MarketingFormsProps> = ({ departmentData, modalSuccess,
             setModalInfoDownload(false)
             setModalTGError(true)
             return
+          }
+          if (data.success === false || data.message === 'Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)') {
+            setModalInfoDownload(false)
+            setModalTgBotError(true)
           }
           if (data.sucess === false) {
             setModalInfoDownload(false)

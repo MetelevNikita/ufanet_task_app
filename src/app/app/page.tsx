@@ -66,6 +66,7 @@ const page: FC = () => {
   const [modalBackInfo, setModalBackInfo] = useState<boolean>(false)
   const [modalInfoDownload, setModalInfoDownload] = useState<boolean>(false)
   const [modalTGError, setModalTGError] = useState<boolean>(false)
+  const [modalTgBotError, setModalTgBotError] = useState<boolean>(false)
 
   //
 
@@ -92,6 +93,7 @@ const page: FC = () => {
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
             modalTgError={{modalTGError, setModalTGError}}
+            modalTGBotError={{modalTgBotError, setModalTgBotError}}
         />
       case 'Отдел дизайна':
         return <DesignForm
@@ -101,6 +103,7 @@ const page: FC = () => {
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
             modalTgError={{modalTGError, setModalTGError}}
+            modalTGBotError={{modalTgBotError, setModalTgBotError}}
         />
 
       case 'Отдел рекламы':
@@ -111,6 +114,7 @@ const page: FC = () => {
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
             modalTgError={{modalTGError, setModalTGError}}
+            modalTGBotError={{modalTgBotError, setModalTgBotError}}
         />
       case 'Отдел интернет-маркетинга':
         return <MarketingForms
@@ -120,6 +124,7 @@ const page: FC = () => {
             modalInfo={{modalBackInfo, setModalBackInfo}}
             modalDownload={{modalInfoDownload, setModalInfoDownload}}
             modalTgError={{modalTGError, setModalTGError}}
+            modalTGBotError={{modalTgBotError, setModalTgBotError}}
             />
     }
   }
@@ -149,6 +154,24 @@ const page: FC = () => {
                       onClickTwo={
                         () => {
                           setModalTGError(false)
+                        }}
+                      />
+                  )
+                }
+
+
+                {
+                  (modalTgBotError) && (
+                    <ModalInfo
+                      title={'Ошибка! Возможно вы ввели неправильный Telegram id или не подписались на Бота'}
+                      btnTitleOne={'Продолжить'}
+                      image={<BsInfoCircle style={{width: '60px', color: '#FC9B32'}}/>}
+                      onClickOne={() => {
+                        setModalTgBotError(false)
+                      }}
+                      onClickTwo={
+                        () => {
+                          setModalTgBotError(false)
                         }}
                       />
                   )

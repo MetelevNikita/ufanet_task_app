@@ -234,10 +234,15 @@ interface DesignFormsProps {
   modalTgError: {
     modalTGError: boolean,
     setModalTGError: (e: boolean) => void
+  },
+
+  modalTGBotError: {
+    modalTgBotError: boolean,
+    setModalTgBotError: (e: boolean) => void
   }
 }
 
-const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError }) => {
+const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError, modalTGBotError }) => {
 
 
   const [isEmpty, setIsImpty] = useState<Boolean>(false)
@@ -249,6 +254,7 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
   const { modalBackInfo, setModalBackInfo } = modalInfo
   const { modalInfoDownload, setModalInfoDownload } = modalDownload
   const { modalTGError, setModalTGError } = modalTgError
+  const { modalTgBotError, setModalTgBotError } = modalTGBotError
 
   // 
 
@@ -350,6 +356,12 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
             setModalTGError(true)
             return
           }
+
+          if (data.success === false || data.message === 'Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)') {
+            setModalInfoDownload(false)
+            setModalTgBotError(true)
+          }
+
           if (data.sucess === false) {
             setModalInfoDownload(false)
             setModalSubmitError(true)

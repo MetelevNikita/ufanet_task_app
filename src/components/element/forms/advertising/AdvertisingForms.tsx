@@ -235,12 +235,16 @@ interface AdvertisingFormsProps {
   modalTgError: {
     modalTGError: boolean,
     setModalTGError: (e: boolean) => void
+  },
+  modalTGBotError: {
+    modalTgBotError: boolean,
+    setModalTgBotError: (e: boolean) => void
   }
 
 
 }
 
-const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError }) => {
+const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError, modalTGBotError }) => {
 
   const [isEmpty, setIsImpty] = useState<Boolean>(false)
 
@@ -251,6 +255,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
   const { modalBackInfo, setModalBackInfo } = modalInfo
   const { modalInfoDownload, setModalInfoDownload } = modalDownload
   const { modalTGError, setModalTGError } = modalTgError
+  const { modalTgBotError, setModalTgBotError } = modalTGBotError
   // 
 
 
@@ -349,11 +354,18 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
             setModalSubmitSuccess(true)
             return 
           }
+          
           if (data.sucess === false || data.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
             setModalInfoDownload(false)
             setModalTGError(true)
             return
           }
+
+          if (data.success === false || data.message === 'Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)') {
+            setModalInfoDownload(false)
+            setModalTgBotError(true)
+          }
+
           if (data.sucess === false) {
             setModalInfoDownload(false)
             setModalSubmitError(true)

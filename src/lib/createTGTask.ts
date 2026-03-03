@@ -32,15 +32,27 @@ export const createTGTask = async (department: string, descriptionTask: string, 
     )
 
 
-    console.log(sendTgBot)
-    return sendTgBot
+
+    return {
+      success: true,
+      message: `Сообщение отправлено`,
+      data: null
+    }
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       console.log(error.message)
-      return null
+      return {
+        success: false,
+        message: `Ошибка отправки сообщения в телеграм - ${error.message}`,
+        data: null
+      }
     }
 
-    return null
+    return {
+      success: false,
+      message: `Ошибка отправки сообщения в телеграм - ${error}`,
+      data: null
+    }
   }
 }

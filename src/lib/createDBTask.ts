@@ -34,16 +34,32 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
 
     if (!task) {
       console.error('Ошибка создания задачи в базе данных')
-      return null
+      return {
+        success: false,
+        message: `Ошибка создания задачи в базе данных`,
+        data: null
+      }
     }
     
-    return task
+    return {
+      success: false,
+      message: `Ошибка создания задачи в базе данных`,
+      data: task
+    }
 
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
       console.error(error.message)
-      return null
+      return {
+        success: false,
+        message: `Ошибка создания задачи в базе данных - ${error.message}`,
+        data: null
+      }
     }
-    return null
+    return {
+      success: false,
+      message: `Ошибка создания задачи в базе данных - ${error}`,
+      data: null
+    }
   }
 }
