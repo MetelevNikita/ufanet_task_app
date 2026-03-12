@@ -169,12 +169,12 @@ const createTGPhoto = async (department: string, data: any, descriptionTask: str
 
 // 
 
-async function examinationTgMessage (tgId: string) {
+async function resultTgMessage (tgId: string, message: string) {
   try {
 
     const bot = await getBot()
 
-    await bot.sendMessage(tgId, 'Задача отправляется Pr-tz.ru')
+    await bot.sendMessage(tgId, message)
     return {
       success: true,
       message: `Проверочное сообщение отправлено`,
@@ -231,9 +231,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     console.log('Проверочная отправка данных в ТГ')
 
 
-    const examination = await examinationTgMessage(formData.tgId)
-
-    console.log('EX ', examination)
+    const examination = await resultTgMessage(formData.tgId, 'Проверяем подписаны ли вы на бота Pr-tz.ru')
 
     if (!examination.success) {
       return NextResponse.json({
@@ -290,9 +288,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     let data: Object = {}
 
     // message
-
-    console.log(departmentLabel)
-    console.log(data)
 
 
     if (departmentLabel === 'Отдел дизайна') {
@@ -363,6 +358,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
     }
 
     console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
+
+    const ResultMessage = await resultTgMessage(formData.tgId, `Задача ${newDatabaseTask?.data?.title ?? ''} на сайте pr-tz.ru успешно создана`)
 
     return NextResponse.json({
       success: true,

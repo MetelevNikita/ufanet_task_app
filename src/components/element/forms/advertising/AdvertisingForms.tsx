@@ -358,7 +358,7 @@ const AdvertisingForms: FC<AdvertisingFormsProps> = ({ departmentData, modalSucc
           
           if (data.success === false || data.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
             setModalInfoDownload(false)
-            setModalTGError(true)
+            setModalTgBotError(true)
             return
           }
 

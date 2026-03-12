@@ -212,9 +212,7 @@ export const POST = async (req: Request) => {
 
 
     const users = (event.payload.assigned) ? await getYGUsersID(event.payload.assigned[0], YouGileKey) : null
-    console.log("USER CHANGE ", compressionAssigned)
 
-    
     // comparison steacker
 
     let comprassionSteacker: boolean
@@ -253,9 +251,6 @@ export const POST = async (req: Request) => {
     //
 
     const departmentName = department.split(' ').slice(2).join(' ')
-
-    console.log('DEPARTMENT NAME ', departmentName)
-
     const projects = await getYGProjects(YouGileKey)
 
     const currentProjects = projects.content.find((project: any) => {
@@ -268,15 +263,11 @@ export const POST = async (req: Request) => {
     const findColumn = await getCurrentColumns(YouGileKey, boards, columnId) ?? null
 
 
-    console.log('FIND COLLUMN ', findColumn)
-    
-  
-
     // change status DB
 
     const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'status', findColumn)
 
-    
+
     let messageFromUser = '';
 
     if (!findColumn?.title) {
@@ -290,9 +281,9 @@ export const POST = async (req: Request) => {
     }
 
 
-    if (comprassionSteacker && currentSteaker.name) {
-      const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'stage', currentSteaker.name)
-      messageFromUser = `НОВЫЙ СТАТУС!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен статус «${currentSteaker.name}».\n\nСледите за изменениями в БОТЕ`;
+      if (comprassionSteacker && currentSteaker.name) {
+        const changeStatusDB = await changeStatusTaskDB(departmentName, title, 'stage', currentSteaker.name)
+        messageFromUser = `НОВЫЙ СТАТУС!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен статус «${currentSteaker.name}».\n\nСледите за изменениями в БОТЕ`;
       } else if (compressionAssigned) {
         messageFromUser = `НОВЫЙ ИСПОЛНИТЕЛЬ!\n\nЗадаче «${title}» в колонке «${findColumn.title}» присвоен исполнитель ${users.realName}».\n\nСледите за изменениями в БОТЕ`;
       } else {

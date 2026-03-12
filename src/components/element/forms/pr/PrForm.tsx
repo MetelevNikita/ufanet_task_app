@@ -350,7 +350,7 @@ if (Object.entries(message).length < 1) {
           }
           if (data.sucess === false || data.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
             setModalInfoDownload(false)
-            setModalTGError(true)
+            setModalTgBotError(true)
             return
           }
 

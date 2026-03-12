@@ -65,7 +65,7 @@ export const postTask = async (data: any, department: string) => {
     }
 
     const dataTask = await responce.json();
-    console.log(dataTask)
+    console.log("DATA TASK ", dataTask)
     return dataTask
 
    
