@@ -121,8 +121,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
       try {
 
-
-
         await bot.sendMessage(
           getTask.tgId,
           `Статус вашей задачи под именем "${getTask.title}" изменен на Согласовано`,
@@ -188,7 +186,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         
         await bot.sendMessage(
           getTask.tgId,
-          `Статус вашей задачи под именем "${getTask.title}" изменен на Согласовано`,
+          `Статус вашей задачи под именем "${getTask.title}" изменен на Отклонено`,
         ).catch(error => {
           if (error.code === 'ETELEGRAM' && error.message.includes('403')) {
             console.log(`Пользователь ${getTask.tgId} не подписан на бота - пропускаем уведомление`);
