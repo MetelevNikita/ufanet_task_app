@@ -1,0 +1,38 @@
+.footer_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: max-content;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 30px;
+
+
+
+  /*  */
+
+  cursor: pointer;
+}
+
+
+
+.footer_title {
+  width: 450px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  /*  */
+
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.footer_line {
+  width: 40%;
+  height: 2px;
+  background-color: #FF6600;
+  border-radius: 20px;
+}
