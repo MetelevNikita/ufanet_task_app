@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState, useContext, useEffect } from 'react'
+import { FC, useContext, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
@@ -14,7 +14,6 @@ import { Container, Row, Col } from 'react-bootstrap'
 
 // components
 
-import Logo from '@/components/element/Logo/Logo'
 import MyInput from '@/components/UI/MyInput/MyInput'
 
 
@@ -36,6 +35,8 @@ import { Context } from '@/utils/RootContext'
 
 // compoennts
 
+
+import Qrcode from '@/components/element/Qrcode/Qrcode'
 import MyButton from '@/components/UI/MyButton/MyButton'
 
 
@@ -70,8 +71,6 @@ class MyField {
               </Col>
     }
 }
-
-
 
 
 
@@ -125,12 +124,16 @@ const page: FC = () => {
 
     <Container>
 
-      <Row md={8} className='d-flex justify-content-center'>
+      <Row className='d-flex justify-content-center'>
+        <Col md={8} className='d-flex justify-content-center mb-1' style={{padding: '0'}}>
+          <Qrcode />
+        </Col>
+      </Row>
 
+      <Row className='d-flex justify-content-center'>
         <Col md={4} style={{padding: '0'}}>
 
         <div className={styles.bg_left_container}>
-
           <div className={styles.bg_left_wrapper}>
 
               <div className={styles.left_title}>Сервис приема заявок <br></br> в PR-службу</div>
@@ -146,28 +149,19 @@ const page: FC = () => {
                 })
               }
 
-
-
-
           </div>
-
-
         </div>
         
         </Col>
 
 
         <Col md={4} style={{padding: '0'}} className='d-none d-md-block d-lg-block'>
-
           <Image className={styles.bg_right} src={bgImage} alt={''} />
-        
         </Col>
 
 
 
       </Row>
-
-
     </Container>
 
     

@@ -17,6 +17,7 @@ import MySelect from '@/components/UI/MySelect/MySelect'
 import MySelectMulti from '@/components/UI/MySelectMulti/MySelectMulti'
 import MyTextArea from '@/components/UI/MyTextArea/MyTextArea'
 import MyFile from '@/components/UI/MyFile/MyFile'
+import MyCheckBox from '@/components/UI/MyCheckBox/MyCheckBox'
 
 // db
 
@@ -33,6 +34,7 @@ import { postTask } from '@/lib/postTask'
 // data
 
 import { typeSelectorArr } from '@/data/designData'
+import { on } from 'events'
 
 // class
 
@@ -144,6 +146,28 @@ import { typeSelectorArr } from '@/data/designData'
             )
   }
 
+  }
+
+  class MyCheckBoxField {
+    title: string
+    placeholder: string
+    name: string
+    fio: string
+
+    constructor(title: string, placeholder: string, name: string, fio: string) {
+      this.title = title
+      this.placeholder = placeholder
+      this.name = name
+      this.fio = fio
+    }
+
+    createCheckBox(data: any, setData: any): React.ReactNode {
+      return (
+              <Col md={12} className='mt-2 mb-2'>
+                <MyCheckBox name={this.name} fio={this.fio} placeholder={this.placeholder} title={this.title} onChange={(e: any) => {setData(e.target.checked)}} value={data}/>
+              </Col>
+            )
+    }
   }
 
 // selector arr
@@ -290,6 +314,10 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
 
   const currentType = typeSelectorArr.find((type: any) => type.label === design.type)
 
+  function onOffCheckbox (data: any = false, setData: any,  fio: string ) {
+    setData({...data, [fio]: !data[fio]})
+  }
+
 
   
    const submitMessage = async (message: any) => {
@@ -330,7 +358,7 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
         }
 
 
-      
+
         const newData = {
           ...message,
           reconciliator: {
@@ -338,6 +366,8 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
             id: currentType.reconciliator.id,
           },
         }
+
+        console.log(newData)
   
 
         const data = await postTask(newData, department)
@@ -378,10 +408,7 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
           throw new Error(error.message);
         }
       }
-    }
-
-
-
+  }
 
   return (
 
@@ -423,8 +450,6 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
                   {
                     typeSelector.createSelector(design.type, (e: any) => {setDesign({...design, type: e.target.value})})
                   }
-
-                
 
                   {
                     currentField.map((field: any, index: number) => {
@@ -486,6 +511,33 @@ const DesignForms: FC<DesignFormsProps> = ({ departmentData, modalSuccess, modal
                       )
                     })
                   }
+
+
+                  {/* checkboxes */}
+
+
+                  <Row className='d-flex flex-column'>
+                    <Col md={12}>
+                    {new MyCheckBoxField('ГОСУДАРСТВЕННЫЕ И КОРПОРАТИВНЫЕ КЛИЕНТЫ', '', 'Somov', '(Cомов Виталий)')
+                      .createCheckBox(design.somov, (e: any) => {onOffCheckbox(design, setDesign, 'somov')})}
+                    </Col>
+
+                    <Col>
+                    {new MyCheckBoxField('ОБЩЕДОМОВЫЕ УСЛУГИ В МКД (УК)', '', 'Lucinin', '(Лучинин Алексей)')
+                      .createCheckBox(design.lucinin, (e: any) => {onOffCheckbox(design, setDesign, 'lucinin')})}
+                    </Col>
+
+                    <Col>
+                    {new MyCheckBoxField('Средний и малый бизнес Уфанет ТВ', '', 'Kraineva', '(Саша Крайнева)')
+                      .createCheckBox(design.kraineva, (e: any) => {onOffCheckbox(design, setDesign, 'kraineva')})}
+
+                    </Col>
+
+                    <Col>
+                    {new MyCheckBoxField('Внешние клиенты (вне сети)', '', 'Nagaeva', '(Нагаева Валерия)')
+                      .createCheckBox(design.nagaeva, (e: any) => {onOffCheckbox(design, setDesign, 'nagaeva')})}
+                      </Col>
+                  </Row>
 
 
                   <Col md={12} className='mt-3 mb-3'>

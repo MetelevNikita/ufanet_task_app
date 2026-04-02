@@ -16,7 +16,7 @@ import RootContext from "@/utils/RootContext";
 // 
 
 import Header from "@/components/element/Header/Header";
-import Footer from "@/components/element/Footer/Footer";
+import Qrcode from "@/components/element/Qrcode/Qrcode";
 
 
 const montserrat = Montserrat({
@@ -44,7 +44,6 @@ export default function RootLayout({
                 <Suspense fallback={<div>Loading...</div>}>
                     {children}
                 </Suspense>
-            <Footer />
         </RootContext>
         </Container>
       </body>

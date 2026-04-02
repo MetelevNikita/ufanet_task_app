@@ -35,6 +35,7 @@ import { Context } from '@/utils/RootContext'
 // directions
 
 import directions from '@/database/direction.json'
+import Qrcode from '@/components/element/Qrcode/Qrcode'
 
 
 
@@ -48,7 +49,7 @@ const page: FC = () => {
 
 
   // filter state
-  
+
   const [status, setStatus] = useState<string>('')
   const [department, setDepartment] = useState<string | null>(null)
   const [name, setName] = useState<string | null>(null)
@@ -64,8 +65,6 @@ const page: FC = () => {
   }, [])
 
   
-
-
   useEffect(() => {
 
     const currentDepartment = directions.data.find((item: SelectType): Boolean => item.label === department)
@@ -80,7 +79,15 @@ const page: FC = () => {
     const getFilterTasks = async () => {
 
       const data = await getTask()
-      let filter = data
+
+    
+      let filter = data.map((item: any) => {
+        return {
+          ...item,
+          open: false,
+        }
+      })
+
 
       if (department) {
         filter = data.filter((item: {department: string}) => {
@@ -115,80 +122,62 @@ const page: FC = () => {
 
 
 
-  const getCurrentTasks = (name: string): void => {
-
-    const current = tasks.filter((task: any) => {
-      return task.name.toLowerCase() == name.toLowerCase()
-    })
-    setTasks(current)
-  }
-
-
-  console.log(tasks)
-
-
-
-
-
 
   return (
 
 
     <Container>
 
+ 
     <Row className='flex-row'>
 
-    <Col md={3} className='mb-2'>
+      <Col md={3} className='mb-2'>
+        <LeftSideMenu statusData={{status, setStatus}} departmentData={{department, setDepartment}} nameData={{name, setName}}/>
+      </Col>
 
-      <LeftSideMenu statusData={{status, setStatus}} departmentData={{department, setDepartment}} nameData={{name, setName}}/>
-      
-    </Col>
+      {/*  */}
 
-
- 
-
-
-    {/*  */}
-
-
-    <Col md={9} xs={12} className='mb-2 mt-2'>
+      <Col md={9} xs={12} className='mb-2 mt-2'>
     
-      <div className={styles.right_side_container}>
-        <div className={styles.right_side_wrapper}>
+        <div className={styles.right_side_container}>
+          <div className={styles.right_side_wrapper}>
 
 
-          {
-            (!department) ? (
-                <div className={styles.right_side_title}>
-                Выберите отдел для поиска
-                </div>
-            ) : (
-                <div className={styles.right_side_title}>
-                  Выбран
-                  <div className={styles.right_side_subtitle}>
-                    {department}
+            {
+              (!department) ? (
+                  <div className={styles.right_side_title}>
+                  Выберите отдел для поиска
                   </div>
-                </div>
-            )
-          }
-
-
-          {
-              tasks.map((task: any, index: number): React.ReactNode => {
-                return (
-                  <Col className='mb-2 mt-3' key={index+1}>
-                    <SearchElement status={task.status} title={task.title} date={task.deadline} department={task.department} author={task.fio} stage={(task.stage === '') ? '' : task.stage} comment={(task.comment) ? task.comment : null}/>
-                  </Col>
-                  )
-                }
+              ) : (
+                  <div className={styles.right_side_title}>
+                    Выбран
+                    <div className={styles.right_side_subtitle}>
+                      {department}
+                    </div>
+                  </div>
               )
-          } 
+            }
 
 
+            {
+                tasks.map((task: any, index: number): React.ReactNode => {
+                  return (
+                    <Col className='mb-2 mt-3' key={index+1}>
+                      <SearchElement id={task.id} status={task.status} title={task.title} date={task.deadline} department={task.department} author={task.fio} stage={(task.stage === '') ? '' : task.stage} comment={(task.comment) ? task.comment : null} task={{
+                        ...task,
+                        open: false,
+                      }}/>
+                    </Col>
+                    )
+                  }
+                )
+            } 
+
+
+          </div>
         </div>
-      </div>
-    
-    </Col>
+      
+      </Col>
 
     </Row>
 

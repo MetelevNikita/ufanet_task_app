@@ -1,0 +1,62 @@
+.qrcode_wrapper {
+
+  box-shadow: 5px 5px 15px #88888857;
+
+  /*  */
+
+
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  height: max-content;
+
+  padding-left: 15px;
+  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 30px;
+
+
+
+  /*  */
+
+  cursor: pointer;
+
+  /*  */
+
+  margin-left: 10px;
+}
+
+/*  */
+
+
+.qrcode_image {
+  min-width: 100px;
+}
+
+
+.qrcode_info_wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+
+.qrcode_title {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  /*  */
+
+}
+
+
+.qrcode_description {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+}

@@ -52,7 +52,7 @@ const Header: FC<HeaderProps>  = () => {
   return (
 
     <Container>
-      <Row className='d-flex align-items-center justify-content-around mt-4 mb-4' md={4}>
+      <Row className='d-flex align-items-center justify-content-around mt-4 mb-2' md={4}>
 
         <Col md={2} xs={12} className='d-flex flex-md-row flex-column justify-content-start align-items-center mt-2 mb-2'>
               <motion.div whileHover={{scale: 1.05}} whileTap={{scale: 1.15}}><Link href={'/'}><Image src={logo} alt={'logo'} width={120} height={120}/></Link></motion.div>

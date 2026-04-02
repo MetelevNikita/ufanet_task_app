@@ -133,7 +133,7 @@ const page: FC = () => {
 
 
   return (
-      <Container>
+
             <Row className='d-flex flex-row'>
 
 
@@ -264,7 +264,7 @@ const page: FC = () => {
               </Col>
 
             </Row>
-        </Container>
+
   )
 }
 

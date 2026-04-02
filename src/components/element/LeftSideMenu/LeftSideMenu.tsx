@@ -135,6 +135,7 @@ interface LeftSideMenuProps {
 
 const LeftSideMenu: FC<LeftSideMenuProps> = ({ statusData, departmentData, nameData }) => {
 
+
   const [activeMenuDepartment, setActiveMenuDepartment] = useState<string>('')
   const [activeMenuStatus, setActiveMenuStatus] = useState<string>('')
 

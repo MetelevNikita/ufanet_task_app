@@ -27,6 +27,7 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
       stage: 'Не принято'
     }
 
+
     const task = await prisma.task.create({
       data: databaseCard
     })
@@ -43,7 +44,7 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
     
     return {
       success: true,
-      message: `Ошибка создания задачи в базе данных`,
+      message: `Задача в БД создана`,
       data: task
     }
 

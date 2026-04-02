@@ -1,0 +1,55 @@
+.input_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input_text_container {
+  display: flex;
+
+}
+
+
+.input_title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.input_fio {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fc9b32;
+
+  /*  */
+
+  margin-left: 10px;
+}
+
+.input_text {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background: #fff;
+  transition: 0.15s;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.input_text:checked {
+  background: #fc9b32;
+  border-color: #fc9b32;
+}
+
+.input_text:focus-visible {
+  outline: 3px solid rgba(255, 0, 0, 0.3);
+  outline-offset: 2px;
+}
+
+
+
+
+

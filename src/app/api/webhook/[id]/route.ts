@@ -271,7 +271,9 @@ export const POST = async (req: Request) => {
     let messageFromUser = '';
 
     if (!findColumn?.title) {
-        return;
+      return NextResponse.json({
+        message: 'не найдена колонка для перемещеня'
+      }, {status: 200})
     }
 
     if (findColumn.title === 'Согласовано' || findColumn.title === 'Не согласовано') {

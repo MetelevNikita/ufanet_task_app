@@ -183,7 +183,6 @@ async function resultTgMessage (tgId: string, message: string) {
     
   } catch (error: Error | unknown) {
 
-
     if (error instanceof Error) {
       console.error(`Проверочное сообщение не отпралено. Указан не верный Telegram Id или вы не подписались на бота ${error.message}`)
       return {
@@ -209,8 +208,6 @@ async function resultTgMessage (tgId: string, message: string) {
 export const POST = async (req: Request, context: {params: {department: string}}) => {
   try {
 
-
-
     console.log('Начинаем обработку данных')
 
     const { department } = await context.params 
@@ -229,7 +226,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
 
     console.log('Проверочная отправка данных в ТГ')
-
 
     const examination = await resultTgMessage(formData.tgId, 'Проверяем подписаны ли вы на бота Pr-tz.ru')
 
@@ -307,13 +303,11 @@ export const POST = async (req: Request, context: {params: {department: string}}
     } else {
 
       data = {...message}
-
     }
 
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
 
-    //
 
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
     console.log('YG ', newTaskYougile)
@@ -335,7 +329,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const newDatabaseTask = await createDBTask(ygId, departmentLabel, data)
     console.log('DB ', newDatabaseTask)
 
-    if (!newDatabaseTask.success) {
+    if (!newDatabaseTask?.success) {
       return NextResponse.json({
         success: false,
         message: `Ошибка создания задачи в базе данных`
