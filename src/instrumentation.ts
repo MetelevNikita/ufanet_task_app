@@ -104,7 +104,12 @@ export const register = async () => {
     ])
 
     console.log('Приложение запущено')
-  } catch (error) {
-    console.error(`Ошибка запуска функций при старте программы`)
+  } catch (error: Error | unknown) {
+
+    if (error instanceof Error) {
+      console.error(`Ошибка запуска функций при старте программы ${error.message}`)
+    } else {
+      console.error(`Неизвестная ошибка`)
+    }
   }
 }

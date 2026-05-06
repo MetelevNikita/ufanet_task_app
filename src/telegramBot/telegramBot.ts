@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import path from 'path'
 import TelegramBot from 'node-telegram-bot-api'
+import { SocksProxyAgent } from 'socks-proxy-agent'
 
 // YG
 
@@ -187,6 +188,28 @@ declare global {
 export {};
 
 
+// proxy
+
+
+const proxyHost = process.env.PROXY_SOCKS5_HOST
+const proxyPort = process.env.PROXY_SOCKS5_PORT || '1080'
+const proxyUser = process.env.PROXY_SOCKS5_USERNAME
+const proxyPass = process.env.PROXY_SOCKS5_PASSWORD
+
+const proxyAuth =
+  proxyUser && proxyPass
+    ? `${encodeURIComponent(proxyUser)}:${encodeURIComponent(proxyPass)}@`
+    : ''
+
+const telegramAgent = proxyHost
+  ? new SocksProxyAgent(`socks5h://${proxyAuth}${proxyHost}:${proxyPort}`)
+  : undefined
+
+  // 
+
+
+
+
 
 const token = process.env.TG_TOKEN;
 if (!token) throw new Error('TOKEN телеграмма не найден');
@@ -206,10 +229,31 @@ export const getBot = async () => {
   if (!creatingBotCashe) {
     creatingBotCashe = (async () => {
 
-      const bot = new TelegramBot(token as string, { polling: false });
+      const bot = new TelegramBot(token as string, {
+        polling: false,
+        request: telegramAgent ? ({ agent: telegramAgent } as any) : undefined,
+      });
+
+      // Статус
+
+      bot.getMe()
+        .then((botInfo) => {
+          console.log(`Бот подключен: @${botInfo.username}`)
+        })
+        .catch((error) => {
+          console.error('Бот не подключился:', error)
+        })
+
+      bot.on('polling_error', (error) => {
+        console.error('Polling error:', error.message)
+      })
+
+      bot.on('error', (error) => {
+        console.error('Bot error:', error)
+      })
 
 
-  // подписываемся на сообщения только один раз
+      // подписываемся на сообщения только один раз
 
       if (bot.listenerCount('message') === 0) {
 
@@ -363,6 +407,8 @@ export const getBot = async () => {
 
           }
         })
+
+
       }
 
 
