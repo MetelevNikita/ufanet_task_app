@@ -470,12 +470,12 @@ export const POST = async (req: NextRequest) => {
 
                   //
 
-                  // try {
-                  //   await bot.sendMessage(id, message)
-                  //   console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
-                  // } catch (error) {
-                  //   console.error('Ошибка отправки сообщения в телеграм')
-                  // }
+                  try {
+                    await bot.sendMessage(id, message)
+                    console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
+                  } catch (error) {
+                    console.error('Ошибка отправки сообщения в телеграм')
+                  }
 
                   // 
 
