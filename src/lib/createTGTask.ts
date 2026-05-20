@@ -7,8 +7,6 @@ export const createTGTask = async (department: string, descriptionTask: string, 
   const buildCB = (status: string, department: string, cardId: string ) => `${status}|${department}|${taskDB.id}`
 
   console.log('WORK TG')
-  console.log(tgIdGroup)
-
 
   try {
 

@@ -1,9 +1,9 @@
 export const prMessage = async (department: string, data: any): Promise<any> => {
   const headYG = (extra: string) =>
-    `Отдел — ${department}<br><br>Имя — ${data.fio}<br><br>Город — ${data.branch}<br><br>Отдел автора — ${data.subdivision}<br><br>Телеграм id - ${data.tgId}<br><br>Тип заявки — ${data.type}<br><br>${extra}`;
+    `Дата создания - ${data.dateCreated}<br><br>Отдел — ${department}<br><br>Имя — ${data.fio}<br><br>Город — ${data.branch}<br><br>Отдел автора — ${data.subdivision}<br><br>Телеграм id - ${data.tgId}<br><br>Тип заявки — ${data.type}<br><br>${extra}`;
 
   const headTG = (extra: string) =>
-    `Отдел — ${department}\n\nИмя — ${data.fio}\n\nГород — ${data.branch}\n\nОтдел автора — ${data.subdivision}\n\nТелеграм id - ${data.tgId}\n\nТип заявки — ${data.type}\n\n${extra}`;
+    `Дата создания - ${data.dateCreated}\n\nОтдел — ${department}\n\nИмя — ${data.fio}\n\nГород — ${data.branch}\n\nОтдел автора — ${data.subdivision}\n\nТелеграм id - ${data.tgId}\n\nТип заявки — ${data.type}\n\n${extra}`;
 
   const row = (label: string, v?: any, br = '<br>') =>
     v ? `${label} ${v}${br}` : '';

@@ -174,7 +174,7 @@ async function resultTgMessage (tgId: string, message: string) {
 
     const bot = await getBot()
 
-    await bot.sendMessage(tgId, message)
+    await bot.sendMessage(tgId, message, {parse_mode: 'HTML'})
     return {
       success: true,
       message: `Проверочное сообщение отправлено`,
@@ -298,11 +298,15 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
       data = {
         ...message,
-        title: `TЗ № ${designId} ${message.title}`
+        title: `TЗ № ${designId} ${message.title}`,
+        dateCreated: new Date().toLocaleDateString('RU-ru')
       }
     } else {
 
-      data = {...message}
+      data = {
+        ...message,
+        dateCreated: new Date().toLocaleDateString('RU-ru')
+      }
     }
 
 
@@ -353,12 +357,15 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
 
-    const ResultMessage = await resultTgMessage(formData.tgId, `Задача ${newDatabaseTask?.data?.title ?? ''} на сайте pr-tz.ru успешно создана`)
+    const resultMessage = await resultTgMessage(formData.tgId, `Задача ${newDatabaseTask?.data?.title ?? ''} на сайте pr-tz.ru успешно создана\n\n${messageTG}`)
+    console.log(resultMessage)
 
     return NextResponse.json({
       success: true,
       message: `Сообщение в отдел ${department} отправлено на согласование`
     }, { status: 200 });
+    
+
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {

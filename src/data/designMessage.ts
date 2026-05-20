@@ -4,6 +4,7 @@ import {createImageMessageList} from '@/lib/createImageMessageList'
 
 export const designMessage = async (department: string, data: any): Promise<{messageYG:string;messageTG:string}> => {
   const headYG = (extra: string) =>
+    `Дата создания - ${data.dateCreated}<br><br>` +
     `Отдел - ${department}<br><br>` +
     `Имя - ${data.fio}<br><br>` +
     `Город - ${data.branch}<br><br>` +
@@ -12,6 +13,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
     `Тип работы - ${data.type}<br><br>${extra}`;
 
   const headTG = (extra: string) =>
+    `Дата создания - ${data.dateCreated}\n\n` +
     `Отдел - ${department}\n\n` +
     `Имя - ${data.fio}\n\n` +
     `Город - ${data.branch}\n\n` +
