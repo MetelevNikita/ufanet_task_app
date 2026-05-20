@@ -3,7 +3,7 @@ import { PrismaClient } from "../../../../../generated/prisma";
 
 // tg bot
 
-// import { getBot } from '@/telegramBot/telegramBot'
+import { getBot } from '@/telegramBot/telegramBot'
 
 // 
 
@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 
 // 
 
-// const bot = await getBot()
+const bot = await getBot()
 
 // 
 
@@ -376,12 +376,12 @@ export const POST = async (req: NextRequest) => {
 
             // send author 
 
-            // try {
-            //   await bot.sendMessage(id, message)
-            //   console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
-            // } catch (error) {
-            //   console.error('Ошибка отправки сообщения в телеграм')
-            // }
+            try {
+              await bot.sendMessage(id, message)
+              console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
+            } catch (error) {
+              console.error('Ошибка отправки сообщения в телеграм')
+            }
 
 
             return NextResponse.json({
@@ -434,12 +434,12 @@ export const POST = async (req: NextRequest) => {
 
                   // 
 
-                  // try {
-                  //   await bot.sendMessage(id, message)
-                  //   console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
-                  // } catch (error) {
-                  //   console.error('Ошибка отправки сообщения в телеграм')
-                  // }
+                  try {
+                    await bot.sendMessage(id, message)
+                    console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
+                  } catch (error) {
+                    console.error('Ошибка отправки сообщения в телеграм')
+                  }
 
 
                   return NextResponse.json({

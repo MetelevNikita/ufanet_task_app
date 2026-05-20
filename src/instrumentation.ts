@@ -97,7 +97,7 @@ export const getYGData = async () => {
 export const register = async () => {
   try {
     await Promise.all([
-      // await registerBot(),
+      await registerBot(),
       await getYGData(),
       await getAllWebHooks(),
       await getYouGileWebHook()
