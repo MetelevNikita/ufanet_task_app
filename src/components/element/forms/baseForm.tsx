@@ -366,7 +366,7 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
 
   }
 
-
+  console.log(formData)
 
 
 

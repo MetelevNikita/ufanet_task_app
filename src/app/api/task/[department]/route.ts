@@ -300,7 +300,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
       data = {
         ...message,
-        type_approval: message.type_approval.label,
+        type_approval: formData.type_approval.label,
         title: `TЗ № ${designId} ${message.title}`,
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
@@ -312,6 +312,9 @@ export const POST = async (req: Request, context: {params: {department: string}}
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
     }
+
+
+    console.log('DATA FROM ROUTE ', data)
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
 
