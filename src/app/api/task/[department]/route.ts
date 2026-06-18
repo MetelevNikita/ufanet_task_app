@@ -226,9 +226,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const departmentLabel = currentDepartment.label
     const formData = await req.json()
 
-
-    console.log('FORM DATA ', formData)
-
     console.log('Проверочная отправка данных в ТГ')
 
     const examination = await resultTgMessage(formData.tgId, 'Проверяем подписаны ли вы на бота Pr-tz.ru')
@@ -337,8 +334,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     //
 
     const newDatabaseTask = await createDBTask(ygId, departmentLabel, data)
-    console.log('DB ', newDatabaseTask)
-
     if (!newDatabaseTask?.success) {
       return NextResponse.json({
         success: false,
@@ -355,11 +350,9 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     let TelegramRes;
 
-    if (departmentLabel === 'Отдел дизайна' && message.type_approval.label === 'Продвижение услуг компании') {
+    if (departmentLabel === 'Отдел дизайна' && message.type_approval.label === 'Служба развития коммерческих продуктов') {
 
       TelegramRes = await createTGsubTaskGroup(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id, formData.type_approval.idTg)
-
-
       console.log('TG ', TelegramRes)
 
       if (!TelegramRes.success) {
