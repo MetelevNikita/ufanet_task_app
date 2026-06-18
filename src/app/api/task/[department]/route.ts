@@ -226,6 +226,9 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const departmentLabel = currentDepartment.label
     const formData = await req.json()
 
+
+    console.log('FORM DATA ', formData)
+
     console.log('Проверочная отправка данных в ТГ')
 
     const examination = await resultTgMessage(formData.tgId, 'Проверяем подписаны ли вы на бота Pr-tz.ru')
@@ -312,9 +315,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
     }
-
-
-    console.log('DATA FROM ROUTE ', data)
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
 
