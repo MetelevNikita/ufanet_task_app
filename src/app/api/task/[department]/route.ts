@@ -300,7 +300,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
       data = {
         ...message,
-        type_approval: formData.type_approval.label,
+        type_approval: 'Служба развития коммерческих продуктов',
         title: `TЗ № ${designId} ${message.title}`,
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }

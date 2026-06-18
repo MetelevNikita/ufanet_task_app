@@ -254,8 +254,8 @@ const branchSelectorsArr: MenuType[] = [
 const designApprovalSelector: any[] = [
   {
     id: 1,
-    label: 'Служба развития коммерческих продуктов',
-    value: 'Служба развития коммерческих продуктов',
+    label: 'Продвижение услуг компании',
+    value: 'Продвижение услуг компании',
     idTg: process.env.NEXT_PUBLIC_TG_SUB_GROUP_DES
   },
   {
