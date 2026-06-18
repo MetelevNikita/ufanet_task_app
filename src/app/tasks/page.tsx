@@ -25,7 +25,6 @@ import { getTask } from '@/lib/getTask'
 
 // types
 
-import { TaskType } from '@/types/types'
 import { SelectType } from '@/types/types'
 
 // context
@@ -36,6 +35,7 @@ import { Context } from '@/utils/RootContext'
 
 import directions from '@/database/direction.json'
 import Qrcode from '@/components/element/Qrcode/Qrcode'
+import { IoTerminalOutline } from 'react-icons/io5'
 
 
 
@@ -64,8 +64,32 @@ const page: FC = () => {
     setPath(pathname)
   }, [])
 
+
   
   useEffect(() => {
+
+    console.log('useEffect отработал')
+
+    async function getAllTask () {
+      const data = await getTask()
+
+      let taskModified = data.map((item: any) => {
+        return {
+          ...item,
+          open: false,
+        }
+      }).sort((a: any, b: any) => b.id - a.id)
+
+      console.log(taskModified)
+
+      setTasks(taskModified)
+
+    }
+
+
+    getAllTask()
+    console.log(tasks)
+   
 
     const currentDepartment = directions.data.find((item: SelectType): Boolean => item.label === department)
 
@@ -86,7 +110,7 @@ const page: FC = () => {
           ...item,
           open: false,
         }
-      })
+      }).sort((a: any, b: any) => b.id - a.id)
 
 
       if (department) {
@@ -163,7 +187,7 @@ const page: FC = () => {
                 tasks.map((task: any, index: number): React.ReactNode => {
                   return (
                     <Col className='mb-2 mt-3' key={index+1}>
-                      <SearchElement id={task.id} status={task.status} title={task.title} date={task.deadline} department={task.department} author={task.fio} stage={(task.stage === '') ? '' : task.stage} comment={(task.comment) ? task.comment : null} task={{
+                      <SearchElement id={task.id} status={task.status} title={task.title} date={task.createAt} department={task.department} author={task.fio} stage={(task.stage === '') ? '' : task.stage} comment={(task.comment) ? task.comment : null} task={{
                         ...task,
                         open: false,
                       }}/>

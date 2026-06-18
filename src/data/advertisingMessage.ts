@@ -2,11 +2,11 @@ import {createImageMessageList} from '@/lib/createImageMessageList'
 
 export const advertisingMessage = async (department: string, data: any): Promise<any> => {
   const headYG = (extra: string) =>
-    `Дата создания - ${data.dateCreated}<br><br>Отдел - ${department}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id - ${data.tgId}<br><br>Тип услуги - ${data.type}<br><br>${extra}`;
+    `Дата создания - ${data.dateCreated}<br><br>Отдел - ${data.department}<br><br>Тип Задачи - ${data.type}<br><br>Имя - ${data.fio}<br><br>Город - ${data.branch}<br><br>Отдел автора - ${data.subdivision}<br><br>Телеграм id - ${data.tgId}<br><br>Тип услуги - ${data.type}<br><br>${extra}`;
 
 
   const headTG = (extra: string) =>
-    `Дата создания - ${data.dateCreated}\n\nОтдел - ${department}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.type}\n\n${extra}`;
+    `Дата создания - ${data.dateCreated}\n\nОтдел: ${data.department}\n\nТип Задачи ${data.type}\n\nИмя - ${data.fio}\n\nГород - ${data.branch}\n\nОтдел автора - ${data.subdivision}\n\nТелеграм id  - ${data.tgId}\n\nТип услуги - ${data.type}\n\n${extra}`;
 
   // удобный хелпер: строка поля, если оно есть
   const row = (label: string, v?: any, br = '<br>') =>
@@ -20,11 +20,13 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Название проекта:</strong><br>', data.title, '<br><br>') +
       row(`<strong>Первичное описание проекта</strong><br>`, data.description || '', '<br><br>') +
       row('<strong>Желаемая дата сдачи:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Дополнительно:</strong><br>', data.extra);
 
     const bodyTG =
       row('Название проекта:', data.title, '\n') +
       row(`Первичное описание проекта`, data.description || '', '\n') +
       row('Желаемая дата сдачи:', data.deadline, '\n');
+      row('Дополнительно:', data.extra, '\n');
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
@@ -33,25 +35,27 @@ export const advertisingMessage = async (department: string, data: any): Promise
     const bodyYG =
       row('<strong>Название:</strong><br>', data.title, '<br><br>') +
       row('<strong>Изделие:</strong><br>', data.view, '<br><br>') +
+      row('<strong>Количество (из графы "Изделие"):</strong><br>', data.view_qty, '<br><br>') +
       row('<strong>Размер:</strong><br>', data.size, '<br><br>') +
       row('<strong>Другое:</strong><br>', data.size_other, '<br><br>') +
+      row('<strong>Укажите особенности макета:</strong><br>', data.note, '<br><br>') +
       row('<strong>Ориентация:</strong><br>', data.orientation, '<br><br>') +
-
       row('<strong>Файл макета:</strong><br>', `Список`, '<br><br>') +
       createImageMessageList('yg', data.maket_file) +
-
-      row('<strong>Дата сдачи:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Дата сдачи:</strong><br>', new Date(data.deadline_making).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
     const bodyTG =
       row('Название:', data.title, '\n') +
       row('Изделие:', data.view, '\n') +
+      row('Количество (из графы "Изделие"):', data.view_qty, '\n') +
       row('Размер:', data.size, '\n') +
       row('Другое:', data.size_other, '\n') +
       row('Ориентация:', data.orientation, '\n') +
-
       row('Файл макета:', `Список`, '\n') +
       createImageMessageList('tg', data.maket_file) +
-
-      row('Дата сдачи:', data.deadline, '\n');
+      row('Ососбенности макета:', data.note, '\n') +
+      row('Дата сдачи:', new Date(data.deadline_making).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
@@ -64,14 +68,12 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Даты и время:</strong><br>', data.dates, '<br><br>') +
       row('<strong>Адрес/место проведения:</strong><br>', data.place, '<br><br>') +
       row('<strong>Предварительная смета:</strong><br>', data.budget, '<br><br>') +
-
       row('<strong>Файл сметы:</strong><br>', `Список`, '<br><br>') +
       createImageMessageList('yg', data.smeta_file) +
-
       row('<strong>Дополнительные файлы</strong><br>', `Список`, '<br><br>') +
       createImageMessageList('yg', data.additionally_file) +
-
-      row('<strong>Дата готовности ТЗ:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Дата готовности ТЗ:</strong><br>', new Date(data.deadline_event).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название:', data.title, '\n') +
@@ -80,14 +82,12 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Даты и время:', data.dates, '\n') +
       row('Адрес/место проведения:', data.place, '\n') +
       row('Предварительная смета:', data.budget, '\n') +
-
       row('Файл сметы:</strong>', `Список`, '\n') +
       createImageMessageList('tg', data.smeta_file) +
-
       row('Дополнительные файлы', `Список`, '\n') +
       createImageMessageList('tg', data.additionally_file) +
-
-      row('Дата готовности ТЗ:', data.deadline, '\n');
+      row('Дата готовности ТЗ:', new Date(data.deadline_event).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -99,27 +99,25 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Описание/назначение оплаты:</strong><br>', data.description, '<br><br>') +
       row('<strong>Поставщик:</strong><br>', data.vendor, '<br><br>') +
       row('<strong>Сумма и валюта:</strong><br>', data.amount, '<br><br>') +
-
       row('<strong>Файл счета:</strong><br>', `Список`, '<br><br>') +
       createImageMessageList('yg', data.check_file) +
-
-
       row('<strong>Ссылка на счет:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.invoiceLink}>${data.invoiceLink}</a>`, '<br><br>') +
       row('<strong>Комментарий:</strong><br>', data.comment, '<br><br>') +
-      row('<strong>Срок оплаты:</strong><br>', data.deadline, '<br><br>')
+      row('<strong>Срок оплаты:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название:', data.title, '\n') +
       row('Описание/назначение оплаты:', data.description, '\n') +
       row('Поставщик:', data.vendor, '\n') +
       row('Сумма и валюта:', data.amount, '\n') +
-
       row('Файл счета:', `Список`, '\n') +
       createImageMessageList('tg', data.check_file) +
-
       row('Ссылка на счет:', data.invoiceLink, '\n') +
       row('Комментарий:', data.comment, '\n') +
-      row('Срок оплаты:', data.deadline, '\n')
+      row('Срок оплаты:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
+      
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -130,23 +128,21 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Название:</strong><br>', data.title, '<br><br>') +
       row('<strong>Предмет договора:</strong><br>', data.subject, '<br><br>') +
       row('<strong>Цель/описание:</strong><br>', data.description, '<br><br>') +
-
       row('<strong>Файл проекта договора:</strong><br>', `Список`, '<br><br>') +
       createImageMessageList('yg', data.document_file) +
-
       row('<strong>Контакт контрагента:</strong><br>', data.counterparty, '<br><br>') +
-      row('<strong>Сроки:</strong><br>', data.deadline)
+      row('<strong>Сроки:</strong><br>', new Date(data.deadline_agreement).toLocaleDateString('RU-ru')) +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название:', data.title, '\n') +
       row('Предмет договора:', data.subject, '\n') +
       row('Цель/описание:', data.description, '\n') +
-
       row('Файл проекта договора:', `Список`, '\n') +
       createImageMessageList('tg', data.document_file) +
-
       row('Контакт контрагента:', data.counterparty, '\n') +
-      row('Сроки:', data.deadline)
+      row('Сроки:', new Date(data.deadline_agreement).toLocaleDateString('RU-ru'))
+      row('Дополнительно:', data.extra, '\n');
 
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
@@ -156,15 +152,22 @@ export const advertisingMessage = async (department: string, data: any): Promise
   // 6) ТМЦ/реквизит
   if (type === 'Заявка на ТМЦ/реквизит' || data.value === 'props') {
     const bodyYG =
-      row('<strong>Где будет использоваться:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Название проекта/мероприятия:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Где будет использоваться:</strong><br>', data.using, '<br><br>') +
       row('<strong>Что нужно и количество:</strong><br>', data.what, '<br><br>') +
-      row('<strong>Сроки:</strong><br>', data.deadline, '<br><br>')
+      row('<strong>Сроки:</strong><br>', new Date(data.deadline_props).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Время получения:</strong><br>', data.time_slot, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
 
     const bodyTG =
-      row('Где будет использоваться:', data.title, '\n') +
+      row('Название проекта/мероприятия:', data.title, '\n') +
+      row('Где будет использоваться:', data.using, '\n') +
       row('Что нужно и количество:', data.what, '\n') +
-      row('Сроки:', data.deadline, '\n')
+      row('Сроки:', new Date(data.deadline_props).toLocaleDateString('RU-ru'), '\n') +
+      row('Время получения:', data.time_slot, '\n') +
+      row('Дополнительно:', data.extra, '\n');
+      
 
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
@@ -183,21 +186,22 @@ export const advertisingMessage = async (department: string, data: any): Promise
 
       row('<strong>Список награждаемых:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.awarded_file}>${data.awarded_file}</a>`, '<br><br>') +
       row('<strong>Количество:</strong><br>', data.qty, '<br><br>') +
-      row('<strong>Сроки:</strong><br>', data.deadline, '<br><br>')
+      row('<strong>Дата мероприятия:</strong><br>', new Date(data.event).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Сроки:</strong><br>', new Date(data.deadline_merch).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название:', data.title, '\n') +
       row('Описание/повод:', data.description, '\n') +
       row('Индивидуальный заказ:', data.category, '\n') +
       row('Цвет:', data.color, '\n') +
-
       row('Макет', `Список`, '\n') +
       createImageMessageList('tg', data.maket_file) +
-
-
       row('Список награждаемых:', data.awarded_file, '\n') +
       row('Количество:', data.qty, '\n') +
-      row('Сроки:', data.deadline, '\n')
+      row('Дата мероприятия:', new Date(data.event).toLocaleDateString('RU-ru'), '\n') +
+      row('Сроки:', new Date(data.deadline_merch).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -210,7 +214,10 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Вид одежды:</strong><br>', data.clothes_type, '<br><br>') +
       row('<strong>Размеры и количества:</strong><br>', data.sizes, '<br><br>') +
       row('<strong>Примечание:</strong><br>', data.note, '<br><br>') +
-      row('<strong>Дата готовности:</strong><br>', data.deadline, '<br><br>')
+      row('<strong>Дата получения:</strong><br>', new Date(data.deadline_cloth).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Время получения:</strong><br>', data.time_slot, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
+
 
     const bodyTG =
       row('Название:', data.title, '\n') +
@@ -218,7 +225,9 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Вид одежды:', data.clothes_type, '\n') +
       row('Размеры и количества:', data.sizes, '\n') +
       row('Примечание:', data.note, '\n') +
-      row('Дата готовности:', data.deadline, '\n')
+      row('Дата получения:', new Date(data.deadline_cloth).toLocaleDateString('RU-ru'), '\n')
+      row('Время получения:', data.time_slot, '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -231,15 +240,19 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Ссылка на товар:</strong><br>', `<a target="_blank" rel="noopener noreferrer" href=${data.link}>${data.link}</a>`,  '<br><br>') +
       row('<strong>Количество:</strong><br>', data.qty, '<br><br>') +
       row('<strong>Примечания:</strong><br>', data.notes, '<br><br>') +
-      row('<strong>Дата получения</strong><br>', data.deadline, '<br><br>')
+      row('<strong>Дата получения</strong><br>', new Date(data.deadline_marketplace).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название:', data.title, '\n') +
       row('Цель покупки:', data.purpose, '\n') +
       row('Ссылка на товар:', data.link, '\n') +
       row('Количество:', data.qty, '\n') +
-      row('Примечания:', data.notes, '\n')
-      row('Дата получения', data.deadline, '\n')
+      row('Примечания:', data.notes, '\n') +
+      row('Дата получения', new Date(data.deadline_marketplace).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
+      
+
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }

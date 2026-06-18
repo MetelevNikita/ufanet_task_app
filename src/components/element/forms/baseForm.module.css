@@ -1,0 +1,36 @@
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #80298D;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: #FF6600;
+}
+
+.tg_id_info {
+  font-size: 14px;
+  font-weight: 500;
+  color: #80298D
+}
+
+
+.type_product_title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/*  */
+
+
+.info_title {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}

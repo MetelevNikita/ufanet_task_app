@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useContext, useEffect } from 'react'
+import { FC, useContext, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
@@ -40,6 +40,11 @@ import Qrcode from '@/components/element/Qrcode/Qrcode'
 import MyButton from '@/components/UI/MyButton/MyButton'
 
 
+// startModal
+
+import ModalInfo from '@/components/modals/ModalInfo/modalInfo'
+import { BsInfoCircle } from "react-icons/bs";
+
 // menu
 
 
@@ -77,11 +82,18 @@ class MyField {
 const page: FC = () => {
 
   const {path, setPath} = useContext(Context)
+  const [modalOn, setModalOn] = useState<boolean>(false)
 
   // 
 
   useEffect(() => {
     setPath('/')
+  }, [])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setModalOn(true)
+    }, 2000)
   }, [])
 
   const router = useRouter()
@@ -123,6 +135,25 @@ const page: FC = () => {
 
 
     <Container>
+
+      {
+        (modalOn) && (
+          <Row>
+            <Col>
+
+              <ModalInfo
+                title={'Перед заполнением заявки просьба подписаться на бота'}
+                link={'PR_main_bot'}
+                image={<BsInfoCircle style={{width: '60px', color: '#FC9B32'}}/>}
+                btnTitleOne={'Заркыть'}
+                onClickOne={() => {
+                  setModalOn(false)
+                  }}/>
+            
+            </Col>
+          </Row>
+        )
+      }
 
       <Row className='d-flex justify-content-center'>
         <Col md={8} className='d-flex justify-content-center mb-1' style={{padding: '0'}}>

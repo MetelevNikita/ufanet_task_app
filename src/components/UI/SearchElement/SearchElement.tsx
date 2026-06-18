@@ -36,7 +36,7 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
   const [currentTask, setCurrentTask] = useState<any | null>(null)
   const [open, setOpen] = useState<boolean>(false)
 
-  const newDate = new Date(date).toLocaleDateString()
+  const newDate = (!date) ? '' : new Date(date).toLocaleDateString('RU-ru')
   let statusText = ``
   let statusColor = ''
 
@@ -155,7 +155,7 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
             </Col>
 
             <Col md={2} className='d-flex justify-content-center mt-1 mb-1'>
-              <div className={styles.search_status_date}>Дата: {newDate}</div>
+              <div className={styles.search_status_date}>Дата создания: {newDate}</div>
             </Col>
 
             <Col md={1} className='d-flex justify-content-center'>

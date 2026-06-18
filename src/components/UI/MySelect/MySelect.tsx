@@ -10,7 +10,6 @@ import styles from './MySelect.module.css'
 // type
 
 import { SelectType } from '@/types/types'
-import { div } from 'motion/react-client';
 
 // 
 
@@ -30,7 +29,8 @@ const MySelect: FC<MySelectProps> = ({title, options, name, value, onChange }) =
 
     <div className={styles.select_container}>
       <span className={styles.select_title}>{title}</span>
-      <select name={name} className={styles.select} value={value} onChange={onChange}>
+      <select name={name} className={styles.select} value={value} onChange={onChange} defaultValue={""}>
+        <option value={""} disabled>Выберите значение</option>
 
         {
           options.map((item: SelectType, index: number) => {

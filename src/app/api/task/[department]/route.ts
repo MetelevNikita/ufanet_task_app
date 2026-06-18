@@ -24,6 +24,8 @@ import { PrismaClient } from "@/../generated/prisma/client";
 
 import { createYGTask } from "@/lib/createYGTask";
 import { createTGTask } from "@/lib/createTGTask";
+import { createTGsubTaskGroup } from "@/lib/createTGsubTaskGroup";
+
 import { createDBTask } from "@/lib/createDBTask";
 
 // 
@@ -169,12 +171,13 @@ const createTGPhoto = async (department: string, data: any, descriptionTask: str
 
 // 
 
+
 async function resultTgMessage (tgId: string, message: string) {
   try {
 
     const bot = await getBot()
 
-    await bot.sendMessage(tgId, message, {parse_mode: 'HTML'})
+    await bot.sendMessage(tgId, message)
     return {
       success: true,
       message: `Проверочное сообщение отправлено`,
@@ -223,8 +226,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const departmentLabel = currentDepartment.label
     const formData = await req.json()
 
-
-
     console.log('Проверочная отправка данных в ТГ')
 
     const examination = await resultTgMessage(formData.tgId, 'Проверяем подписаны ли вы на бота Pr-tz.ru')
@@ -235,7 +236,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
         message: `Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)`
       });
     }
-
 
     // 
 
@@ -285,8 +285,9 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     // message
 
-
     if (departmentLabel === 'Отдел дизайна') {
+
+      console.log('Создаем в дизайне')
 
       const taskDesign = await prisma.task.findMany({
         where: {
@@ -294,10 +295,12 @@ export const POST = async (req: Request, context: {params: {department: string}}
         }
       })
 
+
       const designId = taskDesign.length + 54
 
       data = {
         ...message,
+        type_approval: message.type_approval.label,
         title: `TЗ № ${designId} ${message.title}`,
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
@@ -305,17 +308,17 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
       data = {
         ...message,
+        type_approval: "",
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
     }
 
-
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
+
+    console.log('# Создаем в YouGile')
 
 
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
-    console.log('YG ', newTaskYougile)
-
 
     if (!newTaskYougile.success) {
       return NextResponse.json({
@@ -327,7 +330,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     const ygId = newTaskYougile.data.id
     console.info(`Задача в YouGile Создана ${ygId}`)
-
+        
     //
 
     const newDatabaseTask = await createDBTask(ygId, departmentLabel, data)
@@ -345,20 +348,47 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     //
 
-    const TelegramRes = await createTGTask(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id)
-    console.log('TG ', TelegramRes)
+    console.log('# Создаем в телеграм')
 
-    if (!TelegramRes.success) {
-      return NextResponse.json({
-        success: false,
-        message: `Ошибка создания задачи в телеграмм`
-      }, { status: 500 });
+    let TelegramRes;
+
+    if (departmentLabel === 'Отдел дизайна' && message.type_approval.label === 'Продвижение услуг компании') {
+
+      TelegramRes = await createTGsubTaskGroup(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id, formData.type_approval.idTg)
+
+
+      console.log('TG ', TelegramRes)
+
+      if (!TelegramRes.success) {
+        return NextResponse.json({
+          success: false,
+          message: `Ошибка создания задачи в телеграмм`
+        }, { status: 500 });
+      }
+
+      console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
+
+      const resultMessage = await resultTgMessage(formData.tgId, `Задача ${newDatabaseTask?.data?.title ?? ''} на сайте pr-tz.ru успешно создана и отправлена на предварительное согласование в отдела "Продвижение услуг компании"\n\n${messageTG}`)
+      console.log(resultMessage)
+
+    } else {
+
+      TelegramRes = await createTGTask(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id, '')
+
+      console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
+
+      const resultMessage = await resultTgMessage(formData.tgId, `Задача ${newDatabaseTask?.data?.title ?? ''} на сайте pr-tz.ru успешно создана\n\n${messageTG}`)
+      console.log(resultMessage)
+
+      if (!TelegramRes.success) {
+        return NextResponse.json({
+          success: false,
+          message: `Ошибка создания задачи в телеграмм`
+        }, { status: 500 });
+      }
     }
 
-    console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
 
-    const resultMessage = await resultTgMessage(formData.tgId, `Задача ${newDatabaseTask?.data?.title ?? ''} на сайте pr-tz.ru успешно создана\n\n${messageTG}`)
-    console.log(resultMessage)
 
     return NextResponse.json({
       success: true,

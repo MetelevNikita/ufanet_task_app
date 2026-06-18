@@ -43,6 +43,7 @@ const MyInput:FC<MyInputProps> = ({ type, title, placeholder, onChange, value, n
 
     <div className={styles.input_container}>
       <span className={styles.input_title}>{title}</span>
+
       <input style={errorField} name={name} className={styles.input_text} type={type} placeholder={placeholder} value={value ?? ''} onChange={onChange} required={true}/>
     </div>
 

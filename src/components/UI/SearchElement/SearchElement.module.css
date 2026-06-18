@@ -123,7 +123,7 @@
 .search_status_date {
   width: 100%;
   height: max-content;
-  font-size: 12px;
+  font-size: clamp(6px, 4vw, 12px)
 }
 
 .search_status_arrow {

@@ -1,7 +1,11 @@
 import dotenv from 'dotenv'
-import path from 'path'
 import TelegramBot from 'node-telegram-bot-api'
 import { SocksProxyAgent } from 'socks-proxy-agent'
+import { PrismaClient } from "@/../generated/prisma/client";
+
+// lib
+
+import { createMessageTgYG } from '@/lib/createMessageTgYG';
 
 // YG
 
@@ -208,7 +212,7 @@ const telegramAgent = proxyHost
   // 
 
 
-
+const prisma = new PrismaClient()
 
 
 const token = process.env.TG_TOKEN;
@@ -277,6 +281,8 @@ export const getBot = async () => {
 
             const splitText = titleText.split(' ')
 
+            console.log(splitText)
+
             const ygId = splitText[2]
             const tgId = splitText[9]
 
@@ -341,21 +347,49 @@ export const getBot = async () => {
           const chatId = query.message?.chat.id as number;
           const messageId = query.message?.message_id as number;
 
+
+          const reconciliatorUser = `@${query.from.username}`
+
           if (!query.data) return;
 
           const data = query.data.split('|')
-
           const status = data[0]
-          const department = data[1]
-          const cardId = data[2]
+          const cardId = data[1]
 
+
+          const currentCard = await prisma.task.findFirst({
+            where: {
+              id: parseInt(cardId)
+            }
+          })
+
+
+          if (!currentCard) {
+            throw new Error('Ошибка! Не удалось найти карточку с задачей')
+          }
+
+          function parseCurrentCard (currentCard: any) {
+                const res = {
+                    ...currentCard,
+                    ...JSON.parse(currentCard.message)
+                }
+
+                delete res.message
+                return res
+          }
+
+          const cardFromDB = parseCurrentCard(currentCard)
+
+          console.log(cardFromDB)
+
+          const {messageYG, messageTG} = await createMessageTgYG(cardFromDB?.department, cardFromDB)
 
 
           if (status === 'approve') {
 
-              console.log('approve FROM TG BOT')
+              console.log('Нажали approve')
 
-              const YGCARD = await sendAnswerMessage(status, department, cardId)
+              const YGCARD = await sendAnswerMessage(status, cardFromDB.department, cardId)
 
               console.log(YGCARD, "FROM TG BOT")
 
@@ -379,21 +413,22 @@ export const getBot = async () => {
                   message: 'MESSAGE APPROVE'
               }
 
-          } else if (status === 'reject') {
+          } 
 
-              const YGCARD = await sendAnswerMessage(status, department, cardId)
+          if (status === 'reject') {
+
+              console.log('Нажали reject')
+
+              const YGCARD = await sendAnswerMessage(status, cardFromDB.department, cardId)
 
               if (YGCARD.success === false ) {
-
                 await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
-
                 return {
                   success: false,
                   message: 'ERROR'
                 }
               }
               
-
               await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ❌ отклонена. Автор сообщения # ${YGCARD.data.tgId} # \n\n Title: ${YGCARD.data.title}`, {
                 chat_id: chatId,
                 message_id: messageId,
@@ -403,14 +438,103 @@ export const getBot = async () => {
                   success: true,
                   message: 'MESSAGE REJECT'
               }
+          }
+
+          if (status === 'approve_resend') {
+            console.log('send approve_resend')
+
+            console.log('query ', query.from.username)
+
+            const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
+            const telegramResencId = cardFromDB.reconciliator.id
+
+            await bot.sendMessage(
+              telegramResencId,
+              `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "✅ Согласовано")\n\n Согласовано пользователем -  ${reconciliatorUser}\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+              {
+                reply_markup: {
+                  inline_keyboard: [
+                    [
+                      { text: 'Согласовать', callback_data: buildCB('approve', cardFromDB.id, '')},
+                      { text: 'Отклонить', callback_data: buildCB('reject', cardFromDB.id, '')},
+                    ]
+                  ]
+                }
+              }
+            )
+
+            await bot.editMessageText(`Заявка # ${cardFromDB.id} : ✅ получила предварительное согласование и отправлена на согласование в группу с Ольгой Николаевной Эделевой.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\n Title: ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+              chat_id: chatId,
+              message_id: messageId,
+            });
+
+            await bot.sendMessage(
+              cardFromDB.tgId,
+              `№${cardFromDB.id} - ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\n\n${messageTG}\n\nСледите за изменениями в боте или на сайте pr-tz.ru Дата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+            )
+
+              return {
+                  success: true,
+                  message: 'MESSAGE RESEND AGREED'
+              }
+
+          }
+
+          if (status === 'reject_resend') {
+            console.log('send approve_resend')
 
 
+            await bot.sendMessage(
+              cardFromDB.tgId,
+              `Заявка # ${cardFromDB.id} ❌ Отклонена\n\n За дополнительной информацией обратитесь\n\n${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`
+            )
+
+            await bot.editMessageText(`Заявка # ${cardFromDB.id} : ❌ Отклонено - Отказ отправлен автору заявки.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+              chat_id: chatId,
+              message_id: messageId,
+            });
+
+              return {
+                  success: true,
+                  message: 'MESSAGE RESEND REJECT'
+              }
+          }
+
+          if (status === 'wrong_group_resend') {
+            console.log('send approve_resend')
+
+            const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
+            const telegramResencId = cardFromDB.reconciliator.id
+
+            await bot.sendMessage(
+              telegramResencId,
+              `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "⚠️ Ошибочно отправленана предварительное согласование")\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nПеремещена пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+              {
+                reply_markup: {
+                  inline_keyboard: [
+                    [
+                      { text: 'Согласовать', callback_data: buildCB('approve', cardFromDB.id, '')},
+                      { text: 'Отклонить', callback_data: buildCB('reject', cardFromDB.id, '')},
+                    ]
+                  ]
+                }
+              }
+            )
+
+            await bot.editMessageText(`Заявка # ${cardFromDB.id} : ⚠️ Ошибочно отправлена на согласование в данную группу - переносим в основную группу.\n\nАвтор сообщения # ${cardFromDB.fio} #\n\nTitle: ${cardFromDB.title}\n\nПеремещена пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+              chat_id: chatId,
+              message_id: messageId,
+            });
+
+              return {
+                  success: true,
+                  message: 'MESSAGE WRONG GROUP'
+              }
           }
         })
 
 
       }
-
 
       // если бот уже создается, ждем его создания и возвращаем тот же промис
 

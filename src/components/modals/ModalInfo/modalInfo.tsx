@@ -9,10 +9,10 @@ import styles from './modalInfo.module.css'
 import MyButton from '@/components/UI/MyButton/MyButton'
 
 
-// 
 
 interface ModalInfoProps {
   title: string
+  link?: string
   btnTitleOne?: string
   btnTitleTwo?: string
   image: React.ReactNode
@@ -22,7 +22,7 @@ interface ModalInfoProps {
 }
 
 
-const modalInfo: FC<ModalInfoProps> = ({ title, image, btnTitleOne, btnTitleTwo, onClickOne, onClickTwo }) => {
+const modalInfo: FC<ModalInfoProps> = ({ title, image, btnTitleOne, btnTitleTwo, onClickOne, onClickTwo, link }) => {
   return (
 
     <div className={styles.modal_info_bg}>
@@ -37,6 +37,13 @@ const modalInfo: FC<ModalInfoProps> = ({ title, image, btnTitleOne, btnTitleTwo,
               <div className={styles.modal_info_title_wrapper}>
                 {title}
               </div>
+
+              {
+                (link) && (
+
+                      <a className={styles.modal_info_link_wrapper} href={`https://t.me/${link}`} target='_blank'>@{link}</a>
+                )
+              }
 
               <div className={styles.modal_info_btn_wrapper}>
 

@@ -5,7 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 
 // bootstrap
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 
 // components
 
@@ -14,10 +14,7 @@ import TopSideHorizontalMenu from '@/components/element/TopSideHorizontalMenu/To
 
 // FORMS
 
-import PrForm from '@/components/element/forms/pr/PrForm'
-import DesignForm from '@/components/element/forms/design/DesignForm'
-import AdvertisingForms from '@/components/element/forms/advertising/AdvertisingForms'
-import MarketingForms from '@/components/element/forms/marketing/MarketingForm'
+import Form from '@/components/element/forms/baseForm'
 
 // MODALS
 
@@ -53,12 +50,6 @@ const page: FC = () => {
 
   }, [params])
 
-
-
-
-
- 
-
   // modal state
 
   const [modalSubmitSuccess, setModalSubmitSuccess] = useState<boolean>(false)
@@ -82,54 +73,6 @@ const page: FC = () => {
       </Row>
     )
   }
-
-  const currentForm = (department: string) => {
-    switch (department) {
-      case 'PR':
-        return <PrForm
-            departmentData={{department, setDepartment}}
-            modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
-            modalError={{modalSubmitError, setModalSubmitError}}
-            modalInfo={{modalBackInfo, setModalBackInfo}}
-            modalDownload={{modalInfoDownload, setModalInfoDownload}}
-            modalTgError={{modalTGError, setModalTGError}}
-            modalTGBotError={{modalTgBotError, setModalTgBotError}}
-        />
-      case 'Отдел дизайна':
-        return <DesignForm
-            departmentData={{department, setDepartment}}
-            modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
-            modalError={{modalSubmitError, setModalSubmitError}}
-            modalInfo={{modalBackInfo, setModalBackInfo}}
-            modalDownload={{modalInfoDownload, setModalInfoDownload}}
-            modalTgError={{modalTGError, setModalTGError}}
-            modalTGBotError={{modalTgBotError, setModalTgBotError}}
-        />
-
-      case 'Отдел рекламы':
-        return <AdvertisingForms
-            departmentData={{department, setDepartment}}
-            modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
-            modalError={{modalSubmitError, setModalSubmitError}}
-            modalInfo={{modalBackInfo, setModalBackInfo}}
-            modalDownload={{modalInfoDownload, setModalInfoDownload}}
-            modalTgError={{modalTGError, setModalTGError}}
-            modalTGBotError={{modalTgBotError, setModalTgBotError}}
-        />
-      case 'Отдел интернет-маркетинга':
-        return <MarketingForms
-            departmentData={{department, setDepartment}}
-            modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
-            modalError={{modalSubmitError, setModalSubmitError}}
-            modalInfo={{modalBackInfo, setModalBackInfo}}
-            modalDownload={{modalInfoDownload, setModalInfoDownload}}
-            modalTgError={{modalTGError, setModalTGError}}
-            modalTGBotError={{modalTgBotError, setModalTgBotError}}
-            />
-    }
-  }
-
-
 
 
   return (
@@ -230,9 +173,6 @@ const page: FC = () => {
                   )
                 }
 
-
-
-
                 </Col>
               </Row>
 
@@ -257,7 +197,17 @@ const page: FC = () => {
                   <div className='app_container'>
                     <div className='app_wrapper'>
                       
-                      {currentForm(department)}
+                      {
+                        <Form
+                          departmentData={{department, setDepartment}}
+                          modalSuccess={{modalSubmitSuccess, setModalSubmitSuccess}}
+                          modalError={{modalSubmitError, setModalSubmitError}}
+                          modalInfo={{modalBackInfo, setModalBackInfo}}
+                          modalDownload={{modalInfoDownload, setModalInfoDownload}}
+                          modalTgError={{modalTGError, setModalTGError}}
+                          modalTGBotError={{modalTgBotError, setModalTgBotError}}
+                        />
+                      }
 
                     </div>
                   </div>

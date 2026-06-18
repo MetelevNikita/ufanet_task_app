@@ -20,6 +20,7 @@ model Task {
   id Int @id @default(autoincrement())
   ygId String
   department String
+  typeApproval String @default("")
   fio String
   subdivision String
   tgId String
@@ -27,9 +28,10 @@ model Task {
   leader String
   type String
   title String
-  deadline String
+  deadline String @default("")
   message String
   status String
   stage String
   comment String? @default("")
+  createAt DateTime @default(now())
 }

@@ -3,31 +3,30 @@ import { getBot } from "@/telegramBot/telegramBot";
 // 
 
 
-export const createTGTask = async (department: string, descriptionTask: string, taskDB: any, tgIdGroup: string, resendTgId: string) => {
+export const createTGsubTaskGroup = async (department: string, descriptionTask: string, taskDB: any, tgIdGroup: string, resendTgId: string) => {
   const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
 
   console.log('WORK TG')
+  console.log(tgIdGroup)
 
   try {
 
     const bot = await getBot();
-    const id = taskDB.id as number
 
-
-    const sendTgBot = await bot.sendMessage(
-      tgIdGroup as string,
-      `Новое сообщение с доски - ${department}\n\n\n${descriptionTask}`,
+    bot.sendMessage(resendTgId, descriptionTask, 
       {
         reply_markup: {
           inline_keyboard: [
             [
-              { text: 'Согласовать', callback_data: buildCB('approve', taskDB.id, '')},
-              { text: 'Отклонить', callback_data: buildCB('reject', taskDB.id, '')},
+              { text: 'Согласовать', callback_data: buildCB('approve_resend', taskDB.id, tgIdGroup)},
+              { text: 'Отклонить', callback_data: buildCB('reject_resend', taskDB.id, tgIdGroup)},
+              { text: 'Перенести в группу без пред. согласования', callback_data: buildCB('wrong_group_resend', taskDB.id, tgIdGroup)}
             ]
           ]
         }
       }
     )
+
 
     return {
       success: true,

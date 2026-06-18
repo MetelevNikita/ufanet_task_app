@@ -14,6 +14,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .modal_info_container {
   max-width: 375px;
   width: 100%;
@@ -59,6 +60,36 @@
   /*  */
 
   margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+
+.modal_info_title_wrapper {
+
+  /*  */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal_info_image_wrapper {
+  width: 60px;
+  height: 60px;
+}
+
+.modal_info_link_wrapper {
+
+  /*  */
+
+  font-size:  18px;
+  font-weight: 600;
+  text-align: center;
+  color: #FC9B30 !important;
+
+  /*  */
+
   margin-bottom: 10px;
 }
 

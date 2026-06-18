@@ -4,7 +4,8 @@ export const marketingMessage = async (
 ): Promise<{ messageYG: string; messageTG: string }> => {
   const headYG = (extra: string) =>
     `Дата создания - ${data.dateCreated}<br><br>` +
-    `Отдел - ${department}<br><br>` +
+    `Отдел - ${data.department}<br><br>` +
+    `Тип Задачи ${data.type}<br><br>` +
     `Имя - ${data.fio}<br><br>` +
     `Город - ${data.branch}<br><br>` +
     `Отдел автора - ${data.subdivision}<br><br>` +
@@ -13,7 +14,8 @@ export const marketingMessage = async (
 
   const headTG = (extra: string) =>
     `Дата создания - ${data.dateCreated}\n\n` +
-    `Отдел - ${department}\n\n` +
+    `Отдел - ${data.department}\n\n` +
+    `Тип Задачи - ${data.type}\n\n` +
     `Имя - ${data.fio}\n\n` +
     `Город - ${data.branch}\n\n` +
     `Отдел автора - ${data.subdivision}\n\n` +
@@ -53,7 +55,8 @@ export const marketingMessage = async (
       row('<strong>Если вы знаете каналы, которые смотрит/читает ваша целевая аудитория, основные виды рекламы, на которые она обращает внимание, — расскажите про них:</strong><br>', data.audience_channels, '<br><br>') +
       row('<strong>Есть ли какие-то существующие базы (база наших клиентов, холодная база и др.) для запуска рекламы по ним?:</strong><br>', data.existing_databases, '<br><br>') +
       row('<strong>Дополнительная информация:</strong><br>', data.additional_information, '<br><br>') +
-      row('<strong>Срок реализации:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Срок реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -78,7 +81,8 @@ export const marketingMessage = async (
       row('Если вы знаете каналы, которые смотрит/читает ваша целевая аудитория, основные виды рекламы, на которые она обращает внимание, — расскажите про них:', data.audience_channels, '\n') +
       row('Есть ли какие-то существующие базы (база наших клиентов, холодная база и др.) для запуска рекламы по ним?:', data.existing_databases, '\n') +
       row('Дополнительная информация:', data.additional_information, '\n') +
-      row('Срок реализации:', data.deadline, '\n');
+      row('Срок реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -104,7 +108,8 @@ export const marketingMessage = async (
       row('<strong>Какая дополнительная информация должна присутствовать на сайте / лендинге / странице (отзывы, карты, схемы, ссылки, контакты, описания и т.д.)?:</strong><br>', data.details, '<br><br>') +
       row('<strong>Должны ли мобильная и десктопная версии совпадать по содержанию? Есть ли контент или функционал, который будет доступен только в одной из версий?:</strong><br>', data.site_content, '<br><br>') +
       row('<strong>Кто будет обрабатывать заявки, приходящие с данного сайта?:</strong><br>', data.processing, '<br><br>') +
-      row('<strong>Срок запуска:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Срок запуска:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>')
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -125,7 +130,8 @@ export const marketingMessage = async (
       row('Какая дополнительная информация должна присутствовать на сайте / лендинге / странице (отзывы, карты, схемы, ссылки, контакты, описания и т.д.)?:', data.details, '\n') +
       row('Должны ли мобильная и десктопная версии совпадать по содержанию? Есть ли контент или функционал, который будет доступен только в одной из версий?:', data.site_content, '\n') +
       row('Кто будет обрабатывать заявки, приходящие с данного сайта?:', data.processing, '\n') +
-      row('Срок запуска:', data.deadline, '\n');
+      row('Срок запуска:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -144,7 +150,8 @@ export const marketingMessage = async (
           data.content_file ? `<a target="_blank" rel="noopener noreferrer" href=${data.content_file}>${data.content_file}</a>` : '', '<br><br>') +
       row('<strong>Нужно ли согласование перед публикацией?:</strong><br>', data.approval, '<br><br>') +
       row('<strong>Комментарии или пожелания к оформлению / формулировке текста / размещению. (опционально):</strong><br>', data.comment, '<br><br>') +
-      row('<strong>Желаемая дата реализации:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Желаемая дата реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -155,7 +162,8 @@ export const marketingMessage = async (
       row('Есть ли у вас готовый текст / изображение / документ для размещения? (если да, приложите файл):', data.content_file, '\n') +
       row('Нужно ли согласование перед публикацией?:', data.approval, '\n') +
       row('Комментарии или пожелания к оформлению / формулировке текста / размещению. (опционально):', data.comment, '\n') +
-      row('Желаемая дата реализации:', data.deadline, '\n');
+      row('Желаемая дата реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -184,7 +192,8 @@ export const marketingMessage = async (
       row('<strong>Бюджет на рекламу в месяц:</strong><br>', data.budget, '<br><br>') +
       row('<strong>Есть ли KPI (ожидаемые результаты)?:</strong><br>', data.kpi, '<br><br>') +
       row('<strong>Период проведения кампании:</strong><br>', data.campaign_period, '<br><br>') +
-      row('<strong>Дата запуска:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Дата запуска:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -207,7 +216,8 @@ export const marketingMessage = async (
       row('Бюджет на рекламу в месяц:', data.budget, '\n') +
       row('Есть ли KPI (ожидаемые результаты)?:', data.kpi, '\n') +
       row('Период проведения кампании:', data.campaign_period, '\n') +
-      row('Дата запуска:', data.deadline, '\n');
+      row('Дата запуска:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -223,7 +233,8 @@ export const marketingMessage = async (
       row('<strong>Прикрепи ссылку на материалы, если они есть Текст, изображения, презентации, ссылка на сайт:</strong><br>', 
           data.material_file ? `<a target="_blank" rel="noopener noreferrer" href=${data.material_file}>${data.material_file}</a>` : '', '<br><br>') +
       row('<strong>Когда планируется размещение? Окончательная дата публикации согласуется лично:</strong><br>', data.publish_date, '<br><br>') +
-      row('<strong>Срок реализации:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Срок реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -233,7 +244,8 @@ export const marketingMessage = async (
       row('Периодичность размещения:', data.frequency, '\n') +
       row('Прикрепи ссылку на материалы, если они есть Текст, изображения, презентации, ссылка на сайт:', data.material_file, '\n') +
       row('Когда планируется размещение? Окончательная дата публикации согласуется лично:', data.publish_date, '\n') +
-      row('Срок реализации:', data.deadline, '\n');
+      row('Срок реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -251,7 +263,8 @@ export const marketingMessage = async (
       row('<strong>Примерная структура текста:</strong><br>', data.structure, '<br><br>') +
       row('<strong>Ссылки и материалы:</strong><br>', data.link_text, '<br><br>') +
       row('<strong>Референсы:</strong><br>', data.reference_text, '<br><br>') +
-      row('<strong>Желаемая дата реализации:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Желаемая дата реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -264,7 +277,8 @@ export const marketingMessage = async (
       row('Примерная структура текста:', data.structure, '\n') +
       row('Ссылки и материалы:', data.link_text, '\n') +
       row('Референсы:', data.reference_text, '\n') +
-      row('Желаемая дата реализации:', data.deadline, '\n');
+      row('Желаемая дата реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -282,7 +296,8 @@ export const marketingMessage = async (
       row('<strong>Целевая аудитория:</strong><br>', data.target_audience, '<br><br>') +
       row('<strong>Пожелания:</strong><br>', data.preferences, '<br><br>') +
       row('<strong>Ссылки:</strong><br>', data.links, '<br><br>') +
-      row('<strong>Желаемая дата реализации:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Желаемая дата реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -295,7 +310,8 @@ export const marketingMessage = async (
       row('Целевая аудитория:', data.target_audience, '\n') +
       row('Пожелания:', data.preferences, '\n') +
       row('Ссылки:', data.links, '\n') +
-      row('Желаемая дата реализации:', data.deadline, '\n');
+      row('Желаемая дата реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -312,7 +328,8 @@ export const marketingMessage = async (
       row('<strong>Срок отправки пушей:</strong><br>', data.send_deadline, '<br><br>') +
       row('<strong>Как будете измерять результат?:</strong><br>', data.kpi, '<br><br>') +
       row('<strong>Если есть примерный текст для рассылки, прикрепите его здесь:</strong><br>', data.message_text, '<br><br>') +
-      row('<strong>Желаемая дата реализации:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Желаемая дата реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -323,7 +340,8 @@ export const marketingMessage = async (
       row('Срок отправки пушей:', data.send_deadline, '\n') +
       row('Как будете измерять результат?:', data.kpi, '\n') +
       row('Если есть примерный текст для рассылки, прикрепите его здесь:', data.message_text, '\n') +
-      row('Желаемая дата реализации:', data.deadline, '\n');
+      row('Желаемая дата реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -346,7 +364,8 @@ export const marketingMessage = async (
           data.storis_file ? `<a target="_blank" rel="noopener noreferrer" href=${data.storis_file}>${data.storis_file}</a>` : '', '<br><br>') +
       row('<strong>Прикрепите миниатюру-баннер:</strong><br>', 
           data.miniature_file ? `<a target="_blank" rel="noopener noreferrer" href=${data.miniature_file}>${data.miniature_file}</a>` : '', '<br><br>') +
-      row('<strong>Желаемая дата реализации:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Желаемая дата реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -361,7 +380,8 @@ export const marketingMessage = async (
       row('На какой картинке ставится кнопка со ссылкой:', data.button_image_ref, '\n') +
       row('Прикрепите изображения сторис. Если на сторис предполагается кнопка, фон должен быть контрастный оранжевому, так как кнопка оранжевого цвета:', data.storis_file, '\n') +
       row('Прикрепите миниатюру-баннер:', data.miniature_file, '\n') +
-      row('Желаемая дата реализации:', data.deadline, '\n');
+      row('Желаемая дата реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -377,7 +397,8 @@ export const marketingMessage = async (
       row('<strong>Регионы показа:</strong><br>', data.regions, '<br><br>') +
       row('<strong>Схема опроса:</strong><br>', 
           data.schema_file ? `<a target="_blank" rel="noopener noreferrer" href=${data.schema_file}>${data.schema_file}</a>` : '', '<br><br>') +
-      row('<strong>Желаемая дата реализации:</strong><br>', data.deadline, '<br><br>');
+      row('<strong>Желаемая дата реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
@@ -387,7 +408,8 @@ export const marketingMessage = async (
       row('Есть ли база клиентов (ID контрагента)?:', data.has_client_base, '\n') +
       row('Регионы показа:', data.regions, '\n') +
       row('Схема опроса:', data.schema_file, '\n') +
-      row('Желаемая дата реализации:', data.deadline, '\n');
+      row('Желаемая дата реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
