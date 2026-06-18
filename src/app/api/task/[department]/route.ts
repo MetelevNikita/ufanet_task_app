@@ -168,7 +168,6 @@ const createTGPhoto = async (department: string, data: any, descriptionTask: str
 }
 
 
-
 // 
 
 
@@ -350,7 +349,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     let TelegramRes;
 
-    if (departmentLabel === 'Отдел дизайна' && message.type_approval.label === 'Служба развития коммерческих продуктов') {
+    if (departmentLabel === 'Отдел дизайна' && message.type_approval.label === 'Продвижение услуг компании') {
 
       TelegramRes = await createTGsubTaskGroup(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id, formData.type_approval.idTg)
       console.log('TG ', TelegramRes)
