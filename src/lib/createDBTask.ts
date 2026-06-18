@@ -15,7 +15,7 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
       ygId: ygId,
       department: department,
       fio: data.fio,
-      typeApproval: data.
+      typeApproval: data.type_approval,
       subdivision: data.subdivision,
       tgId: data.tgId,
       branch: data.branch,
