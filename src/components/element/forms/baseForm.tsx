@@ -327,8 +327,6 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const [formData, setFormData] = useState<any>({
   })
 
-  console.log(formData)
-
 
 
   const { department, setDepartment } = departmentData
