@@ -24,8 +24,6 @@ export const createYGTask = async (department: string, data: any, descriptionTas
 
     const projects = await getYGProjects(yougileKey);
 
-    console.log("PRJECTS ", projects)
-
     if (!projects) {
       console.error('Не найдены проекты в yougile')
       return {
@@ -40,6 +38,8 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     const currentProject = projects.content.find((project: {title: string}) => {
       return project.title === department
     })
+
+    console.log('current project ', currentProject)
 
     // 
 

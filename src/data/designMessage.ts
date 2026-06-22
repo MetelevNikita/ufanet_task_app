@@ -7,7 +7,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
   const headYG = (extra: string) =>
     `Дата создания - ${data.dateCreated}<br><br>` +
     `Отдел - ${data.department}<br><br>` +
-    `Направление - ${data.type_approval}<br><br>` +
+    `Направление - ${data.type_approval || data.typeApproval}<br><br>` +
     `Тип Задачи - ${data.type}<br><br>` +
     `Отдел - ${department}<br><br>` +
     `Имя - ${data.fio}<br><br>` +
@@ -19,7 +19,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
   const headTG = (extra: string) =>
     `Дата создания - ${data.dateCreated}\n\n` +
     `Отдел - ${data.department}\n\n` +
-    `Направление - ${data.type_approval}\n\n` +
+    `Направление - ${data.type_approval || data.typeApproval}\n\n` +
     `Тип Задачи - ${data.type}\n\n` +
     `Имя - ${data.fio}\n\n` +
     `Город - ${data.branch}\n\n` +
@@ -95,7 +95,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('Исходный файл:', 'Cписок', '\n') +
       createImageMessageList('tg', data.target_file) +
       row('Что нужно исправить?:', data.changes, '\n') +
-      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? `https://t.me/${data.client_tg.slice(1)}` : `https://t.me/${data.client_tg}`) +
+      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? `https://t.me/${data.client_tg.slice(1)}` : `https://t.me/${data.client_tg}`, '\n') +
       row('Желаемая дата готовности макета:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
       row('Дополнительно:', data.extra, '\n');
 

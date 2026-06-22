@@ -380,7 +380,6 @@ export const getBot = async () => {
 
           const cardFromDB = parseCurrentCard(currentCard)
 
-          console.log(cardFromDB)
 
           const {messageYG, messageTG} = await createMessageTgYG(cardFromDB?.department, cardFromDB)
 
@@ -442,8 +441,6 @@ export const getBot = async () => {
 
           if (status === 'approve_resend') {
             console.log('send approve_resend')
-
-            console.log('query ', query.from.username)
 
             const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
             const telegramResencId = cardFromDB.reconciliator.id

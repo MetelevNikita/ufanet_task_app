@@ -255,20 +255,20 @@ const designApprovalSelector: any[] = [
   {
     id: 1,
     label: 'Продвижение услуг компании',
-    value: 'Продвижение услуг компании',
+    value: 'Служба развития коммерческих продуктов',
     idTg: process.env.NEXT_PUBLIC_TG_SUB_GROUP_DES
   },
   {
     id: 2,
     label: 'Мероприятия, офис, мерч, брендирование итд.',
     value: 'Мероприятия, офис, мерч, брендирование итд.',
-    idTg: process.env.NEXT_PUBLIC_TG_SUB_GROUP_DES
+    idTg: process.env.NEXT_PUBLIC_TG_GROUP_DES
   },
   {
     id: 3,
     label: 'Прочее (тех. наклейки)',
     value: 'Прочее (тех. наклейки)',
-    idTg: process.env.NEXT_PUBLIC_TG_SUB_GROUP_DES 
+    idTg: process.env.NEXT_PUBLIC_TG_GROUP_DES 
   }
 ]
 
@@ -326,6 +326,8 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const [activeOther, setActiveOther] = useState(false)
   const [formData, setFormData] = useState<any>({
   })
+
+  console.log(formData)
 
 
 
@@ -503,11 +505,11 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
                   
                   {
                     (department == 'Отдел дизайна') && (
-                      typeApproval.createSelector(formData.type_approval?.value || '', (e: any) => {
-                        const current = designApprovalSelector.find((item: {value: string}) => item.value == e.target.value)
+                      typeApproval.createSelector(formData.typeApproval?.value || '', (e: any) => {
+                        const current = designApprovalSelector.find((item: {label: string}) => item.label == e.target.value)
                         setFormData((prev: any) => ({
                         ...prev,
-                        type_approval: current,
+                        typeApproval: current,
                       }))
                       })
                     )

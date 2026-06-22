@@ -429,7 +429,7 @@ export const POST = async (req: NextRequest) => {
 
                   console.log(`Задача ${title} получила новый стикер состояния - ${newSticker.data}`)
 
-                  message = `Статус Задачи изменен\n\nЗадача - ${title}\nПроект - ${projectYouGile.data}\n\nСостояние задачи измененео на состояние "${newSticker.data}"\n\nДата перемещения ${new Date().toLocaleDateString('RU-ru')}`
+                  message = `Статус Задачи изменен\n\nЗадача - ${title}\nПроект - ${projectYouGile.data}\n\nСостояние задачи изменено на "${newSticker.data}"\n\nДата перемещения ${new Date().toLocaleDateString('RU-ru')}`
                   console.log("MESSAGE ", message)
 
                   // 

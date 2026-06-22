@@ -284,9 +284,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     // message
 
-    if (departmentLabel === 'Отдел дизайна') {
-
-      console.log('Создаем в дизайне')
+    if (departmentLabel === 'Отдел дизайна' && message?.typeApproval.label == 'Продвижение услуг компании') {
 
       const taskDesign = await prisma.task.findMany({
         where: {
@@ -299,7 +297,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
       data = {
         ...message,
-        type_approval: 'Служба развития коммерческих продуктов',
+        typeApproval: message?.typeApproval.value,
         title: `TЗ № ${designId} ${message.title}`,
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
@@ -307,7 +305,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
       data = {
         ...message,
-        type_approval: "",
+        typeApproval: message?.typeApproval.label ?? '',
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
     }
@@ -349,9 +347,9 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     let TelegramRes;
 
-    if (departmentLabel === 'Отдел дизайна' && message.type_approval.label === 'Продвижение услуг компании') {
+    if (departmentLabel === 'Отдел дизайна' && message.typeApproval.label === 'Продвижение услуг компании') {
 
-      TelegramRes = await createTGsubTaskGroup(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id, formData.type_approval.idTg)
+      TelegramRes = await createTGsubTaskGroup(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id, formData.typeApproval.idTg)
       console.log('TG ', TelegramRes)
 
       if (!TelegramRes.success) {
