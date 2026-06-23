@@ -40,7 +40,7 @@ const MyDate: FC<MyDateProps> = ({ type, title, onChange, value, name, error = f
     <div className={styles.date_container}>
       <span className={styles.date_title}>{title}</span>
 
-      <input min={min} style={errorField} name={name} className={styles.date_text} type={type} value={value ?? ''} onChange={onChange} required={true}/>
+      <input min={min} style={errorField} name={name} className={styles.date_text} type={type} onChange={onChange} defaultValue={value ?? ''} required={true}/>
     </div>
 
   )

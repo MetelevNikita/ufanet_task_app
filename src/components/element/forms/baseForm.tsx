@@ -171,16 +171,18 @@ import { typeSelectorArrPr } from '@/data/prData'
 
     createFiled(data: string, setData: any, error?: boolean): React.ReactNode {
 
-      let resultDate;
+       let date = new Date()
 
-      if (this.name == 'deadline_making' || this.name == 'deadline_event' || this.name == 'deadline_merch') {
-        const date = new Date();
-        date.setDate(date.getDate() + 2);
-
-        resultDate = date.toISOString().split("T")[0];
-      } else {
-        resultDate = new Date()
+      if (
+        this.name === 'deadline_making' ||
+        this.name === 'deadline_event' ||
+        this.name === 'deadline_merch'
+      ) {
+        date.setDate(date.getDate() + 2)
       }
+
+      const resultDate = date.toISOString().split('T')[0]
+
 
       return  <Col md={12} className='mt-2 mb-2'>
                   <MyDate
@@ -372,6 +374,8 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const typeApproval = new MySelector('Ваше ТЗ связано с', 'approval_type', designApprovalSelector)
 
   // primary
+
+  console.log(formData)
 
 
   const data = currentTypeSelectors(currentDepartment).find((type: any) => type.label === formData.type) as any

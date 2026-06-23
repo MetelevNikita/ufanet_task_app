@@ -215,6 +215,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const { department } = await context.params 
     const currentDepartment = directions.data.find((item: MenuType): Boolean => item.label.toLocaleLowerCase() == department.toLocaleLowerCase())
 
+    console.log(currentDepartment)
+
     if (!currentDepartment) {
       return NextResponse.json({
         message: 'Ошибка отправки сообщения. Отдел не найден',
@@ -228,6 +230,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     console.log('Проверочная отправка данных в ТГ')
 
     const examination = await resultTgMessage(formData.tgId, 'Проверяем подписаны ли вы на бота Pr-tz.ru')
+    console.log('EXAMP ', examination)
 
     if (!examination.success) {
       return NextResponse.json({
@@ -235,6 +238,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
         message: `Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)`
       });
     }
+    
 
     // 
 
@@ -282,9 +286,13 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const message = Object.fromEntries(pairs)
     let data: Object = {}
 
+    console.log(message)
+
+
     // message
 
-    if (departmentLabel === 'Отдел дизайна' && message?.typeApproval.label == 'Продвижение услуг компании') {
+    if (departmentLabel === 'Отдел дизайна') {
+
 
       const taskDesign = await prisma.task.findMany({
         where: {
@@ -292,23 +300,36 @@ export const POST = async (req: Request, context: {params: {department: string}}
         }
       })
 
-
       const designId = taskDesign.length + 54
 
-      data = {
-        ...message,
-        typeApproval: message?.typeApproval.value,
-        title: `TЗ № ${designId} ${message.title}`,
-        dateCreated: new Date().toLocaleDateString('RU-ru')
+      if (message?.typeApproval.label == 'Продвижение услуг компании') {
+        data = {
+          ...message,
+          typeApproval: message?.typeApproval.value,
+          title: `TЗ № ${designId} ${message.title}`,
+          dateCreated: new Date().toLocaleDateString('RU-ru')
+        }
+      } else {
+        data = {
+          ...message,
+          typeApproval: message?.typeApproval.label ?? '',
+          dateCreated: new Date().toLocaleDateString('RU-ru')
+        }
       }
+
+
+
     } else {
 
       data = {
         ...message,
-        typeApproval: message?.typeApproval.label ?? '',
+        typeApproval: '',
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
     }
+
+
+    console.log(data)
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
 
