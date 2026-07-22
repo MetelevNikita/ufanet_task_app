@@ -30,6 +30,7 @@ import { departmentType, MenuType } from '@/types/types'
 // lib
 
 import { postTask } from '@/lib/postTask'
+import { getUsers } from '@/lib/getUsers'
 
 // data
 
@@ -150,7 +151,6 @@ import { typeSelectorArrPr } from '@/data/prData'
   }
 
   }
-
 
    class MyDateField {
 
@@ -325,9 +325,45 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const { modalTgBotError, setModalTgBotError } = modalTGBotError
   // 
 
-  const [activeOther, setActiveOther] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [activeOther, setActiveOther] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>({
   })
+
+
+
+  useEffect(() => {
+
+
+      const userStorage = localStorage.getItem('data')?.split('|')
+
+      if (!userStorage) {
+        return
+      }
+
+
+      const getCurrentUser = async () => {
+        try {
+          const users = await getUsers()
+
+          const currentUser = users.data.find((item: {id: number}) => item.id.toString() === userStorage[1])
+          setFormData({
+            fio: currentUser.name,
+            subdivision: currentUser.department,
+            tgId: currentUser.telegramId
+          })
+          
+        } catch (error) {
+          console.log(error)
+          return {}
+        }
+      }
+
+      getCurrentUser()
+
+
+  
+  }, [])
 
 
 
@@ -374,8 +410,6 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const typeApproval = new MySelector('Ваше ТЗ связано с', 'approval_type', designApprovalSelector)
 
   // primary
-
-  console.log(formData)
 
 
   const data = currentTypeSelectors(currentDepartment).find((type: any) => type.label === formData.type) as any
@@ -462,6 +496,8 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   }
 
 
+
+
   return (
 
     <Container>
@@ -489,12 +525,17 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
                   <Row className='d-flex flex-row justify-content-center align-items-center'>
                     <Col md={12}>
 
-                      {new MyField('ФИО', 'ФИО', 'text', 'fio').createFiled(formData.fio, (e: any) => {setFormData({...formData, fio: e.target.value})}, isEmpty as boolean)}
-                      {new MySelector('Филиал', 'branch', branchSelectorsArr).createSelector(formData.branch, (e: any) => {setFormData({...formData, branch: e.target.value})})}
-                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision').createFiled(formData.subdivision, (e: any) => {setFormData({...formData, subdivision: e.target.value})}, isEmpty as boolean)}
-                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId').createFiled(formData.tgId, (e: any) => {setFormData({...formData, tgId: e.target.value})}, isEmpty as boolean)}
+                      {new MyField('ФИО', 'ФИО', 'text', 'fio')
+                        .createFiled(formData.fio, (e: any) => {setFormData({...formData, fio: e.target.value})}, isEmpty as boolean)}
+                      {new MyField('Служба/отдел', 'Ваша служба/отдел', 'text', 'subdivision')
+                        .createFiled(formData.subdivision, (e: any) => {setFormData({...formData, subdivision: e.target.value})}, isEmpty as boolean)}
+                      {new MyField('Телеграм ID', 'Введите телеграм ID', 'text', 'tgId')
+                        .createFiled(formData.tgId, (e: any) => {setFormData({...formData, tgId: e.target.value})}, isEmpty as boolean)}
 
                       <div className={styles.tg_id_info}>Ваш telegram id вы можете посмотреть на корпоративном сайте или с помощью бота - <Link href={'https://t.me/getmyid_bot'}>@getmyid_bot</Link></div>
+
+                      {new MySelector('Филиал', 'branch', branchSelectorsArr)
+                        .createSelector(formData.branch, (e: any) => {setFormData({...formData, branch: e.target.value})})}
 
                       {new MyField('Лидер проекта/мероприятия', 'Введите лидера проекта/мероприятия', 'text', 'leader').createFiled(formData.leader, (e: any) => {setFormData({...formData, leader: e.target.value})}, isEmpty as boolean)}
                     

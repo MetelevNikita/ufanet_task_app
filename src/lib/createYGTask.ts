@@ -10,6 +10,8 @@ import { getYGStickers } from "@/functions/getYGStickers";
 export const createYGTask = async (department: string, data: any, descriptionTask: string) => {
   try {
 
+    console.log(descriptionTask)
+
     const yougileKey = process.env.NEXT_PUBLIC_YOGILE_KEY as string
     //
 

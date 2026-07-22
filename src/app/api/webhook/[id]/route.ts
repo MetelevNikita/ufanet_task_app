@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { PrismaClient } from "../../../../../generated/prisma";
+import { PrismaClient } from "../../../../../../generated/prisma";
 
 // tg bot
 

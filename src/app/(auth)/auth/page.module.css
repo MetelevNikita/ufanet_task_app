@@ -1,0 +1,16 @@
+.error_field {
+  color: red;
+}
+
+
+.result_field {
+  color: #fc9b32
+}
+
+.forgot_password {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+  cursor: pointer;
+}
+

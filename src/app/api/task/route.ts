@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 // prisma
 
-import { PrismaClient } from "../../../../generated/prisma";
+import { PrismaClient } from "@/../generated/prisma/client";
 
 // 
 

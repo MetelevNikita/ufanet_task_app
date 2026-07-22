@@ -16,6 +16,23 @@ datasource db {
 
 
 
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  department String @default("")
+  email String
+  telegramId String
+  password String
+  loginCorp String
+  сonfirmed Boolean
+  admin Boolean
+  policy Boolean @default(false)
+  updateAt DateTime @default(now())
+  createAt DateTime @default(now())
+}
+
+
+
 model Task {
   id Int @id @default(autoincrement())
   ygId String

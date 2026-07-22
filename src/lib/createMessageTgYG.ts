@@ -9,8 +9,6 @@ import { marketingMessage } from '@/data/marketingMessage'
 export const createMessageTgYG = async (department: string, data: any) => {
   try {
 
-    console.log(department)
-
     switch (department) {
       case 'Отдел рекламы':
         return await advertisingMessage(department, data)

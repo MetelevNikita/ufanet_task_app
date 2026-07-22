@@ -1,22 +1,14 @@
 
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 
 // 
 
-import { Container } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // context
 
-import RootContext from "@/utils/RootContext";
-
-// 
-
-import Header from "@/components/element/Header/Header";
-import Qrcode from "@/components/element/Qrcode/Qrcode";
 
 
 const montserrat = Montserrat({
@@ -38,14 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.variable}`}>
-        <Container className="mt-3">
-          <RootContext>
-            <Header />
-                <Suspense fallback={<div>Loading...</div>}>
-                    {children}
-                </Suspense>
-        </RootContext>
-        </Container>
+          {children}
       </body>
     </html>
   );

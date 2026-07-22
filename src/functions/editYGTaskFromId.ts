@@ -19,11 +19,11 @@ export const editYGTaskFromId = async (key: string, id: string, title: string, c
       })
     })
 
-    if (!responce.ok) {
-      throw new Error(
-        `Ошибка получения задачи из YG по ID ${responce.statusText} - ${responce.status}`
-      )
-    }
+    // if (!responce.ok) {
+    //   throw new Error(
+    //     `Ошибка получения задачи из YG по ID ${responce.statusText} - ${responce.status}`
+    //   )
+    // }
 
     const data = await responce.json()
     return data

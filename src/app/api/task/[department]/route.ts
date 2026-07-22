@@ -215,8 +215,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const { department } = await context.params 
     const currentDepartment = directions.data.find((item: MenuType): Boolean => item.label.toLocaleLowerCase() == department.toLocaleLowerCase())
 
-    console.log(currentDepartment)
-
     if (!currentDepartment) {
       return NextResponse.json({
         message: 'Ошибка отправки сообщения. Отдел не найден',
@@ -286,8 +284,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const message = Object.fromEntries(pairs)
     let data: Object = {}
 
-    console.log(message)
-
 
     // message
 
@@ -332,7 +328,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     console.log(data)
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
-
     console.log('# Создаем в YouGile')
 
 

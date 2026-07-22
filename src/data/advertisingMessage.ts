@@ -54,7 +54,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Файл макета:', `Список`, '\n') +
       createImageMessageList('tg', data.maket_file) +
       row('Ососбенности макета:', data.note, '\n') +
-      row('Дата сдачи:', new Date(data.deadline_making).toLocaleDateString('RU-ru'), '\n') +
+      row('Дата сдачи:', data.deadline_making, '\n') +
       row('Дополнительно:', data.extra, '\n');
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -86,7 +86,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       createImageMessageList('tg', data.smeta_file) +
       row('Дополнительные файлы', `Список`, '\n') +
       createImageMessageList('tg', data.additionally_file) +
-      row('Дата готовности ТЗ:', new Date(data.deadline_event).toLocaleDateString('RU-ru'), '\n') +
+      row('Дата готовности ТЗ:', data.deadline_event, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
@@ -115,7 +115,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       createImageMessageList('tg', data.check_file) +
       row('Ссылка на счет:', data.invoiceLink, '\n') +
       row('Комментарий:', data.comment, '\n') +
-      row('Срок оплаты:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
+      row('Срок оплаты:', data.deadline, '\n') +
       row('Дополнительно:', data.extra, '\n');
       
 
@@ -141,7 +141,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Файл проекта договора:', `Список`, '\n') +
       createImageMessageList('tg', data.document_file) +
       row('Контакт контрагента:', data.counterparty, '\n') +
-      row('Сроки:', new Date(data.deadline_agreement).toLocaleDateString('RU-ru'))
+      row('Сроки:', data.deadline_agreement, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
 
@@ -164,7 +164,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Название проекта/мероприятия:', data.title, '\n') +
       row('Где будет использоваться:', data.using, '\n') +
       row('Что нужно и количество:', data.what, '\n') +
-      row('Сроки:', new Date(data.deadline_props).toLocaleDateString('RU-ru'), '\n') +
+      row('Сроки:', data.deadline_props, '\n') +
       row('Время получения:', data.time_slot, '\n') +
       row('Дополнительно:', data.extra, '\n');
       
@@ -199,8 +199,8 @@ export const advertisingMessage = async (department: string, data: any): Promise
       createImageMessageList('tg', data.maket_file) +
       row('Список награждаемых:', data.awarded_file, '\n') +
       row('Количество:', data.qty, '\n') +
-      row('Дата мероприятия:', new Date(data.event).toLocaleDateString('RU-ru'), '\n') +
-      row('Сроки:', new Date(data.deadline_merch).toLocaleDateString('RU-ru'), '\n') +
+      row('Дата мероприятия:', data.event, '\n') +
+      row('Сроки:', data.deadline_merch, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
@@ -214,7 +214,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Вид одежды:</strong><br>', data.clothes_type, '<br><br>') +
       row('<strong>Размеры и количества:</strong><br>', data.sizes, '<br><br>') +
       row('<strong>Примечание:</strong><br>', data.note, '<br><br>') +
-      row('<strong>Дата получения:</strong><br>', new Date(data.deadline_cloth).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дата получения:</strong><br>', new Date(data.deadline_сloth).toLocaleDateString('RU-ru'), '<br><br>') +
       row('<strong>Время получения:</strong><br>', data.time_slot, '<br><br>') +
       row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
@@ -225,7 +225,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Вид одежды:', data.clothes_type, '\n') +
       row('Размеры и количества:', data.sizes, '\n') +
       row('Примечание:', data.note, '\n') +
-      row('Дата получения:', new Date(data.deadline_cloth).toLocaleDateString('RU-ru'), '\n')
+      row('Дата получения:', data.deadline_сloth, '\n') +
       row('Время получения:', data.time_slot, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
@@ -249,7 +249,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Ссылка на товар:', data.link, '\n') +
       row('Количество:', data.qty, '\n') +
       row('Примечания:', data.notes, '\n') +
-      row('Дата получения', new Date(data.deadline_marketplace).toLocaleDateString('RU-ru'), '\n') +
+      row('Дата получения', data.deadline_marketplace, '\n') +
       row('Дополнительно:', data.extra, '\n');
       
 

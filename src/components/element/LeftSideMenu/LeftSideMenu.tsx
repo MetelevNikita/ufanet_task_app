@@ -221,10 +221,10 @@ const LeftSideMenu: FC<LeftSideMenuProps> = ({ statusData, departmentData, nameD
 
               <Col className='mt-3'>
 
-              <div className={styles.left_menu_title} onClick={(() => {console.log(name)})}>
+              <div className={styles.left_menu_title} onClick={(() => {})}>
                 
                 <BiChevronRight className={styles.left_menu_icon_department}/>
-                Найти
+                Найти по названию
                 
               </div>
 

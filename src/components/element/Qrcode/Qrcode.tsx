@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import React, { FC } from 'react'
 import Image from 'next/image'
 
 
@@ -16,9 +16,16 @@ import { Container, Row, Col } from 'react-bootstrap'
 
 import qrCode from '@/../public/qr-code.svg'
 
+interface QrCodeProps {
+  title: string | React.ReactNode
+  subtitle: string
+  link?: string
+  titleLink?: string
+}
 
 
-const Qrcode: FC = () => {
+
+const Qrcode: FC<QrCodeProps> = ({ title, subtitle, link, titleLink }) => {
   return (
 
     <Container>
@@ -34,9 +41,9 @@ const Qrcode: FC = () => {
             </Col>
 
             <Col md={10} xs={12}  className={styles.qrcode_info_wrapper}>
-              <div className={styles.qrcode_title}>Сначала сканируйте QR-код и подпишитесь на бота в Telegram, только после этого заполняйте форму для ТЗ. <a target='_blanc' href="https://t.me/PR_main_bot">@PR_main_bot</a></div>
+              <div className={styles.qrcode_title}>{title} {(link && titleLink) && <a target='_blanc' href={link}>{titleLink}</a>}</div>
 
-              <div className={styles.qrcode_description}>Примечание: В боте Telegram вы сможете отслеживать, что происходит с вашим ТЗ, на каждом этапе обработки.</div>
+              <div className={styles.qrcode_description}>{subtitle}</div>
             </Col>
 
           </Col>

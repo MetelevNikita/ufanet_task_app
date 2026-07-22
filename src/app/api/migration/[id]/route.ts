@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "../../../../../generated/prisma";
+import { PrismaClient } from "@/../generated/prisma";
 
 // 
 
@@ -43,8 +43,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         }
     })
 
-      console.log('GET TASK FROM MIGRATION', getTask)
-
 
     if (!getTask) {
       return NextResponse.json({ message: `Задача с ID ${id} не найдена` }, { status: 404 });
@@ -58,6 +56,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         { status: 400 }
       );
     }
+
+    console.log('GET TASK FROM MIGRATION', getTask.title)
 
     const yougileKey = process.env.YOGILE_KEY_INSTANCE as string
 
@@ -87,13 +87,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
   }
 
 
-    console.log('TASK ID', getTask.id)
-
-
   if (status === 'approve') {
-
-    console.log('status')
-
 
     const column = columns.content.find((column: {title: string}) => column.title === 'Согласовано')
     const correctColumns = column.id
@@ -149,6 +143,24 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       )
     }
     console.log(`Задача ${getTask.title} перемещена в столбец Согласовано`)
+
+    console.log('status', status)
+
+    const changeTaskStatus = await prisma.task.update({
+      where: {
+        id: Number(id)
+      },
+      data: {
+        status: 'Согласовано'
+      }
+    })
+
+
+    if (!changeTaskStatus) {
+      return NextResponse.json(
+        { message: 'Ошибка изменения статуса задачи' },
+      )
+    }
 
     return NextResponse.json({
       title: getTask.title,
@@ -207,6 +219,25 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     console.log(`Задача ${getTask.title} перемещена в столбец Отклонено`)
 
+
+    console.log('status', status)
+
+    const changeTaskStatus = await prisma.task.update({
+      where: {
+        id: Number(id)
+      },
+      data: {
+        status: 'Отклонено'
+      }
+    })
+
+
+    if (!changeTaskStatus) {
+      return NextResponse.json(
+        { message: 'Ошибка изменения статуса задачи' },
+      )
+    }
+
     return NextResponse.json({
       title: getTask.title,
       ygId: getTask.ygId,
@@ -215,25 +246,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
   } 
 
-  // chande TASK STATUS
 
-  console.log('status', status)
-
-  const changeTaskStatus = await prisma.task.update({
-    where: {
-      id: Number(id)
-    },
-    data: {
-      status
-    }
-  })
-
-
-  if (!changeTaskStatus) {
-    return NextResponse.json(
-      { message: 'Ошибка изменения статуса задачи' },
-    )
-  }
 
 
   return NextResponse.json({

@@ -81,7 +81,7 @@ const sendCommentMessageYG = async (text: string, ygTaskID: string) => {
   try {
 
     const YG_KEY = process.env.YOGILE_KEY_INSTANCE as string
-
+    
     const data = await getYGTaskFromId(YG_KEY, ygTaskID)
 
     if (!data) {
@@ -100,6 +100,7 @@ const sendCommentMessageYG = async (text: string, ygTaskID: string) => {
     const taskColumnId = data.columnId
 
     const editYGTask = await editYGTaskFromId(YG_KEY, ygTaskID, data.title, taskColumnId, taskDescription)
+    console.log('EDIT TASK ', editYGTask)
 
     if (!editYGTask) {
       console.error(`Ошибка изменения задачи из yougile по ID`)
@@ -158,7 +159,6 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
     })
 
     const data = await responce.json()
-    console.log(data)
     return data
     
   } catch (error: Error | unknown) {
@@ -184,8 +184,168 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
 
 
 
+// FN from ADMIN PANEL
+
+
+
+  async function confimedUser (id: string, query: any, answer: string, chatId: number, bot: TelegramBot) {
+
+    try {
+      
+      const currentUser = await prisma.user.findFirst({
+        where: {
+          id: parseInt(id)
+        }
+      })
+
+      if (!currentUser) {
+        console.error('Не найден пользователь в базе данных')
+        return 'Не найден пользователь в базе данных'
+      }
+
+      const updateUser = await prisma.user.update({
+        where: {
+          id: parseInt(id)
+        },
+        data: {
+          сonfirmed: true
+        }
+      })
+
+      if (updateUser) {
+
+        await bot.sendMessage(currentUser.telegramId as string, `Пользователь id:${currentUser.id}#${currentUser.name} добавлен в систему\n\nВход разрешен\n\nПерезагрузите страницу входа`, {parse_mode: 'HTML'})
+
+        await bot.editMessageText(
+            `Пользователь id: ${currentUser.id}#${currentUser.name as string} авторизован и добавлен в базу данных\n\nДата обработки\n${new Date().toLocaleDateString('RU-ru')} - ${new Date().toLocaleTimeString('RU-ru')}`,
+            {
+              parse_mode: 'HTML',
+              chat_id: query.message?.chat.id,
+              message_id: query.message?.message_id,
+            }
+        )
+
+        return 'Сообщение отправлено'
+
+      } else {
+        console.error('Ошибка отпраки')
+      }
+
+    } catch (error) {
+      console.error(error)
+      return `Ошбика смены статуса регистрации пользваотеля`
+    }
+  }
+
+  async function deleteUser (id: string, query: any, answer: string, chatId: number, bot: TelegramBot) {
+
+
+    try {
+      
+        const checkUser = await prisma.user.findFirst({
+          where: {
+            id: parseInt(id)
+          }
+        })
+
+        if (!checkUser) {
+          console.log(`Ошибка удаления пользователя`)
+          bot.sendMessage(chatId, 'Ошибка удаления пользователя')
+          return `Ошбика удаления пользваотеля`
+        }
+
+
+        const deleteUser = await prisma.user.delete({
+          where: {
+            id: parseInt(id)
+          }
+        })
+
+        console.log('Пользователь удален')
+
+        bot.sendMessage(checkUser.telegramId, `Администрация сайта pr-tz.ru удалили пользователя ${checkUser.name}\n\nЗа дополнительной информацией обратитесь в службу PR\n\nДата удаления ${new Date().toLocaleDateString('RU-ru')}`, {parse_mode: 'HTML'})
+
+
+        bot.editMessageText(
+          `Пользователь ${id}#${answer} - Удален\nДата удаления - ${new Date().toLocaleDateString('RU-ru')}`,
+          {
+            chat_id: query.message?.chat.id,
+            message_id: query.message?.message_id,
+          }
+        )
+
+        return 'Сообщение удалено'
+
+    } catch (error) {
+      console.error(error)
+      return `Ошбика удаления пользваотеля`
+    }
+
+
+
+  }
+
+  async function resetUser (id: string, query: any, answer: string, chatId: number, bot: TelegramBot) {
+
+    try {
+      
+      const checkUser = await prisma.user.findFirst({
+        where: {
+          id: parseInt(id)
+        }
+      })
+
+      if (!checkUser) {
+        console.log(`Ошибка смены статуса пользователя`)
+        bot.sendMessage(chatId, 'Ошибка удаления пользователя')
+        return
+      }
+
+      const changeStatus = await prisma.user.update({
+        where: {
+          id: parseInt(id)
+        },
+        data: {
+          сonfirmed: false
+        }
+      })
+
+      if (!changeStatus) {
+
+        console.error('Ошибка смены статуса')
+        bot.sendMessage(query.message?.chat.id as number | string, `Ошибка смены статуса пользователя ${id}#${answer}, попробуйте позже`)
+        return 'Сообщение изменено'
+      }
+
+
+      bot.sendMessage(checkUser.telegramId, `Администрация сайта pr-tz.ru изменили стату регистрации пользователя ${checkUser.name}\n\nДоступ на сайт запрещен\n\nЗа дополнительной информацией обратитесь в службу PR\n\nДата удаления ${new Date().toLocaleDateString('RU-ru')}`)
+
+      bot.editMessageText(
+        `Пользователь ${id}#${answer} - Изменен\n\nСтатус активации пользователя в системе - Ожидает подтверждения\nДата удаления - ${new Date().toLocaleDateString('RU-ru')}`,
+        {
+          chat_id: query.message?.chat.id,
+          message_id: query.message?.message_id,
+        }
+      )
+
+      return 'Сообщение изменено'
+
+
+    } catch (error) {
+      console.error(error)
+      return 'Ошибка из изменения'
+    }
+
+  }
+
+
+
+  // 
+
+
+
 declare global {
-  var _tgBot: TelegramBot | undefined;
+  var _tgBot: TelegramBot;
   var _tgCreating: Promise<TelegramBot> | undefined;
 }
 
@@ -238,6 +398,9 @@ export const getBot = async () => {
         request: telegramAgent ? ({ agent: telegramAgent } as any) : undefined,
       });
 
+
+      console.log('BOT INIT, PID:', process.pid);
+
       // Статус
 
       bot.getMe()
@@ -262,6 +425,7 @@ export const getBot = async () => {
       if (bot.listenerCount('message') === 0) {
 
         // Основа БОТА
+        
 
         bot.on('message', async (msg) => {
         
@@ -270,51 +434,100 @@ export const getBot = async () => {
           const userId = msg.from?.id;
           const isReply = msg.reply_to_message;
 
-          // ответ на комментарий
 
-          if (isReply) {
-            if (!msg.reply_to_message) return
+          if (msg.chat.id.toString() === process.env.ADMIN_GROUP) {
 
-            const titleText = msg.reply_to_message.text
+              const resCommand = await bot.setMyCommands([
+                { command: 'start', description: 'Start bot' },
+                { command: 'help', description: 'Help' },
+              ])
+          
+          
+              if (text === '/start') {
+                bot.sendMessage(process.env.ADMIN_GROUP, 'Админ бот приложения PR-TZ.ru', {
+                  reply_markup: {
+                    keyboard: [
+                      [{ text: 'Получить список пользователей' }],
+                    ],
+                    resize_keyboard: true,
+                    one_time_keyboard: true
+                  }
+                })
+              }
 
-            if (!titleText) return
+              // 
+          
+              if (text === 'Получить список пользователей') {
+            
+                const allUsers = await prisma.user.findMany()
+          
+                if (allUsers.length < 1) {
+                bot.sendMessage(process.env.ADMIN_GROUP as string, 'Список пуст', {parse_mode: 'HTML'})
+                  return 'Данные получены'
+                } else {
+                    allUsers.map((item: {id: number, name: string, email: string, сonfirmed: boolean, createAt: Date, }) => {
+                    
+                    const message = `${item.id}#${item.name} - ${item.email} # Подтверждение ${(item.сonfirmed) ? 'Подтвержден' : 'Ожидает подтверждения'} - Дата создания ${new Date(item.createAt).toLocaleDateString('RU-ru')}`
+          
+                    bot.sendMessage(process.env.ADMIN_GROUP as string, message, {
+                      reply_markup: {
+                        inline_keyboard: [
+                          [{text: 'Удалить', callback_data: `${item.id}|DELETE|${item.name}`}],
+                        ]
+                      }
+                    })
+                    return 'Данные получены'
+                  })
+                }
+          
+          
+              }
 
-            const splitText = titleText.split(' ')
-
-            console.log(splitText)
-
-            const ygId = splitText[2]
-            const tgId = splitText[9]
-
-
-            const sendToYG = await sendCommentMessageYG(text as string, ygId)
-            console.info('Комментарий отправлен в YouGile')
-
-            // 
-
-            const sendToDB = await sendCommentMessageDB(sendToYG.originalTitle, text as string)
-            console.info('Комментарий отправлен в Базу Данных')
-
-            // 
-
-
-            if (!sendToYG.success) {
-              await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
               return
-            }
+          } else {
+              // ответ на комментарий
+
+              if (isReply) {
+                if (!msg.reply_to_message) return
+
+                const titleText = msg.reply_to_message.text
+
+                if (!titleText) return
+
+  
+                const splitText = titleText.split(' ')
+                const ygId = splitText[2]
+                const tgId = splitText[9]
+
+                console.log(splitText)
 
 
-            const sendToTg = await bot.sendMessage(tgId, `КОММЕНТАРИЙ к Задаче - \n\n${sendToYG.title}\n\n${text}`)
+                const sendToYG = await sendCommentMessageYG(text as string, ygId)
+                console.info('Комментарий отправлен в YouGile')
 
-            if (!sendToYG.success) {
-              await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
-              return
-            }
+                // 
 
-            return await bot.sendMessage(chatId, 'ℹ️ Комментарий отмечен в задаче и направлен автору задачи')
-          }
+                const sendToDB = await sendCommentMessageDB(sendToYG.originalTitle, text as string)
+                console.info('Комментарий отправлен в Базу Данных')
 
-          // 
+                // 
+
+
+                if (!sendToYG.success) {
+                  await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
+                  return
+                }
+
+
+                const sendToTg = await bot.sendMessage(tgId, `КОММЕНТАРИЙ к Задаче - \n\n${sendToYG.title}\n\n${text}`)
+
+                if (!sendToYG.success) {
+                  await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
+                  return
+                }
+
+                return await bot.sendMessage(chatId, 'ℹ️ Комментарий отмечен в задаче и направлен автору задачи')
+              }
 
             if (msg.text === '/start') {
               await bot.sendMessage(chatId, 'Привет! Я бот для уведомлений из YouGile.', {
@@ -334,204 +547,240 @@ export const getBot = async () => {
             } else if (msg.text === 'Найти мой Telegram ID') {
               await bot.sendMessage(chatId, 'Вы можете посмотреть свой Telegram ID на корпоративном сайте или воспользоватеься ботом @Getmyid_bot')
             } else {
-              await bot.sendMessage(chatId, 'Еще что то спросить хотите.....')
+              return
             }
+
+          }
+          
+
         })
-
-        // ОТВЕТ НЕ КНОПКАХ
-
-        bot.on('callback_query', async (query) => {
-
-          // 
-
-          const chatId = query.message?.chat.id as number;
-          const messageId = query.message?.message_id as number;
-
-
-          const reconciliatorUser = `@${query.from.username}`
-
-          if (!query.data) return;
-
-          const data = query.data.split('|')
-          const status = data[0]
-          const cardId = data[1]
-
-
-          const currentCard = await prisma.task.findFirst({
-            where: {
-              id: parseInt(cardId)
-            }
-          })
-
-
-          if (!currentCard) {
-            throw new Error('Ошибка! Не удалось найти карточку с задачей')
-          }
-
-          function parseCurrentCard (currentCard: any) {
-                const res = {
-                    ...currentCard,
-                    ...JSON.parse(currentCard.message)
-                }
-
-                delete res.message
-                return res
-          }
-
-          const cardFromDB = parseCurrentCard(currentCard)
-
-
-          const {messageYG, messageTG} = await createMessageTgYG(cardFromDB?.department, cardFromDB)
-
-
-          if (status === 'approve') {
-
-              console.log('Нажали approve')
-
-              const YGCARD = await sendAnswerMessage(status, cardFromDB.department, cardId)
-
-              console.log(YGCARD, "FROM TG BOT")
-
-              if (YGCARD.success === false ) {
-
-                await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
-
-                return {
-                  success: false,
-                  message: 'ERROR'
-                }
-              }
-
-              await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.data.tgId} # \n\n Title: ${YGCARD.data.title}`, {
-                chat_id: chatId,
-                message_id: messageId,
-              });
-
-              return {
-                  success: true,
-                  message: 'MESSAGE APPROVE'
-              }
-
-          } 
-
-          if (status === 'reject') {
-
-              console.log('Нажали reject')
-
-              const YGCARD = await sendAnswerMessage(status, cardFromDB.department, cardId)
-
-              if (YGCARD.success === false ) {
-                await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
-                return {
-                  success: false,
-                  message: 'ERROR'
-                }
-              }
-              
-              await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ❌ отклонена. Автор сообщения # ${YGCARD.data.tgId} # \n\n Title: ${YGCARD.data.title}`, {
-                chat_id: chatId,
-                message_id: messageId,
-              });
-
-              return {
-                  success: true,
-                  message: 'MESSAGE REJECT'
-              }
-          }
-
-          if (status === 'approve_resend') {
-            console.log('send approve_resend')
-
-            const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
-            const telegramResencId = cardFromDB.reconciliator.id
-
-            await bot.sendMessage(
-              telegramResencId,
-              `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "✅ Согласовано")\n\n Согласовано пользователем -  ${reconciliatorUser}\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`,
-              {
-                reply_markup: {
-                  inline_keyboard: [
-                    [
-                      { text: 'Согласовать', callback_data: buildCB('approve', cardFromDB.id, '')},
-                      { text: 'Отклонить', callback_data: buildCB('reject', cardFromDB.id, '')},
-                    ]
-                  ]
-                }
-              }
-            )
-
-            await bot.editMessageText(`Заявка # ${cardFromDB.id} : ✅ получила предварительное согласование и отправлена на согласование в группу с Ольгой Николаевной Эделевой.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\n Title: ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
-              chat_id: chatId,
-              message_id: messageId,
-            });
-
-            await bot.sendMessage(
-              cardFromDB.tgId,
-              `№${cardFromDB.id} - ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\n\n${messageTG}\n\nСледите за изменениями в боте или на сайте pr-tz.ru Дата изменения ${new Date().toLocaleDateString('RU-ru')}`,
-            )
-
-              return {
-                  success: true,
-                  message: 'MESSAGE RESEND AGREED'
-              }
-
-          }
-
-          if (status === 'reject_resend') {
-            console.log('send approve_resend')
-
-
-            await bot.sendMessage(
-              cardFromDB.tgId,
-              `Заявка # ${cardFromDB.id} ❌ Отклонена\n\n За дополнительной информацией обратитесь\n\n${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`
-            )
-
-            await bot.editMessageText(`Заявка # ${cardFromDB.id} : ❌ Отклонено - Отказ отправлен автору заявки.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
-              chat_id: chatId,
-              message_id: messageId,
-            });
-
-              return {
-                  success: true,
-                  message: 'MESSAGE RESEND REJECT'
-              }
-          }
-
-          if (status === 'wrong_group_resend') {
-            console.log('send approve_resend')
-
-            const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
-            const telegramResencId = cardFromDB.reconciliator.id
-
-            await bot.sendMessage(
-              telegramResencId,
-              `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "⚠️ Ошибочно отправленана предварительное согласование")\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nПеремещена пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`,
-              {
-                reply_markup: {
-                  inline_keyboard: [
-                    [
-                      { text: 'Согласовать', callback_data: buildCB('approve', cardFromDB.id, '')},
-                      { text: 'Отклонить', callback_data: buildCB('reject', cardFromDB.id, '')},
-                    ]
-                  ]
-                }
-              }
-            )
-
-            await bot.editMessageText(`Заявка # ${cardFromDB.id} : ⚠️ Ошибочно отправлена на согласование в данную группу - переносим в основную группу.\n\nАвтор сообщения # ${cardFromDB.fio} #\n\nTitle: ${cardFromDB.title}\n\nПеремещена пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
-              chat_id: chatId,
-              message_id: messageId,
-            });
-
-              return {
-                  success: true,
-                  message: 'MESSAGE WRONG GROUP'
-              }
-          }
-        })
-
 
       }
+
+
+
+      bot.on('callback_query', async (query) => {
+
+          if (!query.message || !('text' in query.message) || !('chat' in query.message)) {
+            return 'Сообщение не найдено'
+          }
+
+          const chatId = query.message?.chat.id
+
+          if (chatId.toString() === process.env.ADMIN_GROUP) {
+              const data = query.data?.split('|') as any
+              const text = query.message.text
+
+
+              const answer = data[2]
+              const method = data[1]
+              const id = data[0]
+
+              console.log('Ответ от Callback ', answer)
+
+              if (!text) {
+                return 'Сообщение не найдено'
+              }
+
+              // 
+
+  
+              switch (method) {
+                case 'CONFIRMED':
+                  return await confimedUser(id, query, answer, chatId, bot)
+                case 'DELETE':
+                  return await deleteUser(id, query, answer, chatId, bot)
+                case 'RESET':
+                  return await resetUser(id, query, answer, chatId, bot)
+                  
+              }
+
+              return
+
+          } else {
+
+
+            const messageId = query.message?.message_id as number;
+            const reconciliatorUser = `@${query.from.username}`
+
+            if (!query.data) return;
+
+            const data = query.data.split('|')
+            const status = data[0]
+            const cardId = data[1]
+
+
+            const currentCard = await prisma.task.findFirst({
+              where: {
+                id: parseInt(cardId)
+              }
+            })
+
+
+            if (!currentCard) {
+              throw new Error('Ошибка! Не удалось найти карточку с задачей')
+            }
+
+            function parseCurrentCard (currentCard: any) {
+                  const res = {
+                      ...currentCard,
+                      ...JSON.parse(currentCard.message)
+                  }
+
+                  delete res.message
+                  return res
+            }
+
+            const cardFromDB = parseCurrentCard(currentCard)
+
+            const {messageYG, messageTG} = await createMessageTgYG(cardFromDB?.department, cardFromDB)
+
+
+            if (status === 'approve') {
+
+                console.log('Нажали approve')
+
+                const YGCARD = await sendAnswerMessage(status, cardFromDB.department, cardId)
+
+                if (YGCARD.success === false ) {
+
+                  await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
+
+                  return {
+                    success: false,
+                    message: 'ERROR'
+                  }
+                }
+
+                await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ✅ согласована. Автор сообщения # ${YGCARD.data.tgId} # \n\n Title: ${YGCARD.data.title}`, {
+                  chat_id: chatId,
+                  message_id: messageId,
+                });
+
+                return {
+                    success: true,
+                    message: 'MESSAGE APPROVE'
+                }
+
+            } 
+
+            if (status === 'reject') {
+
+                console.log('Нажали reject')
+
+                const YGCARD = await sendAnswerMessage(status, cardFromDB.department, cardId)
+
+                if (YGCARD.success === false ) {
+                  await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
+                  return {
+                    success: false,
+                    message: 'ERROR'
+                  }
+                }
+                
+                await bot.editMessageText(`Заявка # ${YGCARD.data.ygId} : ❌ отклонена. Автор сообщения # ${YGCARD.data.tgId} # \n\n Title: ${YGCARD.data.title}`, {
+                  chat_id: chatId,
+                  message_id: messageId,
+                });
+
+                return {
+                    success: true,
+                    message: 'MESSAGE REJECT'
+                }
+            }
+
+            if (status === 'approve_resend') {
+              console.log('send approve_resend')
+
+              const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
+              const telegramResencId = cardFromDB.reconciliator.id
+
+              await bot.sendMessage(
+                telegramResencId,
+                `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "✅ Согласовано")\n\n Согласовано пользователем -  ${reconciliatorUser}\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+                {
+                  reply_markup: {
+                    inline_keyboard: [
+                      [
+                        { text: 'Согласовать', callback_data: buildCB('approve', cardFromDB.id, '')},
+                        { text: 'Отклонить', callback_data: buildCB('reject', cardFromDB.id, '')},
+                      ]
+                    ]
+                  }
+                }
+              )
+
+              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ✅ получила предварительное согласование и отправлена на согласование в группу с Ольгой Николаевной Эделевой.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\n Title: ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+                chat_id: chatId,
+                message_id: messageId,
+              });
+
+              await bot.sendMessage(
+                cardFromDB.tgId,
+                `№${cardFromDB.id} - ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\n\n${messageTG}\n\nСледите за изменениями в боте или на сайте pr-tz.ru Дата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+              )
+
+                return {
+                    success: true,
+                    message: 'MESSAGE RESEND AGREED'
+                }
+
+            }
+
+            if (status === 'reject_resend') {
+              console.log('send approve_resend')
+
+
+              await bot.sendMessage(
+                cardFromDB.tgId,
+                `Заявка # ${cardFromDB.id} ❌ Отклонена\n\n За дополнительной информацией обратитесь\n\n${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`
+              )
+
+              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ❌ Отклонено - Отказ отправлен автору заявки.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+                chat_id: chatId,
+                message_id: messageId,
+              });
+
+                return {
+                    success: true,
+                    message: 'MESSAGE RESEND REJECT'
+                }
+            }
+
+            if (status === 'wrong_group_resend') {
+              console.log('send approve_resend')
+
+              const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
+              const telegramResencId = cardFromDB.reconciliator.id
+
+              await bot.sendMessage(
+                telegramResencId,
+                `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "⚠️ Ошибочно отправленана предварительное согласование")\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nПеремещена пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+                {
+                  reply_markup: {
+                    inline_keyboard: [
+                      [
+                        { text: 'Согласовать', callback_data: buildCB('approve', cardFromDB.id, '')},
+                        { text: 'Отклонить', callback_data: buildCB('reject', cardFromDB.id, '')},
+                      ]
+                    ]
+                  }
+                }
+              )
+
+              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ⚠️ Ошибочно отправлена на согласование в данную группу - переносим в основную группу.\n\nАвтор сообщения # ${cardFromDB.fio} #\n\nTitle: ${cardFromDB.title}\n\nПеремещена пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+                chat_id: chatId,
+                message_id: messageId,
+              });
+
+                return {
+                    success: true,
+                    message: 'MESSAGE WRONG GROUP'
+                }
+            }
+          }
+
+      })
 
       // если бот уже создается, ждем его создания и возвращаем тот же промис
 

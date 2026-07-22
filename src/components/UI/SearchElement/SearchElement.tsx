@@ -102,16 +102,12 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
 
     const filteredTask = Object.entries(JSON.parse(task.message)).filter((item) => item[0] !== 'reconciliator')
 
-    console.log(filteredTask)
-
     const formattedTask = filteredTask.map((item: any) => {
       if (typeof item[1] === 'object') {
         return item[1].join(',')
       }
       return item[1]
     })
-
-    console.log(formattedTask)
     setCurrentTask(formattedTask)
     return formattedTask
 
@@ -190,8 +186,6 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
 
               if (item.startsWith('https://') || item.startsWith('http://')) {
 
-                console.log('link')
-
                 return (
 
                   <Col key={index} md={9} className='d-flex justify-content-start'>
@@ -201,7 +195,6 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
                 )
     
             } else {
-                  console.log('text')
                   return (
 
                     <Col key={index} md={9} className='d-flex justify-content-start'>

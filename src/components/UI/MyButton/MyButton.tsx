@@ -23,9 +23,10 @@ interface MyButtonProps {
   type: "submit" | "button" | "reset",
   link?: string
   style?: CSSProperties
+  disabled?: boolean
 }
 
-const MyButton: FC<MyButtonProps> = ({ text, onClick, type, link, style }) => {
+const MyButton: FC<MyButtonProps> = ({ text, onClick, type, link, style, disabled=false }) => {
 
     return (
       <motion.button
@@ -34,7 +35,9 @@ const MyButton: FC<MyButtonProps> = ({ text, onClick, type, link, style }) => {
       type={type}
       onClick={onClick}
       whileHover={{background: 'linear-gradient(90deg,rgba(252, 155, 50, 1) 0%, rgba(255, 102, 0, 1) 99%)', border: '1px solid #4f01ae00', color: 'white'}}
-      whileTap={{scale: 1.1}}>
+      whileTap={{scale: 1.1}}
+      disabled={disabled}
+      >
 
         <span className={styles.btn_text}>{text}</span>
         <CgArrowLongRight className={styles.btn_icon}/>

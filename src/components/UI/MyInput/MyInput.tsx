@@ -14,10 +14,11 @@ interface MyInputProps {
   value: string | number
   name: string
   error?: boolean
+  onFocus?: () => any
 
 }
 
-const MyInput:FC<MyInputProps> = ({ type, title, placeholder, onChange, value, name, error = false }) => {
+const MyInput:FC<MyInputProps> = ({ type, title, placeholder, onChange, value, name, error = false, onFocus }) => {
 
   let isAString = ''
 
@@ -44,7 +45,7 @@ const MyInput:FC<MyInputProps> = ({ type, title, placeholder, onChange, value, n
     <div className={styles.input_container}>
       <span className={styles.input_title}>{title}</span>
 
-      <input style={errorField} name={name} className={styles.input_text} type={type} placeholder={placeholder} value={value ?? ''} onChange={onChange} required={true}/>
+      <input style={errorField} name={name} className={styles.input_text} type={type} placeholder={placeholder} value={value ?? ''} onChange={onChange} required={true} onFocus={onFocus}/>
     </div>
 
   )
