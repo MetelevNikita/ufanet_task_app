@@ -38,7 +38,6 @@ export const POST = async (req: NextRequest) => {
 
 
     const comparePassword = await bcrypt.compare(password, authUser.password)
-    console.log('Валидация пароля ', comparePassword)
 
 
     if (!comparePassword) {
@@ -72,7 +71,8 @@ export const POST = async (req: NextRequest) => {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
-        maxAge: 60 * 60 * 24 * 7,
+        // maxAge: 60 * 60 * 24 * 7,
+        maxAge: 60
     })
 
     res.cookies

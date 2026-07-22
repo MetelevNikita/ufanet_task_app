@@ -34,7 +34,6 @@ export const POST = async (req: NextRequest) => {
       }, {status: 404})
     }
 
-    console.log(findUser)
     const hashPassword = await bcrypt.hash(password, 10)
     const changePassword = await prisma.user.update({
       where: {

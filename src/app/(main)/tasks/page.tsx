@@ -77,6 +77,8 @@ const page: FC = () => {
 
         const dataStorage = localStorage.getItem('data')?.split('|')
 
+        console.log(dataStorage)
+
         if (!dataStorage) {
           return []
         }
@@ -91,14 +93,17 @@ const page: FC = () => {
         // 
 
         const currentUser = users.data.find((item: {id: number}) => item.id.toString() === id)
+
         // 
-        const currentUserTask = tasks.filter((item: any) => item.fio == currentUser.name)
 
-        filter = currentUserTask
+        filter = tasks.filter((item: any) => item.fio == currentUser.name)
+        console.log('USER TASK ', filter)
+        console.log('FILTER ', filter)
 
-   
+
         if (department) {
-            filter = tasks.filter((item: {department: string}) => item.department == department)
+            filter = filter.filter((item: {department: string}) => item.department == department)
+            console.log(filter)
         }
 
         if (status) {

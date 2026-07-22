@@ -6,7 +6,7 @@ import styles from './page.module.css'
 
 // 
 
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Container, Row, Col } from 'react-bootstrap'
 import { motion } from 'motion/react'
@@ -26,8 +26,13 @@ const page: FC = () => {
   const [errorAuth, setErrorAuth] = useState<string | null>(null)
   const [resultHandler, setResultHandler] = useState<any>(null)
 
+  useEffect(() => {
 
-  console.log(user)
+    if (localStorage.getItem('data')) {
+      localStorage.removeItem('data')
+    }
+
+  }, [])
 
 
   async function handleLogin(user: {email: string, password: string, policy: boolean}) {
@@ -59,7 +64,6 @@ const page: FC = () => {
       }
 
       const data = await response.json()
-      console.log(data)
 
       if (!data.success) {
         setErrorAuth(data.message)
@@ -67,7 +71,6 @@ const page: FC = () => {
       }
       setResultHandler(data.message)
 
-      console.log(data)
       localStorage.setItem('data', data.data)
       router.push('/')
 
@@ -141,7 +144,6 @@ const page: FC = () => {
               fio={''}
               placeholder={''}
               onChange={(e) => {
-                console.log('click')
                 setUser({...user, policy: e.target.checked})
               }}
               value={user.policy}

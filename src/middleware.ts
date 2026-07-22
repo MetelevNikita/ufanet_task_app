@@ -30,13 +30,17 @@ export async function middleware(request: NextRequest) {
   } catch (err: Error | unknown) {
 
     if (err instanceof Error) {
+
+
+      const url = new URL('/auth')
+      url.searchParams.set('expired', 'true')
       if (err.name === 'TokenExpiredError') {
         console.error('Срок действия токена истек')
-        return NextResponse.redirect(new URL('/auth', request.url))
+        return NextResponse.redirect(new URL(url, request.url))
       }
 
       console.error('ERR ', err)
-      return NextResponse.redirect(new URL('/auth', request.url))
+      return NextResponse.redirect(new URL(url, request.url))
     }
 
   }

@@ -13,8 +13,6 @@ export const POST = async (req: NextRequest) => {
 
     const {name, department, email, telegramId, loginCorp, password} = await req.json()
 
-    console.log(name, department,  email, telegramId, loginCorp, password)
-
     if (!name || !department || !email || !telegramId || !loginCorp || !password) {
       return NextResponse.json({
         success: false,
@@ -60,8 +58,6 @@ export const POST = async (req: NextRequest) => {
     const newUser = await prisma.user.create({
       data: userObject
     })
-
-    console.log(newUser)
 
     // send to user
 

@@ -1,9 +1,10 @@
 'use client'
 
-import { FC, useState, useContext } from 'react'
+import { FC, useContext } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, scale } from 'motion/react'
+import { motion } from 'motion/react'
+
 // styles
 
 import styles from './Header.module.css'
@@ -25,6 +26,10 @@ import MyButton from '@/components/UI/MyButton/MyButton'
 
 import logo from '@/../public/logo_ufanet/logo_full.svg'
 import tgIcon from '@/../public/social_icon/tg.svg'
+
+// lib
+
+import { logoutUser } from '@/lib/logoutUser'
 
 
 
@@ -59,26 +64,47 @@ const Header: FC<HeaderProps>  = () => {
         </Col>
 
         <Col md={3} xs={12} className='d-flex flex-md-row flex-column justify-content-start align-items-center mt-2 mb-2'>
-
             <MyButton text={(path === '/tasks') ? 'Вернуться на главную' : 'Посмотреть историю заявок'} onClick={() => {(path === '/tasks') ? window.location.href = '/' : window.location.href = '/tasks'}} type={'button'} />
-        
         </Col>
 
-        <Col md={7} xs={12} className='d-flex flex-row justify-content-md-end justify-content-center align-items-center mt-2 mb-2'>
-
-
+        <Col md={6} xs={12} className='d-flex flex-row justify-content-md-end justify-content-center align-items-center mt-2 mb-2'>
             <motion.div onClick={() => {window.location.href = socialArr[0].link}} whileHover={{color: '#FF6600', scale: 1.02}} className={[styles.header_info_title, 'd-flex'].join(' ')}>Что-то не работает? Пишите.</motion.div>
-
             {
-            
               socialArr.map((item: any, index: number): React.ReactNode => {
                 return <Link key={index+1} target={'_blank'} href={item.link}><Image className={styles.social_icon}  src={item.icon} alt='icon'/></Link>
               })
-
             }
+        </Col>
 
+        <Col md={1} xs={12} className='d-flex flex-row justify-content-md-end justify-content-center align-items-center mt-2 mb-2'>
+            
+            <motion.div
+              className={styles.exit_btn}
+              whileHover={{color: 'white', backgroundColor: '#FF6600'}}
+              whileTap={{scale: 1.4}}
+              transition={{
+                duration: 0.3
+              }}
+              onClick={async () => {
 
+                const isConfirm = confirm('Вы уверены что хотите покинуть приложение?')
 
+                if (isConfirm) {
+                  const logoutUserHandler = await logoutUser()
+
+                  if (logoutUserHandler.success) {
+                    localStorage.removeItem('data')
+                    window.location.href = '/auth'
+                  } else {
+                    return
+                  }
+                }
+
+              }}
+            >
+                Выйти
+            </motion.div>
+        
         </Col>
 
 
