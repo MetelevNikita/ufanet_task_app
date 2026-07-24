@@ -14,6 +14,11 @@ import { Container, Row, Col } from 'react-bootstrap'
 
 import MyInput from '@/components/UI/MyInput/MyInput'
 import MyButton from '@/components/UI/MyButton/MyButton'
+import MySelect from '@/components/UI/MySelect/MySelect'
+
+// types
+
+import { MenuType } from '@/types/types'
 
 
 
@@ -21,12 +26,62 @@ const page: FC = () => {
 
   const router = useRouter()
 
+  // 
+
   const [user, setUser] = useState<any>(null)
 
+  // 
 
   const [disabledBtn, setDisabledBtn] = useState<{disable: boolean, text: string}>({disable: false, text: 'Регистрация'})
   const [errorAuth, setErrorAuth] = useState<string | null>(null)
   const [resultHandler, setResultHandler] = useState<any>(null)
+
+  // 
+
+  const branchSelectorsArr: MenuType[] = [
+    {
+      id: 1,
+      label: 'Уфа',
+      value: 'Уфа',
+    },
+    {
+      id: 2,
+      label: 'Оренбуржье',
+      value: 'Оренбуржье',
+    },
+    {
+      id: 3,
+      label: 'Поволжье',
+      value: 'Поволжье',
+    },
+    {
+      id: 4,
+      label: 'Южный куст',
+      value: 'Южный куст',
+    },
+    {
+      id: 5,
+      label: 'Северный куст',
+      value: 'Северный куст',
+    },
+    {
+      id: 6,
+      label: 'Западный куст',
+      value: 'Западный куст',
+    },
+    {
+      id: 7,
+      label: 'Московская область',
+      value: 'Московская область',
+    },
+    {
+      id: 8,
+      label: 'Нижегородский филиал',
+      value: 'Нижегородский филиал',
+    }
+  ]
+
+  // 
 
   async function createNewUserHandler (user: any) {
     try {
@@ -51,7 +106,6 @@ const page: FC = () => {
         return
       }
 
-      console.log(data)
       setResultHandler(data)
       alert(data.message)
       
@@ -68,7 +122,6 @@ const page: FC = () => {
       return error
     }
   }
-
 
 
 
@@ -90,6 +143,20 @@ const page: FC = () => {
             placeholder="Имя Фамилия"
             value={user?.name || ''}
             onChange={(e: any) => setUser({...user, name: e.target.value})}
+          />
+        </Col>
+
+        <Col md={8} className="mt-3">
+          <MySelect
+            title={''}
+            name={'branch'}
+            options={branchSelectorsArr}
+            onChange={
+              (e: any) => {
+                setUser({...user, branch: e.target.value})
+              }
+            }
+            value={user?.brnach}
           />
         </Col>
 

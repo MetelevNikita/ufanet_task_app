@@ -13,11 +13,11 @@ export const createMessageTgYG = async (department: string, data: any) => {
       case 'Отдел рекламы':
         return await advertisingMessage(department, data)
       case 'Отдел интернет-маркетинга':
-        return marketingMessage(department, data)
+        return await marketingMessage(department, data)
       case 'PR':
-        return prMessage(department, data)
+        return await prMessage(department, data)
       case 'Отдел дизайна':
-        return designMessage(department, data)
+        return await designMessage(department, data)
       default: 
         return {
           messageTG: 'НЕ ТАКОГО ТИПА ЗАДАЧ!',

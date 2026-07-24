@@ -330,6 +330,8 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const [formData, setFormData] = useState<any>({
   })
 
+  console.log(formData)
+
 
 
   useEffect(() => {
@@ -350,7 +352,8 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
           setFormData({
             fio: currentUser.name,
             subdivision: currentUser.department,
-            tgId: currentUser.telegramId
+            tgId: currentUser.telegramId,
+            branch: currentUser.branch
           })
           
         } catch (error) {

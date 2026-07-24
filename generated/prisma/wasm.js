@@ -95,6 +95,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  branch: 'branch',
   department: 'department',
   email: 'email',
   telegramId: 'telegramId',
@@ -158,7 +159,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/nikitametelev/Documents/NEXTJS/ufanetapp/generated/prisma",
+      "value": "/Users/nikitametelev/Documents/NEXTJS/ufanet_task_app/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -172,7 +173,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/nikitametelev/Documents/NEXTJS/ufanetapp/prisma/schema.prisma",
+    "sourceFilePath": "/Users/nikitametelev/Documents/NEXTJS/ufanet_task_app/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -194,13 +195,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id         Int      @id @default(autoincrement())\n  name       String\n  department String   @default(\"\")\n  email      String\n  telegramId String\n  password   String\n  loginCorp  String\n  сonfirmed Boolean\n  admin      Boolean\n  policy     Boolean  @default(false)\n  updateAt   DateTime @default(now())\n  createAt   DateTime @default(now())\n}\n\nmodel Task {\n  id           Int      @id @default(autoincrement())\n  ygId         String\n  department   String\n  typeApproval String   @default(\"\")\n  fio          String\n  subdivision  String\n  tgId         String\n  branch       String\n  leader       String\n  type         String\n  title        String\n  deadline     String   @default(\"\")\n  message      String\n  status       String\n  stage        String\n  comment      String?  @default(\"\")\n  createAt     DateTime @default(now())\n}\n",
-  "inlineSchemaHash": "00d2f2169f590e1eeeb5818da79b843ebce6598e23c0182514012ace31b65449",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id         Int      @id @default(autoincrement())\n  name       String\n  branch     String   @default(\"\")\n  department String   @default(\"\")\n  email      String\n  telegramId String\n  password   String\n  loginCorp  String\n  сonfirmed Boolean\n  admin      Boolean\n  policy     Boolean  @default(false)\n  updateAt   DateTime @default(now())\n  createAt   DateTime @default(now())\n}\n\nmodel Task {\n  id           Int      @id @default(autoincrement())\n  ygId         String\n  department   String\n  typeApproval String   @default(\"\")\n  fio          String\n  subdivision  String\n  tgId         String\n  branch       String\n  leader       String\n  type         String\n  title        String\n  deadline     String   @default(\"\")\n  message      String\n  status       String\n  stage        String\n  comment      String?  @default(\"\")\n  createAt     DateTime @default(now())\n}\n",
+  "inlineSchemaHash": "3b4e3f7211080250fddecaa9a05949180638d3d3df34edb9c46a21e6b045f8a7",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telegramId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"loginCorp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"сonfirmed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"admin\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"policy\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"updateAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ygId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"typeApproval\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fio\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subdivision\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tgId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"branch\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"leader\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deadline\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stage\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"comment\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"branch\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telegramId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"loginCorp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"сonfirmed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"admin\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"policy\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"updateAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ygId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"typeApproval\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fio\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subdivision\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tgId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"branch\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"leader\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deadline\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stage\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"comment\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

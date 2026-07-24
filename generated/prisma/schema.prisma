@@ -17,6 +17,7 @@ datasource db {
 model User {
   id         Int      @id @default(autoincrement())
   name       String
+  branch     String   @default("")
   department String   @default("")
   email      String
   telegramId String

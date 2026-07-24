@@ -974,6 +974,7 @@ export namespace Prisma {
   export type UserMinAggregateOutputType = {
     id: number | null
     name: string | null
+    branch: string | null
     department: string | null
     email: string | null
     telegramId: string | null
@@ -989,6 +990,7 @@ export namespace Prisma {
   export type UserMaxAggregateOutputType = {
     id: number | null
     name: string | null
+    branch: string | null
     department: string | null
     email: string | null
     telegramId: string | null
@@ -1004,6 +1006,7 @@ export namespace Prisma {
   export type UserCountAggregateOutputType = {
     id: number
     name: number
+    branch: number
     department: number
     email: number
     telegramId: number
@@ -1029,6 +1032,7 @@ export namespace Prisma {
   export type UserMinAggregateInputType = {
     id?: true
     name?: true
+    branch?: true
     department?: true
     email?: true
     telegramId?: true
@@ -1044,6 +1048,7 @@ export namespace Prisma {
   export type UserMaxAggregateInputType = {
     id?: true
     name?: true
+    branch?: true
     department?: true
     email?: true
     telegramId?: true
@@ -1059,6 +1064,7 @@ export namespace Prisma {
   export type UserCountAggregateInputType = {
     id?: true
     name?: true
+    branch?: true
     department?: true
     email?: true
     telegramId?: true
@@ -1161,6 +1167,7 @@ export namespace Prisma {
   export type UserGroupByOutputType = {
     id: number
     name: string
+    branch: string
     department: string
     email: string
     telegramId: string
@@ -1195,6 +1202,7 @@ export namespace Prisma {
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    branch?: boolean
     department?: boolean
     email?: boolean
     telegramId?: boolean
@@ -1210,6 +1218,7 @@ export namespace Prisma {
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    branch?: boolean
     department?: boolean
     email?: boolean
     telegramId?: boolean
@@ -1225,6 +1234,7 @@ export namespace Prisma {
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    branch?: boolean
     department?: boolean
     email?: boolean
     telegramId?: boolean
@@ -1240,6 +1250,7 @@ export namespace Prisma {
   export type UserSelectScalar = {
     id?: boolean
     name?: boolean
+    branch?: boolean
     department?: boolean
     email?: boolean
     telegramId?: boolean
@@ -1252,7 +1263,7 @@ export namespace Prisma {
     createAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "department" | "email" | "telegramId" | "password" | "loginCorp" | "сonfirmed" | "admin" | "policy" | "updateAt" | "createAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "branch" | "department" | "email" | "telegramId" | "password" | "loginCorp" | "сonfirmed" | "admin" | "policy" | "updateAt" | "createAt", ExtArgs["result"]["user"]>
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
@@ -1260,6 +1271,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
+      branch: string
       department: string
       email: string
       telegramId: string
@@ -1695,6 +1707,7 @@ export namespace Prisma {
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'Int'>
     readonly name: FieldRef<"User", 'String'>
+    readonly branch: FieldRef<"User", 'String'>
     readonly department: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly telegramId: FieldRef<"User", 'String'>
@@ -3273,6 +3286,7 @@ export namespace Prisma {
   export const UserScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    branch: 'branch',
     department: 'department',
     email: 'email',
     telegramId: 'telegramId',
@@ -3412,6 +3426,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     id?: IntFilter<"User"> | number
     name?: StringFilter<"User"> | string
+    branch?: StringFilter<"User"> | string
     department?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     telegramId?: StringFilter<"User"> | string
@@ -3427,6 +3442,7 @@ export namespace Prisma {
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    branch?: SortOrder
     department?: SortOrder
     email?: SortOrder
     telegramId?: SortOrder
@@ -3445,6 +3461,7 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
+    branch?: StringFilter<"User"> | string
     department?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     telegramId?: StringFilter<"User"> | string
@@ -3460,6 +3477,7 @@ export namespace Prisma {
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    branch?: SortOrder
     department?: SortOrder
     email?: SortOrder
     telegramId?: SortOrder
@@ -3483,6 +3501,7 @@ export namespace Prisma {
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"User"> | number
     name?: StringWithAggregatesFilter<"User"> | string
+    branch?: StringWithAggregatesFilter<"User"> | string
     department?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     telegramId?: StringWithAggregatesFilter<"User"> | string
@@ -3611,6 +3630,7 @@ export namespace Prisma {
 
   export type UserCreateInput = {
     name: string
+    branch?: string
     department?: string
     email: string
     telegramId: string
@@ -3626,6 +3646,7 @@ export namespace Prisma {
   export type UserUncheckedCreateInput = {
     id?: number
     name: string
+    branch?: string
     department?: string
     email: string
     telegramId: string
@@ -3640,6 +3661,7 @@ export namespace Prisma {
 
   export type UserUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     telegramId?: StringFieldUpdateOperationsInput | string
@@ -3655,6 +3677,7 @@ export namespace Prisma {
   export type UserUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    branch?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     telegramId?: StringFieldUpdateOperationsInput | string
@@ -3670,6 +3693,7 @@ export namespace Prisma {
   export type UserCreateManyInput = {
     id?: number
     name: string
+    branch?: string
     department?: string
     email: string
     telegramId: string
@@ -3684,6 +3708,7 @@ export namespace Prisma {
 
   export type UserUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     telegramId?: StringFieldUpdateOperationsInput | string
@@ -3699,6 +3724,7 @@ export namespace Prisma {
   export type UserUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    branch?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     telegramId?: StringFieldUpdateOperationsInput | string
@@ -3893,6 +3919,7 @@ export namespace Prisma {
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    branch?: SortOrder
     department?: SortOrder
     email?: SortOrder
     telegramId?: SortOrder
@@ -3912,6 +3939,7 @@ export namespace Prisma {
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    branch?: SortOrder
     department?: SortOrder
     email?: SortOrder
     telegramId?: SortOrder
@@ -3927,6 +3955,7 @@ export namespace Prisma {
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    branch?: SortOrder
     department?: SortOrder
     email?: SortOrder
     telegramId?: SortOrder

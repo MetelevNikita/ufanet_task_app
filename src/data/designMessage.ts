@@ -1,9 +1,16 @@
 
 import {createImageMessageList} from '@/lib/createImageMessageList'
-import { a } from '@vitejs/plugin-rsc/plugin-24ZutaDY';
 
 
 export const designMessage = async (department: string, data: any): Promise<{messageYG:string;messageTG:string}> => {
+
+
+  const clientTg =
+  typeof data.client_tg === 'string'
+    ? data.client_tg.trim()
+    : '';
+
+
   const headYG = (extra: string) =>
     `Дата создания - ${data.dateCreated}<br><br>` +
     `Отдел - ${data.department}<br><br>` +
@@ -50,7 +57,15 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('<strong>Где будет размещаться макет?:</strong><br>', data.placement, '<br><br>') +
       row('<strong>Фотография места размещения:</strong><br>', `Список`, '<br><br>') +
       createImageMessageList('yg', data.place_file) +
-      row('<strong>Телеграм заказчика макета:</strong><br>', (data.client_tg.startsWith('@')) ? `<a target="_blank" rel="noopener noreferrer" href=https://t.me/${data.client_tg.slice(1)}>${data.client_tg}</a>` : `<a target="_blank" rel="noopener noreferrer" href=https://t.me/${data.client_tg}>${data.client_tg}</a>`, '<br><br>') +
+      row(
+          '<strong>Телеграм заказчика макета:</strong><br>',
+          clientTg
+            ? clientTg.startsWith('@')
+              ? `<a target="_blank" rel="noopener noreferrer" href="https://t.me/${clientTg.slice(1)}">${clientTg}</a>`
+              : `<a target="_blank" rel="noopener noreferrer" href="https://t.me/${clientTg}">${clientTg}</a>`
+            : '',
+          '<br><br>'
+      ) +
       row('<strong>Желаемая дата готовности макета:</strong><br>', data.deadline, '<br><br>') +
       row('<strong>Дополнительно:</strong><br>', data.extra);
 
@@ -69,8 +84,15 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('Фотография места размещения:', 'Список', '\n') +
 
       createImageMessageList('tg', data.place_file) +
-
-      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? `https://t.me/${data.client_tg.slice(1)}` : `https://t.me/${data.client_tg}`, '\n') +
+      row(
+        'Телеграм заказчика макета:',
+        clientTg
+          ? clientTg.startsWith('@')
+            ? `https://t.me/${clientTg.slice(1)}`
+            : `https://t.me/${clientTg}`
+          : '',
+        '\n'
+      ) +
       row('Желаемая дата готовности макета:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
       row('Дополнительно:', data.extra, '\n');
 
@@ -86,7 +108,15 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       createImageMessageList('yg', data.target_file) +
 
       row('<strong>Что нужно исправить?:</strong><br>', data.changes, '<br><br>') +
-      row('<strong>Телеграм заказчика макета:</strong><br>', (data.client_tg.startsWith('@')) ? `<a target="_blank" rel="noopener noreferrer" href=https://t.me/${data.client_tg.slice(1)}>${data.client_tg}</a>` : `<a target="_blank" rel="noopener noreferrer" href=https://t.me/${data.client_tg}>${data.client_tg}</a>`, '<br><br>') +
+      row(
+          '<strong>Телеграм заказчика макета:</strong><br>',
+          clientTg
+            ? clientTg.startsWith('@')
+              ? `<a target="_blank" rel="noopener noreferrer" href="https://t.me/${clientTg.slice(1)}">${clientTg}</a>`
+              : `<a target="_blank" rel="noopener noreferrer" href="https://t.me/${clientTg}">${clientTg}</a>`
+            : '',
+          '<br><br>'
+      ) +
       row('<strong>Желаемая дата готовности макета:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
       row('<strong>Дополнительно:</strong><br>', data.extra);
 
@@ -95,7 +125,15 @@ export const designMessage = async (department: string, data: any): Promise<{mes
       row('Исходный файл:', 'Cписок', '\n') +
       createImageMessageList('tg', data.target_file) +
       row('Что нужно исправить?:', data.changes, '\n') +
-      row('Телеграм заказчика макета:', (data.client_tg.startsWith('@')) ? `https://t.me/${data.client_tg.slice(1)}` : `https://t.me/${data.client_tg}`, '\n') +
+      row(
+        'Телеграм заказчика макета: ',
+        clientTg
+          ? clientTg.startsWith('@')
+            ? `https://t.me/${clientTg.slice(1)}`
+            : `https://t.me/${clientTg}`
+          : '',
+        '\n'
+      ) +
       row('Желаемая дата готовности макета:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
       row('Дополнительно:', data.extra, '\n');
 

@@ -43,7 +43,7 @@ const page: FC = () => {
 
 
       const url = new URL(window.location.href)
-      console.log(url.searchParams.get('id'))
+
 
 
 
@@ -66,14 +66,12 @@ const page: FC = () => {
       }
 
       const data = await response.json()
-      console.log(data)
 
       if (!data.success) {
         setErrorAuth(data.message)
         return data.message
       }
       setResultHandler(data.message)
-      console.log(data)
       setTimeout(() => {
         router.push('/auth')
       }, 2000)

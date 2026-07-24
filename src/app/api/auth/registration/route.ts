@@ -11,9 +11,9 @@ const prisma = new PrismaClient()
 export const POST = async (req: NextRequest) => {
   try {
 
-    const {name, department, email, telegramId, loginCorp, password} = await req.json()
+    const {name, branch, department, email, telegramId, loginCorp, password} = await req.json()
 
-    if (!name || !department || !email || !telegramId || !loginCorp || !password) {
+    if (!name || !branch || !department || !email || !telegramId || !loginCorp || !password) {
       return NextResponse.json({
         success: false,
         message: 'Field Empty',
@@ -46,6 +46,7 @@ export const POST = async (req: NextRequest) => {
 
     const userObject = {
       name: name,
+      branch: branch,
       department: department,
       email: email,
       telegramId: telegramId,
@@ -67,7 +68,7 @@ export const POST = async (req: NextRequest) => {
 
     await globalThis._tgBot.sendMessage(
       process.env.ADMIN_GROUP as string,
-      `<b>Заявка на регистрацию</b>\n\nНовый пользователь\n\n<b>Имя пользователя</b>\n${name}\n\n<b>TelegramId</b>\n${telegramId}\n\n<b>Почта</b>\n${email}\n\n<b>Имя пользователя на корпортаивном сайте</b>\n${loginCorp}\n\n<b>Дата регистрации</b>\n${new Date().toLocaleDateString('ru-RU')}`,
+      `<b>Заявка на регистрацию</b>\n\nНовый пользователь\n\n<b>Имя пользователя</b>\n${name}\n\n\n\n<b>Города</b>\n${branch}<b>TelegramId</b>\n${telegramId}\n\n<b>Почта</b>\n${email}\n\n<b>Имя пользователя на корпортаивном сайте</b>\n${loginCorp}\n\n<b>Дата регистрации</b>\n${new Date().toLocaleDateString('ru-RU')}`,
       {
         parse_mode: 'HTML',
         reply_markup: {

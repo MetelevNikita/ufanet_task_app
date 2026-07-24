@@ -52,14 +52,13 @@ const page: FC = () => {
       }
 
       const data = await response.json()
-      console.log(data)
+
 
       if (!data.success) {
         setErrorAuth(data.message)
         return data.message
       }
       setResultHandler(data.message)
-      console.log(data)
       return data
 
       
