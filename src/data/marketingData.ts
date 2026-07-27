@@ -1181,8 +1181,8 @@ export const typeSelectorArrMark = [
 			},
 			{
 				id: 3,
-				title: 'Цель рассылки',
-				placeholder: 'Вставьте текст',
+				title: 'Укажите цель рассылки',
+				placeholder: 'Также напишите, почему вы выбрали именно этот инструмент для продвижения',
 				typeField: 'area',
 				type: 'area',
 				name: 'goal'
@@ -1197,8 +1197,8 @@ export const typeSelectorArrMark = [
 			},
 			{
 				id: 5,
-				title: 'Кому рассылать пуши. Если ранее вы прикрепили выгрузку - пропустите этот вопрос',
-				placeholder: 'Укажите населенный пункт, ФЛ или ЮЛ, тарифные опции, наличие услуг или другие параметры, которые важны при формировании выгрузки',
+				title: 'Кому рассылать пуши',
+				placeholder: 'Укажите ID населенных пунктов и их названия, ФЛ или ЮЛ, тарифные опции, наличие услуг или другие параметры, по которым формируется выгрузка. Если у вас есть готовая выгрузка, отправьте ссылку на процесс ОТПАД в ERP.',
 				typeField: 'area',
 				type: 'area',
 				name: 'recipients'
@@ -1206,7 +1206,7 @@ export const typeSelectorArrMark = [
 			{
 				id: 6,
 				title: 'Срок отправки пушей',
-				placeholder: 'Окончательный срок отправки может варьироваться в зависимости от нагрузки СПК/ОСК',
+				placeholder: 'Окончательный срок отправки может быть изменен',
 				typeField: 'text',
 				type: 'text',
 				name: 'send_deadline'
@@ -1221,7 +1221,7 @@ export const typeSelectorArrMark = [
 			},
 			{
 				id: 8,
-				title: 'Если есть примерный текст для рассылки, прикрепите его здесь',
+				title: 'Укажите текст для рассылки',
 				placeholder: 'Вставьте текст',
 				typeField: 'area',
 				type: 'area',
@@ -1229,6 +1229,14 @@ export const typeSelectorArrMark = [
 			},
 			{
 				id: 9,
+				title: 'Аргументация срочности (если рассылка срочная)',
+				placeholder: 'Вставьте текст',
+				typeField: 'area',
+				type: 'area',
+				name: 'urgency'
+			},
+			{
+				id: 10,
 				title: 'Желаемая дата реализации',
 				placeholder: 'Дата выполнения',
 				typeField: 'date',

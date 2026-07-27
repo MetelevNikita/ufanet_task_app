@@ -53,7 +53,7 @@ export const POST = async (req: NextRequest) => {
     if (!authUser.сonfirmed) {
       return NextResponse.json({
         success: false,
-        message: 'Пользователь еще не авторизован в системе',
+        message: 'Ваша заявка на регистрацию в системе на рассмотрении у администратора',
         data: 'User not confirmed'
       })
     }

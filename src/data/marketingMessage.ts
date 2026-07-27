@@ -321,25 +321,27 @@ export const marketingMessage = async (
     const bodyYG =
       row('<strong>Назовите задачу так, чтобы сразу была понятна суть:</strong><br>', data.title, '<br><br>') +
       row('<strong>Что необходимо сделать?:</strong><br>', data.description, '<br><br>') +
-      row('<strong>Цель рассылки:</strong><br>', data.goal, '<br><br>') +
+      row('<strong>Укажите цель рассылки</strong><br>', data.goal, '<br><br>') +
       row('<strong>Прикрепите файл с выгрузкой абонентов Если у вас нет готового файла - пропустите этот вопрос:</strong><br>', 
           data.abonents_file ? `<a target="_blank" rel="noopener noreferrer" href=${data.abonents_file}>${data.abonents_file}</a>` : '', '<br><br>') +
-      row('<strong>Кому рассылать пуши. Если ранее вы прикрепили выгрузку - пропустите этот вопрос:</strong><br>', data.recipients, '<br><br>') +
+      row('<strong>Кому рассылать пуши</strong><br>', data.recipients, '<br><br>') +
       row('<strong>Срок отправки пушей:</strong><br>', data.send_deadline, '<br><br>') +
       row('<strong>Как будете измерять результат?:</strong><br>', data.kpi, '<br><br>') +
-      row('<strong>Если есть примерный текст для рассылки, прикрепите его здесь:</strong><br>', data.message_text, '<br><br>') +
+      row('<strong>Укажите текст для рассылки</strong><br>', data.message_text, '<br><br>') +
+      row('<strong>Аргументация срочности (если рассылка срочная)</strong><br>', data.urgency, '<br><br>') +
       row('<strong>Желаемая дата реализации:</strong><br>', new Date(data.deadline).toLocaleDateString('RU-ru'), '<br><br>') +
       row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Назовите задачу так, чтобы сразу была понятна суть:', data.title, '\n') +
       row('Что необходимо сделать?:', data.description, '\n') +
-      row('Цель рассылки:', data.goal, '\n') +
+      row('Укажите цель рассылки', data.goal, '\n') +
       row('Прикрепите файл с выгрузкой абонентов Если у вас нет готового файла - пропустите этот вопрос:', data.abonents_file, '\n') +
-      row('Кому рассылать пуши. Если ранее вы прикрепили выгрузку - пропустите этот вопрос:', data.recipients, '\n') +
+      row('Кому рассылать пуши', data.recipients, '\n') +
       row('Срок отправки пушей:', data.send_deadline, '\n') +
       row('Как будете измерять результат?:', data.kpi, '\n') +
-      row('Если есть примерный текст для рассылки, прикрепите его здесь:', data.message_text, '\n') +
+      row('Укажите текст для рассылки', data.message_text, '\n') +
+      row('Аргументация срочности (если рассылка срочная)', data.urgency, '\n') +
       row('Желаемая дата реализации:', new Date(data.deadline).toLocaleDateString('RU-ru'), '\n') +
       row('Дополнительно:', data.extra, '\n');
 
