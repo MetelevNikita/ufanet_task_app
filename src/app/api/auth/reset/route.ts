@@ -14,6 +14,16 @@ const prisma = new PrismaClient()
 export const POST = async (req: NextRequest) => {
   try {
 
+    const url = process.env.WEBHOOK_URL ?? null
+
+    if (!url) {
+      return NextResponse.json({
+        success: false,
+        message: 'Ошибка, не найден url',
+        data: null
+      }, {status: 404})
+    }
+
     const {telegramId} = await req.json()
 
 
@@ -32,9 +42,7 @@ export const POST = async (req: NextRequest) => {
       }, {status: 404})
     }
 
-
-    const url = new URL(req.url)
-    const resetLink = new URL(`${url.origin}/auth/new_password`)
+    const resetLink = new URL(`${url}/auth/new_password`)
     resetLink.searchParams.set('id', findUser.id.toString())
 
 
