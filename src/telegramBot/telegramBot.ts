@@ -465,9 +465,9 @@ export const getBot = async () => {
                 bot.sendMessage(process.env.ADMIN_GROUP as string, 'Список пуст', {parse_mode: 'HTML'})
                   return 'Данные получены'
                 } else {
-                    allUsers.map((item: {id: number, name: string, email: string, сonfirmed: boolean, createAt: Date, }) => {
+                    allUsers.map((item: {id: number, name: string, lastName: string, email: string, сonfirmed: boolean, createAt: Date, }) => {
                     
-                    const message = `${item.id}#${item.name} - ${item.email} # Подтверждение ${(item.сonfirmed) ? 'Подтвержден' : 'Ожидает подтверждения'} - Дата создания ${new Date(item.createAt).toLocaleDateString('RU-ru')}`
+                    const message = `${item.id}#${item.name} ${item.lastName ?? ''} - ${item.email} # Подтверждение ${(item.сonfirmed) ? 'Подтвержден' : 'Ожидает подтверждения'} - Дата создания ${new Date(item.createAt).toLocaleDateString('RU-ru')}`
           
                     bot.sendMessage(process.env.ADMIN_GROUP as string, message, {
                       reply_markup: {

@@ -1,4 +1,5 @@
 
+
 export const registerBot = async () => {
 
   console.log('Registering telegram bot instrumentation');
@@ -102,6 +103,7 @@ export const register = async () => {
       await getAllWebHooks(),
       await getYouGileWebHook()
     ])
+
 
     console.log('Приложение запущено')
   } catch (error: Error | unknown) {

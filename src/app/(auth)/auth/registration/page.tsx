@@ -140,9 +140,20 @@ const page: FC = () => {
             title=''
             name='name'
             type="text"
-            placeholder="Имя Фамилия"
+            placeholder="Имя"
             value={user?.name || ''}
             onChange={(e: any) => setUser({...user, name: e.target.value})}
+          />
+        </Col>
+
+        <Col md={8} className="mt-3">
+          <MyInput
+            title=''
+            name='lastName'
+            type="text"
+            placeholder="Фамилия"
+            value={user?.lastName || ''}
+            onChange={(e: any) => setUser({...user, lastName: e.target.value})}
           />
         </Col>
 

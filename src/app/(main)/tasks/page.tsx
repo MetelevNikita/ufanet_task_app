@@ -87,14 +87,18 @@ const page: FC = () => {
 
         const tasks = await getTask()
         const users = await getUsers()
+
+        console.log(tasks)
         
         // 
 
         const currentUser = users.data.find((item: {id: number}) => item.id.toString() === id)
 
+        console.log(currentUser)
+
         // 
 
-        filter = tasks.filter((item: any) => item.fio == currentUser.name)
+        filter = tasks.filter((item: any) => item.tgId == currentUser.telegramId)
 
         if (department) {
             filter = filter.filter((item: {department: string}) => item.department == department)
@@ -113,10 +117,7 @@ const page: FC = () => {
 
         setTasks(filter)
 
-        
-
-        
-        
+         
       } catch (error) {
         console.error(error)
         return []

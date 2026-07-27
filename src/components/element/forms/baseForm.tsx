@@ -349,8 +349,20 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
           const users = await getUsers()
 
           const currentUser = users.data.find((item: {id: number}) => item.id.toString() === userStorage[1])
+
+          console.log(currentUser)
+
+          let userName;
+
+          if (currentUser.lastName.length < 1) {
+            console.log('Пустой')
+            userName = currentUser.name
+          } else {
+            userName = `${currentUser.name} ${currentUser.lastName}`
+          }
+
           setFormData({
-            fio: currentUser.name,
+            fio: userName,
             subdivision: currentUser.department,
             tgId: currentUser.telegramId,
             branch: currentUser.branch
@@ -367,6 +379,9 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
 
   
   }, [])
+
+
+
 
 
 
