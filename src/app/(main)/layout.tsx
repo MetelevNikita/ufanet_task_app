@@ -77,12 +77,20 @@ export default function MainLayout ({children}: {children: React.ReactNode}) {
   // 
 
   return (
+    <Suspense fallback={
+    <Row className='d-flex flex-row justify-content-center align-items-center mt-3 mb-4'>
+        <Col md={12}>
+          <div className='d-flex flex-row justify-content-center align-items-center'>Загрузка...</div>
+        </Col>
+      </Row>
+    }>
     <Container>
       <RootContext>
           <Header />
               {children}
       </RootContext>
     </Container>
+    </Suspense>
 
   )
 }
