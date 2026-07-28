@@ -322,8 +322,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
         typeApproval: '',
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
-    }
 
+    }
 
     console.log(data)
 

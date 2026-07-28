@@ -1,10 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+
   allowedDevOrigins: ['*'],
   typescript: {
     ignoreBuildErrors: true,
+  },
+  experimental: {
+    middlewareClientMaxBodySize: '20mb',
+
+    serverActions: {
+      bodySizeLimit: '20mb',
+    },
   },
 };
 
