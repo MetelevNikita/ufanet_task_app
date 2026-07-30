@@ -434,123 +434,178 @@ export const getBot = async () => {
           const userId = msg.from?.id;
           const isReply = msg.reply_to_message;
 
+          // 
 
           if (msg.chat.id.toString() === process.env.ADMIN_GROUP) {
 
-              const resCommand = await bot.setMyCommands([
-                { command: 'start', description: 'Start bot' },
-                { command: 'help', description: 'Help' },
-              ])
-          
-          
-              if (text === '/start') {
-                bot.sendMessage(process.env.ADMIN_GROUP, 'Админ бот приложения PR-TZ.ru', {
-                  reply_markup: {
-                    keyboard: [
-                      [{ text: 'Получить список пользователей' }],
-                    ],
-                    resize_keyboard: true,
-                    one_time_keyboard: true
-                  }
-                })
-              }
-
-              // 
-          
-              if (text === 'Получить список пользователей') {
-            
                 const allUsers = await prisma.user.findMany()
-          
-                if (allUsers.length < 1) {
-                bot.sendMessage(process.env.ADMIN_GROUP as string, 'Список пуст', {parse_mode: 'HTML'})
-                  return 'Данные получены'
-                } else {
-                    allUsers.map((item: {id: number, name: string, lastName: string, email: string, сonfirmed: boolean, createAt: Date, }) => {
-                    
-                    const message = `${item.id}#${item.name} ${item.lastName ?? ''} - ${item.email} # Подтверждение ${(item.сonfirmed) ? 'Подтвержден' : 'Ожидает подтверждения'} - Дата создания ${new Date(item.createAt).toLocaleDateString('RU-ru')}`
-          
-                    bot.sendMessage(process.env.ADMIN_GROUP as string, message, {
-                      reply_markup: {
-                        inline_keyboard: [
-                          [{text: 'Удалить', callback_data: `${item.id}|DELETE|${item.name}`}],
-                        ]
-                      }
-                    })
-                    return 'Данные получены'
+
+                const resCommand = await bot.setMyCommands([
+                  { command: 'start', description: 'Start bot' },
+                  { command: 'help', description: 'Help' },
+                ])
+            
+            
+                if (text === '/start') {
+                  bot.sendMessage(process.env.ADMIN_GROUP, 'Админ бот приложения PR-TZ.ru', {
+                    reply_markup: {
+                      keyboard: [
+                        [{ text: 'Получить пользователей' }],
+                        [{ text: 'Пользователи списком' }]
+                      ],
+                      resize_keyboard: true,
+                      one_time_keyboard: true
+                    }
                   })
                 }
-          
-          
-              }
-
-              return
-          } else {
-              // ответ на комментарий
-
-              if (isReply) {
-                if (!msg.reply_to_message) return
-
-                const titleText = msg.reply_to_message.text
-
-                if (!titleText) return
-
-  
-                const splitText = titleText.split(' ')
-                const ygId = splitText[2]
-                const tgId = splitText[9]
-
-                console.log(splitText)
-
-
-                const sendToYG = await sendCommentMessageYG(text as string, ygId)
-                console.info('Комментарий отправлен в YouGile')
 
                 // 
+            
+                if (text === 'Получить пользователей') {
+              
+                  if (allUsers.length < 1) {
+                  bot.sendMessage(process.env.ADMIN_GROUP as string, 'Список пуст', {parse_mode: 'HTML'})
+                    return 'Данные получены'
+                  } else {
+                      allUsers.map((item: {id: number, name: string, lastName: string, email: string, сonfirmed: boolean, createAt: Date, }) => {
+                      
+                      const message = `${item.id}#${item.name} ${item.lastName ?? ''} - ${item.email} # Подтверждение ${(item.сonfirmed) ? 'Подтвержден' : 'Ожидает подтверждения'} - Дата создания ${new Date(item.createAt).toLocaleDateString('RU-ru')}`
+            
+                      bot.sendMessage(process.env.ADMIN_GROUP as string, message, {
+                        reply_markup: {
+                          inline_keyboard: [
+                            [{text: 'Удалить', callback_data: `${item.id}|DELETE|${item.name}`}],
+                          ]
+                        }
+                      })
+                      return 'Данные получены'
+                    })
+                  }
+            
+            
+                }
 
-                const sendToDB = await sendCommentMessageDB(sendToYG.originalTitle, text as string)
-                console.info('Комментарий отправлен в Базу Данных')
+                if (text === 'Пользователи списком') {
 
-                // 
+                  const listUsers = allUsers.map((item) => {
+                    return `${item.id} - Пользователь: ${item.name} ${item.lastName} # Статус: ${(item.сonfirmed == true) ? 'Подтвержден' : 'Одидает подтверждения'} - email: ${item.email} Дата создания: ${new Date(item.createAt).toLocaleDateString('RU-ru')}\n`
+                  })
 
 
-                if (!sendToYG.success) {
-                  await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
-                  return
+                  bot.sendMessage(
+                    process.env.ADMIN_GROUP as string,
+                    `Список пользователей\n\n${listUsers.join('')}`, {
+                      reply_markup: {
+                        inline_keyboard: [
+                            [{ text: 'Удалить пользователя (Подсказка)', callback_data: 'delete_single_user'}]
+                        ]
+                      }
+                    }
+                  )
+
                 }
 
 
-                const sendToTg = await bot.sendMessage(tgId, `КОММЕНТАРИЙ к Задаче - \n\n${sendToYG.title}\n\n${text}`)
+                if (text?.startsWith('Пользователь:')) {
+                  console.log('ИЩЕМ ПОЛЬЗОВАТЕЛЯ!!!! ', text )
 
-                if (!sendToYG.success) {
-                  await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
-                  return
+
+                  const id = text.split(':')[1]
+
+                  const findUser = allUsers.find((item: {id: number}) => item.id == Number(id))
+
+                  if (!findUser) {
+                    bot.sendMessage(process.env.ADMIN_GROUP as string, 'Пользователь с таким id не найден, попробуйте снова')
+                    return
+                  }
+
+                  bot.sendMessage(process.env.ADMIN_GROUP as string, 'Выполняю поиск пользователя, ожидайте')
+
+                  const message = `${findUser.id}#${findUser.name} ${findUser.lastName ?? ''} - ${findUser.email} # Подтверждение ${(findUser.сonfirmed) ? 'Подтвержден' : 'Ожидает подтверждения'} - Дата создания ${new Date(findUser.createAt).toLocaleDateString('RU-ru')}`
+            
+                  bot.sendMessage(process.env.ADMIN_GROUP as string, message, {
+                    reply_markup: {
+                      inline_keyboard: [
+                        [{text: 'Удалить', callback_data: `${findUser.id}|DELETE|${findUser.name}`}],
+                      ]
+                    }
+                  })
                 }
 
-                return await bot.sendMessage(chatId, 'ℹ️ Комментарий отмечен в задаче и направлен автору задачи')
-              }
+                return
+          }
 
-            if (msg.text === '/start') {
-              await bot.sendMessage(chatId, 'Привет! Я бот для уведомлений из YouGile.', {
-                reply_markup: {
-                  keyboard: [
-                      [{ text: 'Инфо', request_contact: false, request_location: false }, { text: 'Помощь', request_contact: false, request_location: false}],
-                      [{ text: 'Ссылка на сайт если потеряли', request_contact: false, request_location: false}, { text: 'Найти мой Telegram ID', request_contact: false, request_location: false}], 
-                  ],
-                }
-              })
-            } else if (msg.text === 'Инфо') {
-              await bot.sendMessage(chatId, 'Данный бот создан для утверждения и контроля над задачами созданными в PR Отдел')
-            } else if (msg.text === 'Ссылка на сайт если потеряли') {
-              await bot.sendMessage(chatId, 'https://pr-tz.ru не теряй')
-            } else if (msg.text === 'Помощь') {
-              await bot.sendMessage(chatId, 'В случае если бот не отправляет вам уведомления о состоянии вашей задачи, вам необходимо обратиться к руководителю отдела куда была заведена заявка для проверки вписанного вами TelegramID')
-            } else if (msg.text === 'Найти мой Telegram ID') {
-              await bot.sendMessage(chatId, 'Вы можете посмотреть свой Telegram ID на корпоративном сайте или воспользоватеься ботом @Getmyid_bot')
-            } else {
+
+          // ответ на комментарий
+
+          if (isReply) {
+            if (!msg.reply_to_message) return
+
+            const titleText = msg.reply_to_message.text
+
+            if (!titleText) return
+
+
+            const splitText = titleText.split(' ')
+            const ygId = splitText[2]
+            const tgId = splitText[9]
+
+
+            const sendToYG = await sendCommentMessageYG(text as string, ygId)
+            console.info('Комментарий отправлен в YouGile')
+
+            // 
+
+            const sendToDB = await sendCommentMessageDB(sendToYG.originalTitle, text as string)
+            console.info('Комментарий отправлен в Базу Данных')
+
+            // 
+
+            if (!sendToYG.success) {
+              await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
               return
             }
 
+            const sendToTg = await bot.sendMessage(tgId, `КОММЕНТАРИЙ к Задаче - \n\n${sendToYG.title}\n\n${text}`)
+
+            if (!sendToYG.success) {
+              await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
+              return
+            }
+            return await bot.sendMessage(chatId, 'ℹ️ Комментарий отмечен в задаче и направлен автору задачи')
           }
+
+          if (msg.text === '/start') {
+            await bot.sendMessage(chatId, 'Привет! Я бот для уведомлений из YouGile.', {
+              reply_markup: {
+                keyboard: [
+                    [{ text: 'Инфо', request_contact: false, request_location: false }, { text: 'Помощь', request_contact: false, request_location: false}],
+                    [{ text: 'Ссылка на сайт если потеряли', request_contact: false, request_location: false}, { text: 'Найти мой Telegram ID', request_contact: false, request_location: false}], 
+                ],
+              }
+            })
+          } else if (msg.text === 'Инфо') {
+            await bot.sendMessage(chatId, 'Данный бот создан для утверждения и контроля над задачами созданными в PR Отдел')
+          } else if (msg.text === 'Ссылка на сайт если потеряли') {
+            await bot.sendMessage(chatId, 'https://pr-tz.ru не теряй')
+          } else if (msg.text === 'Помощь') {
+            await bot.sendMessage(chatId, 'В случае если бот не отправляет вам уведомления о состоянии вашей задачи, вам необходимо обратиться к руководителю отдела куда была заведена заявка для проверки вписанного вами TelegramID')
+          } else if (msg.text === 'Найти мой Telegram ID') {
+            await bot.sendMessage(chatId, 'Вы можете посмотреть свой Telegram ID на корпоративном сайте или воспользоватеься ботом @Getmyid_bot')
+          } else {
+            return
+          }
+
+
+
+
+
+
+
+
+          // 
+
+
           
 
         })
@@ -568,6 +623,17 @@ export const getBot = async () => {
           const chatId = query.message?.chat.id
 
           if (chatId.toString() === process.env.ADMIN_GROUP) {
+
+              if (query.data === 'delete_single_user') {
+
+                const groupId = query.message.chat.id
+
+                bot.sendMessage(groupId, 'Что бы удалить пользователя необходимо:\n\n1)Напишите в группу сообщение\n2) ВНИМАНИЕ формат сообщения "Пользователь:НОМЕР ПОЛЬЗОВАТЕЛЯ (номер был узказан в выводе сообщения)"\n3)Следующим сообщение придет ответ с данными о пользователе и кнопкой удалить\n3)Удаляете пользователя')
+
+                return
+              }
+
+
               const data = query.data?.split('|') as any
               const text = query.message.text
 
