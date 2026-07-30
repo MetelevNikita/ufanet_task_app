@@ -67,6 +67,7 @@
 .file_insert {
   font-size: 12px;
   padding-left: 10px;
+  display: flex;
 }
 
 .result_wrapper {
@@ -91,6 +92,36 @@
   align-items: center;
   justify-content: center;
 }
+
+.result_image_btn {
+
+  margin-top: 5px;
+
+  /*  */
+
+  font-size: 12px;
+  width: max-content;
+  height: max-content;
+  border-radius: 3px;
+  padding: 5px;
+
+
+  color: white;
+  background: #f60;
+
+}
+
+
+/*  */
+
+.error_limit {
+  margin-top: 10px;
+  color: red;
+  font-size: 12px;
+}
+
+
+/*  */
 
 
 .file_input::placeholder {

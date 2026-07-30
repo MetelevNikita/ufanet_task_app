@@ -124,7 +124,7 @@ import { typeSelectorArrPr } from '@/data/prData'
     uploadFile(data: File, setData: any): React.ReactNode {
       return(
               <Col md={12} className='mt-2 mb-2'>
-                <MyFile title={this.title} name={this.name} placeholder={this.placeholder} value={data} onChange={setData} data={data}/>
+                <MyFile title={`${this.title} Лимит 20мб`} name={this.name} placeholder={`${this.placeholder} (Общий объем фотографий не должен превышать 20мб)`} value={data} onChange={setData} data={data}/>
               </Col>
             )
     }
@@ -330,8 +330,8 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const [formData, setFormData] = useState<any>({
   })
 
-  console.log(formData)
 
+  console.log(formData)
 
 
   useEffect(() => {
@@ -350,12 +350,9 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
 
           const currentUser = users.data.find((item: {id: number}) => item.id.toString() === userStorage[1])
 
-          console.log(currentUser)
-
           let userName;
 
           if (currentUser.lastName.length < 1) {
-            console.log('Пустой')
             userName = currentUser.name
           } else {
             userName = `${currentUser.name} ${currentUser.lastName}`
@@ -379,11 +376,6 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
 
   
   }, [])
-
-
-
-
-
 
   const { department, setDepartment } = departmentData
 
