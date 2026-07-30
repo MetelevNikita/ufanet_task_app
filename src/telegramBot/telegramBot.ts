@@ -147,6 +147,8 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
 
   try {
 
+    console.log({title, message})
+
       const responce = await fetch (`${process.env.WEBHOOK_URL as string}/api/comment`, {
       method: 'POST',
       headers: {
@@ -159,20 +161,21 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
     })
 
     const data = await responce.json()
+    console.log(data)
     return data
     
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка создания комментарий ${error.message}`)
+      console.error(`Ошибка создания комментария ${error.message}`)
       return {
         success: false,
-        message: `Ошибка создания комментарий ${error.message}`
+        message: `Ошибка создания комментария ${error.message}`
       }
     }
 
 
-      console.error(`Ошибка создания комментарий ${error}`)
+      console.error(`Ошибка создания комментария ${error}`)
       return {
         success: false,
         message: `Ошибка создания комментарий ${error}`
@@ -505,7 +508,6 @@ export const getBot = async () => {
 
                 }
 
-
                 if (text?.startsWith('Пользователь:')) {
                   console.log('ИЩЕМ ПОЛЬЗОВАТЕЛЯ!!!! ', text )
 
@@ -545,20 +547,42 @@ export const getBot = async () => {
 
             if (!titleText) return
 
+            const matchYG = titleText.match(/Заявка\s*#\s*([^:\s]+)/i)
+            const matchTG = titleText.match(/Автор\s+сообщения\s*#\s*(\d+)/i
+)
+            const ygId = matchYG?.[1]
+            const tgId = matchTG?.[1]
 
-            const splitText = titleText.split(' ')
-            const ygId = splitText[2]
-            const tgId = splitText[9]
+            console.log('YG ID ', ygId)
+            console.log('TG ID ', tgId)
 
+            if (!ygId || !tgId) {
+              await bot.sendMessage(chatId, 'ОШИБКА! Не удалось получить данные о задаче')
+              return
+            }
+
+            const allUsers = await prisma.task.findMany()
+
+            const currentTask = allUsers.find((item: {ygId: string}) => item.ygId == ygId)
+            console.log('CURRENT TASK ', currentTask)
+
+            if (!currentTask) {
+              await bot.sendMessage(chatId, 'ОШИБКА! Не удалось получить данные о задаче из базы')
+              return
+            }
+
+            // 
+
+            const sendToDB = await sendCommentMessageDB(currentTask.title, text as string)
+            console.info(sendToDB)
+            console.info('Комментарий отправлен в Базу Данных')
+
+            // 
 
             const sendToYG = await sendCommentMessageYG(text as string, ygId)
             console.info('Комментарий отправлен в YouGile')
 
-            // 
-
-            const sendToDB = await sendCommentMessageDB(sendToYG.originalTitle, text as string)
-            console.info('Комментарий отправлен в Базу Данных')
-
+    
             // 
 
             if (!sendToYG.success) {
@@ -597,16 +621,7 @@ export const getBot = async () => {
           }
 
 
-
-
-
-
-
-
-          // 
-
-
-          
+          //   
 
         })
 
@@ -776,7 +791,7 @@ export const getBot = async () => {
                 }
               )
 
-              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ✅ получила предварительное согласование и отправлена на согласование в группу с Ольгой Николаевной Эделевой.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\n Title: ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+              await bot.editMessageText(`Заявка # ${cardFromDB.ygId} : ✅ получила предварительное согласование и отправлена на согласование в группу с Ольгой Николаевной Эделевой.\n\nАвтор сообщения # ${cardFromDB.tgId} # ${cardFromDB.fio} # \n\n Title: ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });

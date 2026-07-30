@@ -14,13 +14,19 @@ export const POST = async (req: any, context: {params: {title: string}}) => {
 
     const { title, comment } = await req.json()
 
+    console.log('ДАНЫЕ С АПИ')
+    console.log({title, comment})
+
     const dateComment = `${new Date().toLocaleString()} - ${comment}`
+    console.log('DATA COMMENT ', dateComment)
 
     const findTask = await prisma.task.findFirst({
       where: {
         title: title
       }
     })
+
+    console.log('TASK FROM API ', findTask)
 
     if (!findTask) {
       return NextResponse.json({
