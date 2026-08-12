@@ -342,6 +342,20 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
   }
 
 
+  // 
+
+
+  function chunkArray<T>(array: T[], chunkSize: number = 10): T[][] {
+  const chunks: T[][] = []
+
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize))
+  }
+
+  return chunks
+}
+
+
 
   // 
 
@@ -495,16 +509,28 @@ export const getBot = async () => {
                   })
 
 
-                  bot.sendMessage(
-                    process.env.ADMIN_GROUP as string,
-                    `Список пользователей\n\n${listUsers.join('')}`, {
-                      reply_markup: {
-                        inline_keyboard: [
-                            [{ text: 'Удалить пользователя (Подсказка)', callback_data: 'delete_single_user'}]
-                        ]
-                      }
-                    }
-                  )
+                  const userChunks = chunkArray(listUsers, 10)
+                  console.log(userChunks)
+
+
+                  for (let i = 0; i < userChunks.length; i++) {
+                    const isLast = i === userChunks.length - 1
+                    const text = userChunks[i].join('\n')
+
+                    await bot.sendMessage(
+                      process.env.ADMIN_GROUP as string,
+                      `Список пользователей (${i + 1}/${userChunks.length})\n\n${text}`,
+                      isLast
+                        ? {
+                            reply_markup: {
+                              inline_keyboard: [
+                                [{ text: 'Удалить пользователя (Подсказка)', callback_data: 'delete_single_user' }]
+                              ]
+                            }
+                          }
+                        : undefined
+                    )
+                  }
 
                 }
 
@@ -548,8 +574,7 @@ export const getBot = async () => {
             if (!titleText) return
 
             const matchYG = titleText.match(/Заявка\s*#\s*([^:\s]+)/i)
-            const matchTG = titleText.match(/Автор\s+сообщения\s*#\s*(\d+)/i
-)
+            const matchTG = titleText.match(/Автор\s+сообщения\s*#\s*(\d+)/i)
             const ygId = matchYG?.[1]
             const tgId = matchTG?.[1]
 
@@ -598,6 +623,9 @@ export const getBot = async () => {
             }
             return await bot.sendMessage(chatId, 'ℹ️ Комментарий отмечен в задаче и направлен автору задачи')
           }
+
+
+
 
           if (msg.text === '/start') {
             await bot.sendMessage(chatId, 'Привет! Я бот для уведомлений из YouGile.', {
@@ -665,7 +693,9 @@ export const getBot = async () => {
 
               // 
 
-  
+
+              console.log('METHOD FROM USER DATA', method)
+
               switch (method) {
                 case 'CONFIRMED':
                   return await confimedUser(id, query, answer, chatId, bot)

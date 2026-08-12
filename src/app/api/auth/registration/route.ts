@@ -84,7 +84,7 @@ export const POST = async (req: NextRequest) => {
           inline_keyboard: [
             [
               { text: 'Подтвердить', callback_data: `${newUser.id}|CONFIRMED|user_agreed` },
-              { text: 'Отклонить', callback_data: `${newUser.id}|CONFIRMED|user_disagreed` }
+              { text: 'Отклонить', callback_data: `${newUser.id}|DELETE|user_disagreed` }
             ]
           ]
         }
