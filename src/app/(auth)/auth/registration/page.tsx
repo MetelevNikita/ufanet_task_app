@@ -83,9 +83,49 @@ const page: FC = () => {
 
   // 
 
+
+  function validTgId (id: string | number) {
+
+    const num = typeof id === 'string' ? Number(id) : id
+
+    return (
+      typeof num === 'number' &&
+      Number.isInteger(num) &&
+      Number.isSafeInteger(num) &&
+      num > 0
+    )
+
+  }
+
+
+
   async function createNewUserHandler (user: any) {
     try {
       setDisabledBtn({disable: true, text: 'Отправка данных'})
+
+      // valid TG ID
+
+      if (!user?.telegramId) {
+        setErrorAuth('Ошибка! неверно указан Telegram id')
+        setDisabledBtn({disable: false, text: 'Отправить'})
+        return
+      }
+
+      const idCheck = validTgId(user.telegramId ?? '')
+
+      console.log(idCheck)
+      
+      if (!idCheck) {
+        setErrorAuth('Ошибка! неверно указан Telegram id')
+        setDisabledBtn({disable: false, text: 'Отправить'})
+        return
+      }
+
+
+      console.log(user.telegramId)
+
+      // 
+
 
       const response = await fetch('/api/auth/registration', {
         method: 'POST',
@@ -95,23 +135,20 @@ const page: FC = () => {
         body: JSON.stringify(user)
       })
 
-      if (!response.ok) {
-        throw new Error(`Сетевая ошибка ${response.status} - ${response.statusText}`)
-      }
-
       const data = await response.json()
 
       if (!data.success) {
         setErrorAuth(data.message)
+        setDisabledBtn({disable: false, text: 'Отправить'})
         return
       }
 
       setResultHandler(data)
       alert(data.message)
       
-      router.push('/auth')
+      // router.push('/auth')
       return data
-      
+
     } catch (error: Error | unknown) {
       if (error instanceof Error) {
         console.error(`Ошибка ${error.message}`)
@@ -226,6 +263,22 @@ const page: FC = () => {
               (e: any) => setUser({...user, password: e.target.value})}
             />
         </Col>
+      </Row>
+
+      <Row>
+
+            {
+              (errorAuth) && (
+                <Row md={12} className='d-flex flex-md-row flex-column justify-content-center align-items-center'>
+                  <Col className='d-flex flex-md-row flex-column justify-content-center align-items-center mt-2 mb-2'>
+
+                    <div className={styles.error_field}>Ошибка: {errorAuth}</div>
+                  
+                  </Col>
+                </Row>
+              )
+            }
+
       </Row>
 
       <Row md={12} className='d-flex flex-md-row flex-column justify-content-center align-items-center'>

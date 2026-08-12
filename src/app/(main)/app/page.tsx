@@ -58,6 +58,7 @@ const page: FC = () => {
   const [modalInfoDownload, setModalInfoDownload] = useState<boolean>(false)
   const [modalTGError, setModalTGError] = useState<boolean>(false)
   const [modalTgBotError, setModalTgBotError] = useState<boolean>(false)
+  const [modalMessage, setModalMessage] = useState<string>('')
 
   //
 
@@ -88,7 +89,7 @@ const page: FC = () => {
                 {
                   (modalTGError) && (
                     <ModalInfo
-                      title={'Ошибка! Проверьте правильность введенного Telegram ID, его можно посмотреть в боте.'}
+                      title={modalMessage}
                       btnTitleOne={'Продолжить'}
                       image={<BsInfoCircle style={{width: '60px', color: '#FC9B32'}}/>}
                       onClickOne={() => {
@@ -106,7 +107,7 @@ const page: FC = () => {
                 {
                   (modalTgBotError) && (
                     <ModalInfo
-                      title={'Ошибка! Возможно вы ввели неправильный Telegram id или не подписались на Бота'}
+                      title={modalMessage}
                       btnTitleOne={'Продолжить'}
                       image={<BsInfoCircle style={{width: '60px', color: '#FC9B32'}}/>}
                       onClickOne={() => {
@@ -206,6 +207,7 @@ const page: FC = () => {
                           modalDownload={{modalInfoDownload, setModalInfoDownload}}
                           modalTgError={{modalTGError, setModalTGError}}
                           modalTGBotError={{modalTgBotError, setModalTgBotError}}
+                          modalTextMessage={{modalMessage, setModalMessage}}
                         />
                       }
 

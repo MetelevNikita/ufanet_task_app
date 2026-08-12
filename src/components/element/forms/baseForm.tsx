@@ -38,6 +38,7 @@ import { typeSelectorArrAds } from '@/data/advertisingData'
 import { typeSelectorArrDes } from '@/data/designData'
 import { typeSelectorArrMark } from '@/data/marketingData'
 import { typeSelectorArrPr } from '@/data/prData'
+import { s } from '@vitejs/plugin-rsc/index-CM9Mmb_C'
 
 
 // class
@@ -306,12 +307,17 @@ interface FormProps {
   modalTGBotError: {
     modalTgBotError: boolean,
     setModalTgBotError: (e: boolean) => void
+  },
+  modalTextMessage: {
+    modalMessage: string,
+    setModalMessage: (e: string) => void
   }
+
 
 
 }
 
-const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError, modalTGBotError }) => {
+const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalInfo, modalDownload, modalTgError, modalTGBotError, modalTextMessage }) => {
 
   const [isEmpty, setIsImpty] = useState<Boolean>(false)
 
@@ -321,6 +327,10 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const { modalSubmitError, setModalSubmitError } = modalError
   const { modalBackInfo, setModalBackInfo } = modalInfo
   const { modalInfoDownload, setModalInfoDownload } = modalDownload
+  const {modalMessage, setModalMessage} = modalTextMessage
+
+
+  
   const { modalTGError, setModalTGError } = modalTgError
   const { modalTgBotError, setModalTgBotError } = modalTGBotError
   // 
@@ -330,8 +340,6 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const [formData, setFormData] = useState<any>({
   })
 
-
-  console.log(formData)
 
 
   useEffect(() => {
@@ -467,6 +475,7 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
       }
 
       const result = await postTask(newData, department)
+      console.log(result)
 
       setModalInfoDownload(false)
 
@@ -476,21 +485,32 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
           setModalSubmitSuccess(true)
           return 
         }
-        
-        if (result.success === false || result.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
+
+
+        if (result.success === false && result.message === 'Ошибка при добавлении задачи: Payload Too Large - 413') {
           setModalInfoDownload(false)
+          setModalMessage('Вы превысили лимит 40мб на задачу (Длинный текст или ращмер файлов)')
           setModalTgBotError(true)
           return
         }
 
-        if (result.success === false || result.message === 'Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)') {
+        if (result.success === false && result.message === 'Telegram ID должен состоять из цифр (его можно посмотреть в боте)') {
           setModalInfoDownload(false)
+          setModalMessage('Telegram ID должен состоять из цифр (его можно посмотреть в боте)')
           setModalTgBotError(true)
           return
         }
 
-        if (data.success === false) {
+        if (result.success === false && result.message === 'Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)') {
           setModalInfoDownload(false)
+          setModalMessage('Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)')
+          setModalTgBotError(true)
+          return
+        }
+
+        if (result.success === false) {
+          setModalInfoDownload(false)
+          setModalMessage(result.message)
           setModalSubmitError(true)
           return
         }

@@ -16,7 +16,7 @@ export const POST = async (req: NextRequest) => {
     if (!name || !lastName || !branch || !department || !email || !telegramId || !loginCorp || !password) {
       return NextResponse.json({
         success: false,
-        message: 'Field Empty',
+        message: 'Поля не должны быть пустыми',
         data: 'Field Empty'
       }, {status: 404})
     }
@@ -27,11 +27,19 @@ export const POST = async (req: NextRequest) => {
       }
     }))
 
+    const tgIdExist = await prisma.user.findFirst({
+      where: {
+        telegramId: telegramId
+      }
+    })
 
-    if (emailExist) {
+    console.log(emailExist)
+
+
+    if (emailExist || tgIdExist) {
       return NextResponse.json({
         success: false,
-        message: `Пользователь c почтой ${email} уже зарегестрирован`,
+        message: `Пользователь c почтой ${email} или Telegram ID ${telegramId} уже зарегестрирован`,
         data: 'done'
       }, {status: 200})
 

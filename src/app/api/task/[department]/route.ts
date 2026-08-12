@@ -37,19 +37,6 @@ import { createMessageTgYG } from "@/lib/createMessageTgYG";
 const prisma = new PrismaClient();
 
 
-// 
-
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '150mb',
-    },
-  },
-};
-
-
-
 //
 
 const createUploadFolder = (folder: string) => {
@@ -210,7 +197,23 @@ async function resultTgMessage (tgId: string, message: string) {
 export const POST = async (req: Request, context: {params: {department: string}}) => {
   try {
 
+
+    // 
+
     console.log('Начинаем обработку данных')
+
+    const contentLength = req.headers.get('content-length')
+    const MAX_SIZE = 20 * 1024 * 1024
+
+    if (contentLength && Number(contentLength) > MAX_SIZE) {
+      return NextResponse.json({
+        success: false,
+        message: 'Размер отправляемых файлов превышает допустимый лимит (40MB)'
+      }, { status: 413 })
+    }
+
+    // 
+
 
     const { department } = await context.params 
     const currentDepartment = directions.data.find((item: MenuType): Boolean => item.label.toLocaleLowerCase() == department.toLocaleLowerCase())
@@ -322,14 +325,10 @@ export const POST = async (req: Request, context: {params: {department: string}}
         typeApproval: '',
         dateCreated: new Date().toLocaleDateString('RU-ru')
       }
-
     }
-
-    console.log(data)
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
     console.log('# Создаем в YouGile')
-
 
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
 
@@ -339,7 +338,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
         message: newTaskYougile.message
       })
     }
-
 
     const ygId = newTaskYougile.data.id
     console.info(`Задача в YouGile Создана ${ygId}`)
@@ -354,11 +352,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
       }, { status: 500 });
     }
 
-
     console.info(`Задача в БД Создана`)
-
     //
-
     console.log('# Создаем в телеграм')
 
     let TelegramRes;

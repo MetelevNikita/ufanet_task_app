@@ -7,10 +7,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    middlewareClientMaxBodySize: '20mb',
+    middlewareClientMaxBodySize: '40mb',
 
     serverActions: {
-      bodySizeLimit: '20mb',
+      bodySizeLimit: '40mb',
     },
   },
 };
