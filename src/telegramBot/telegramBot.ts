@@ -652,9 +652,10 @@ export const getBot = async () => {
 
       bot.on('callback_query', async (query) => {
 
+        await bot.answerCallbackQuery(query.id)
+
         try {
           
-
           if (!query.message || !('text' in query.message) || !('chat' in query.message)) {
             return 'Сообщение не найдено'
           }
