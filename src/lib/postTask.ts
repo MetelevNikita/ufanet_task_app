@@ -18,7 +18,10 @@ export const fileToBase64 = (file: File): Promise<string> => {
 
 
 
-export const postTask = async (data: any, department: string) => {
+// время ожидания ответа сервера, после которого запрос отменяется автоматически
+const REQUEST_TIMEOUT_MS = 20_000
+
+export const postTask = async (data: any, department: string, signal?: AbortSignal, timeoutMs: number = REQUEST_TIMEOUT_MS) => {
   try {
 
 
@@ -49,12 +52,16 @@ export const postTask = async (data: any, department: string) => {
       }
     }
 
+    const timeoutSignal = AbortSignal.timeout(timeoutMs)
+    const combinedSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal
+
     const responce = await fetch (`/api/task/${department}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(fromEntries)
+      body: JSON.stringify(fromEntries),
+      signal: combinedSignal
     })
 
     if (!responce.ok) {
@@ -71,6 +78,25 @@ export const postTask = async (data: any, department: string) => {
    
 
   } catch (error: Error | unknown) {
+    if (error instanceof DOMException && error.name === 'TimeoutError') {
+      console.error(`Превышено время ожидания ответа сервера (${timeoutMs}мс)`)
+      return {
+        success: false,
+        aborted: true,
+        timedOut: true,
+        message: 'Превышено время ожидания ответа сервера. Попробуйте ещё раз',
+      }
+    }
+
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      console.log('Запрос на добавление задачи отменён')
+      return {
+        success: false,
+        aborted: true,
+        message: 'Запрос отменён',
+      }
+    }
+
     if (error instanceof Error) {
       console.error(`Ошибка при добавлении задачи: ${error.message}`)
 

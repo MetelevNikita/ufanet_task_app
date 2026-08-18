@@ -52,5 +52,6 @@ model Task {
   status String
   stage String
   comment String? @default("")
+  author_comment String? @default("")
   createAt DateTime @default(now())
 }

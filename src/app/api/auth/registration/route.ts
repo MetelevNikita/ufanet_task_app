@@ -5,7 +5,11 @@ import { PrismaClient } from "@/../generated/prisma/client";
 // 
 
 
+import { getBot } from "@/telegramBot/telegramBot";
+
+
 const prisma = new PrismaClient()
+const telegramBot = await getBot()
 
 
 export const POST = async (req: NextRequest) => {
@@ -71,11 +75,11 @@ export const POST = async (req: NextRequest) => {
 
     // send to user
 
-    await globalThis._tgBot.sendMessage(telegramId, '<b>Вы успешно прошли регистрацию на сайте pr-tz.ru</b>\n\nУведомление о получения разрешения на вход в систему придет в телеграм боте', {parse_mode: 'HTML'})
+    await telegramBot.sendMessage(telegramId, '<b>Вы успешно прошли регистрацию на сайте pr-tz.ru</b>\n\nУведомление о получения разрешения на вход в систему придет в телеграм боте', {parse_mode: 'HTML'})
 
     // 
 
-    await globalThis._tgBot.sendMessage(
+    await telegramBot.sendMessage(
       process.env.ADMIN_GROUP as string,
       `<b>Заявка на регистрацию</b>\n\nНовый пользователь\n\n<b>Имя пользователя</b>\n${name} ${lastName}\n\n<b>Город</b>\n${branch}\n\n<b>TelegramId</b>\n${telegramId}\n\n<b>Почта</b>\n${email}\n\n<b>Имя пользователя на корпортаивном сайте</b>\n${loginCorp}\n\n<b>Дата регистрации</b>\n${new Date().toLocaleDateString('ru-RU')}`,
       {

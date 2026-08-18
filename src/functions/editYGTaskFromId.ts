@@ -1,7 +1,34 @@
-export const editYGTaskFromId = async (key: string, id: string, title: string, columnId: any, description: string) => {
+// newDescription - это то, что нужно ДОБАВИТЬ к уже существующему описанию задачи,
+// а не полная замена. Старое описание подтягивается GET-запросом и сохраняется.
+export const editYGTaskFromId = async (key: string, id: string, title: string, columnId: any, newDescription: string) => {
 
 
   try {
+
+    const currentTaskResponce = await fetch(`https://ru.yougile.com/api-v2/tasks/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${key}`
+      }
+    })
+
+    if (!currentTaskResponce.ok) {
+      const errorBody = await currentTaskResponce.text()
+      throw new Error(
+        `[GET] Ошибка получения задачи из YG по ID ${currentTaskResponce.statusText} - ${currentTaskResponce.status} - ${errorBody}`
+      )
+    }
+
+    console.log('URL YG ', `https://ru.yougile.com/api-v2/tasks/${id}`)
+    console.log('FIND YG TASK ', currentTaskResponce)
+
+    const currentTask = await currentTaskResponce.json()
+    const previousDescription: string = currentTask?.description ?? ''
+
+    const description = previousDescription
+      ? `${previousDescription}<br><br>${newDescription}`
+      : newDescription
 
     const responce = await fetch(`https://ru.yougile.com/api-v2/tasks/${id}`, {
       method: "PUT",
@@ -14,16 +41,17 @@ export const editYGTaskFromId = async (key: string, id: string, title: string, c
         title: title,
         columnId: columnId,
         description: description,
-        stickers :{"c0e502fc-ad94-447c-8e9f-e0bc80bc0291": 'КОММЕНТАРИЙ'}
+        // stickers :{"c0e502fc-ad94-447c-8e9f-e0bc80bc0291": 'КОММЕНТАРИЙ'}
 
       })
     })
 
-    // if (!responce.ok) {
-    //   throw new Error(
-    //     `Ошибка получения задачи из YG по ID ${responce.statusText} - ${responce.status}`
-    //   )
-    // }
+    if (!responce.ok) {
+      const errorBody = await responce.text()
+      throw new Error(
+        `[PUT] Ошибка изменения задачи из YG по ID ${responce.statusText} - ${responce.status} - ${errorBody}`
+      )
+    }
 
     const data = await responce.json()
     return data

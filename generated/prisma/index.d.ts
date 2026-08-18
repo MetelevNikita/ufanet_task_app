@@ -2134,6 +2134,7 @@ export namespace Prisma {
     status: string | null
     stage: string | null
     comment: string | null
+    author_comment: string | null
     createAt: Date | null
   }
 
@@ -2154,6 +2155,7 @@ export namespace Prisma {
     status: string | null
     stage: string | null
     comment: string | null
+    author_comment: string | null
     createAt: Date | null
   }
 
@@ -2174,6 +2176,7 @@ export namespace Prisma {
     status: number
     stage: number
     comment: number
+    author_comment: number
     createAt: number
     _all: number
   }
@@ -2204,6 +2207,7 @@ export namespace Prisma {
     status?: true
     stage?: true
     comment?: true
+    author_comment?: true
     createAt?: true
   }
 
@@ -2224,6 +2228,7 @@ export namespace Prisma {
     status?: true
     stage?: true
     comment?: true
+    author_comment?: true
     createAt?: true
   }
 
@@ -2244,6 +2249,7 @@ export namespace Prisma {
     status?: true
     stage?: true
     comment?: true
+    author_comment?: true
     createAt?: true
     _all?: true
   }
@@ -2351,6 +2357,7 @@ export namespace Prisma {
     status: string
     stage: string
     comment: string | null
+    author_comment: string | null
     createAt: Date
     _count: TaskCountAggregateOutputType | null
     _avg: TaskAvgAggregateOutputType | null
@@ -2390,6 +2397,7 @@ export namespace Prisma {
     status?: boolean
     stage?: boolean
     comment?: boolean
+    author_comment?: boolean
     createAt?: boolean
   }, ExtArgs["result"]["task"]>
 
@@ -2410,6 +2418,7 @@ export namespace Prisma {
     status?: boolean
     stage?: boolean
     comment?: boolean
+    author_comment?: boolean
     createAt?: boolean
   }, ExtArgs["result"]["task"]>
 
@@ -2430,6 +2439,7 @@ export namespace Prisma {
     status?: boolean
     stage?: boolean
     comment?: boolean
+    author_comment?: boolean
     createAt?: boolean
   }, ExtArgs["result"]["task"]>
 
@@ -2450,10 +2460,11 @@ export namespace Prisma {
     status?: boolean
     stage?: boolean
     comment?: boolean
+    author_comment?: boolean
     createAt?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ygId" | "department" | "typeApproval" | "fio" | "subdivision" | "tgId" | "branch" | "leader" | "type" | "title" | "deadline" | "message" | "status" | "stage" | "comment" | "createAt", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ygId" | "department" | "typeApproval" | "fio" | "subdivision" | "tgId" | "branch" | "leader" | "type" | "title" | "deadline" | "message" | "status" | "stage" | "comment" | "author_comment" | "createAt", ExtArgs["result"]["task"]>
 
   export type $TaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Task"
@@ -2475,6 +2486,7 @@ export namespace Prisma {
       status: string
       stage: string
       comment: string | null
+      author_comment: string | null
       createAt: Date
     }, ExtArgs["result"]["task"]>
     composites: {}
@@ -2915,6 +2927,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Task", 'String'>
     readonly stage: FieldRef<"Task", 'String'>
     readonly comment: FieldRef<"Task", 'String'>
+    readonly author_comment: FieldRef<"Task", 'String'>
     readonly createAt: FieldRef<"Task", 'DateTime'>
   }
     
@@ -3333,6 +3346,7 @@ export namespace Prisma {
     status: 'status',
     stage: 'stage',
     comment: 'comment',
+    author_comment: 'author_comment',
     createAt: 'createAt'
   };
 
@@ -3553,6 +3567,7 @@ export namespace Prisma {
     status?: StringFilter<"Task"> | string
     stage?: StringFilter<"Task"> | string
     comment?: StringNullableFilter<"Task"> | string | null
+    author_comment?: StringNullableFilter<"Task"> | string | null
     createAt?: DateTimeFilter<"Task"> | Date | string
   }
 
@@ -3573,6 +3588,7 @@ export namespace Prisma {
     status?: SortOrder
     stage?: SortOrder
     comment?: SortOrderInput | SortOrder
+    author_comment?: SortOrderInput | SortOrder
     createAt?: SortOrder
   }
 
@@ -3596,6 +3612,7 @@ export namespace Prisma {
     status?: StringFilter<"Task"> | string
     stage?: StringFilter<"Task"> | string
     comment?: StringNullableFilter<"Task"> | string | null
+    author_comment?: StringNullableFilter<"Task"> | string | null
     createAt?: DateTimeFilter<"Task"> | Date | string
   }, "id">
 
@@ -3616,6 +3633,7 @@ export namespace Prisma {
     status?: SortOrder
     stage?: SortOrder
     comment?: SortOrderInput | SortOrder
+    author_comment?: SortOrderInput | SortOrder
     createAt?: SortOrder
     _count?: TaskCountOrderByAggregateInput
     _avg?: TaskAvgOrderByAggregateInput
@@ -3644,6 +3662,7 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"Task"> | string
     stage?: StringWithAggregatesFilter<"Task"> | string
     comment?: StringNullableWithAggregatesFilter<"Task"> | string | null
+    author_comment?: StringNullableWithAggregatesFilter<"Task"> | string | null
     createAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
   }
 
@@ -3779,6 +3798,7 @@ export namespace Prisma {
     status: string
     stage: string
     comment?: string | null
+    author_comment?: string | null
     createAt?: Date | string
   }
 
@@ -3799,6 +3819,7 @@ export namespace Prisma {
     status: string
     stage: string
     comment?: string | null
+    author_comment?: string | null
     createAt?: Date | string
   }
 
@@ -3818,6 +3839,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     stage?: StringFieldUpdateOperationsInput | string
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    author_comment?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -3838,6 +3860,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     stage?: StringFieldUpdateOperationsInput | string
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    author_comment?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -3858,6 +3881,7 @@ export namespace Prisma {
     status: string
     stage: string
     comment?: string | null
+    author_comment?: string | null
     createAt?: Date | string
   }
 
@@ -3877,6 +3901,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     stage?: StringFieldUpdateOperationsInput | string
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    author_comment?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -3897,6 +3922,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     stage?: StringFieldUpdateOperationsInput | string
     comment?: NullableStringFieldUpdateOperationsInput | string | null
+    author_comment?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4094,6 +4120,7 @@ export namespace Prisma {
     status?: SortOrder
     stage?: SortOrder
     comment?: SortOrder
+    author_comment?: SortOrder
     createAt?: SortOrder
   }
 
@@ -4118,6 +4145,7 @@ export namespace Prisma {
     status?: SortOrder
     stage?: SortOrder
     comment?: SortOrder
+    author_comment?: SortOrder
     createAt?: SortOrder
   }
 
@@ -4138,6 +4166,7 @@ export namespace Prisma {
     status?: SortOrder
     stage?: SortOrder
     comment?: SortOrder
+    author_comment?: SortOrder
     createAt?: SortOrder
   }
 

@@ -88,13 +88,11 @@ const page: FC = () => {
         const tasks = await getTask()
         const users = await getUsers()
 
-        console.log(tasks)
+
         
         // 
 
         const currentUser = users.data.find((item: {id: number}) => item.id.toString() === id)
-
-        console.log(currentUser)
 
         // 
 

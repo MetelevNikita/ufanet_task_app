@@ -1,11 +1,15 @@
 
-
 export const registerBot = async () => {
 
   console.log('Registering telegram bot instrumentation');
   console.log('NEXT_RUNTIME', process.env.NEXT_RUNTIME);
 
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
+
+  if (process.env.NODE_APP_INSTANCE && process.env.NODE_APP_INSTANCE !== '0') {
+    console.log('Skip bot init: not instance 0')
+    return
+  }
 
   const { getBot } = await import('@/telegramBot/telegramBot')
 
@@ -96,6 +100,13 @@ export const getYGData = async () => {
 // start FNs
 
 export const register = async () => {
+
+  if (process.env.NEXT_RUNTIME !== 'nodejs') return;
+
+  const { registerProcessHandlers } = await import('@/lib/registerProcessHandlers')
+  registerProcessHandlers()
+
+
   try {
     await Promise.all([
       await registerBot(),

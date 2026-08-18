@@ -1,5 +1,6 @@
 import { FC, useState } from 'react'
 import { motion } from 'motion/react'
+import { useRouter } from 'next/navigation';
 
 // bootstrap
 
@@ -13,6 +14,11 @@ import styles from './SearchElement.module.css'
 
 import { BsChatDots } from "react-icons/bs";
 import { BsArrowLeftCircle } from "react-icons/bs";
+
+// components
+
+import MyTextArea from '../MyTextArea/MyTextArea';
+import MyFile from '../MyFile/MyFile';
 
 
 
@@ -33,8 +39,18 @@ interface SearchElementProps {
 
 const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, department, author, stage, comment, task }) => {
 
+
+  const router = useRouter()
+
   const [currentTask, setCurrentTask] = useState<any | null>(null)
   const [open, setOpen] = useState<boolean>(false)
+  const [commentOpen, setCommentOpen] = useState<boolean>(false)
+
+  // 
+
+  const [commentMessage, setCommentMessage] = useState<string | null>(null)
+
+  // 
 
   const newDate = (!date) ? '' : new Date(date).toLocaleDateString('RU-ru')
   let statusText = ``
@@ -95,14 +111,26 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
   // 
 
 
-  function taskOpen(task: {open: boolean, message: string}) {
+
+
+
+  function taskOpen(task: {open: boolean, message: string, author_comment: string}) {
+
+    console.log('task open')
+    console.log(task)
 
     if (!task.hasOwnProperty('open')) return 'error'
     task.open = !task.open
 
     const filteredTask = Object.entries(JSON.parse(task.message)).filter((item) => item[0] !== 'reconciliator')
 
-    const formattedTask = filteredTask.map((item: any) => {
+    const resultTaskFromComment = task.author_comment
+      ? [...filteredTask, ['author_comment', task.author_comment]]
+      : filteredTask
+
+    console.log('TASK ', resultTaskFromComment)
+
+    const formattedTask = resultTaskFromComment.map((item: any) => {
       if (typeof item[1] === 'object') {
         return item[1].join(',')
       }
@@ -111,6 +139,39 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
     setCurrentTask(formattedTask)
     return formattedTask
 
+  }
+
+  async function sendCommentHandler(message: string) {
+    try {
+
+
+      const response = await fetch(`/api/task/${task.department}/${task.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({author_comment: message})
+      })
+
+
+      const data = await response.json()
+      console.log(data)
+
+
+      if (data || data.success) {
+        alert(data.message)
+        window.location.reload()
+      } else {
+        alert(`ОШИБКА ${data.message}`)
+        return
+      }
+      
+      
+    } catch (error) {
+      console.error('Ошибка отправки комментария')
+      alert('Ошибка отправки комментария')
+      return null
+    }
   }
 
 
@@ -162,8 +223,7 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
                 onClick={(e) => {
 
                   const openedTask = taskOpen(task) as any
-                  
-                  
+            
                   
                 }}>
                   <BsArrowLeftCircle
@@ -177,40 +237,103 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
 
         {
           (!open) && (
-                      <Row>
+            <Row className='d-flex flex-column'>
+              {
 
+              (task.open) && currentTask.map((item: any, index: number): React.ReactNode => {
 
-          {
+                  if (item.startsWith('https://') || item.startsWith('http://')) {
 
-            (task.open) && currentTask.map((item: any, index: number): React.ReactNode => {
+                    return (
 
-              if (item.startsWith('https://') || item.startsWith('http://')) {
+                      <Col key={index} md={9} className='d-flex justify-content-start'>
+                        <a href={item} target='_blank' className={styles.search_status_task_info_text}>{item}</a>
 
-                return (
-
-                  <Col key={index} md={9} className='d-flex justify-content-start'>
-                    <a href={item} target='_blank' className={styles.search_status_task_info_text}>{item}</a>
-                  </Col>
-
-                )
     
-            } else {
-                  return (
+                      </Col>
 
-                    <Col key={index} md={9} className='d-flex justify-content-start'>
-                      <div className={styles.search_status_task_info_text}>{item}</div>
-                    </Col>
+                    )
+        
+                  } else {
+                        return (
+
+                          <Col key={index} md={9} className='d-flex justify-content-start'>
+                            <div className={styles.search_status_task_info_text}>{item}</div>
+                          </Col>
+                        
+                      )
+                  }
+
+              })
+              
+              }
+
+              <Col className='mb-3'>
+                <motion.div
+                  className={styles.comment_button}
+                  whileHover={{
+                    background: '#fc9b32',
+                    color: 'white',
+                    border: 'none'
+                  }}
+                  whileTap={{scale: 1.02 }}
+                  onClick={() => {
+                    setCommentOpen(prev => !prev)
+                  }}
+                >
+                  Оставить комментарий
+                </motion.div>
+              </Col>
+
+
+
+              {
+                commentOpen && (
+
+
+                    <Col className='mb-3'>
+                      <MyTextArea
+                        title={'Текст комментария'}
+                        placeholder={'введитие текст или вставьте ссылку на недостающие файлы'}
+                        name={''}
+                        value={commentMessage ?? ''}
+                        onChange={(e) => {
+                          setCommentMessage(e.target.value)
+                        }}
+                      />
+
+                      <motion.div
+                        className={styles.comment_button}
+                        whileHover={{
+                          background: '#fc9b32',
+                          color: 'white',
+                          border: 'none'
+                        }}
+                        whileTap={{scale: 1.02 }}
+                        onClick={() => {
+                          console.log('Comment is SEND')
+                          if (commentMessage) {
+                            sendCommentHandler(commentMessage)
+                          } else {
+                            alert('Поля не может быть пустым')
+                            return
+                          }
+                        }}
+                      >
+                        Отправить
+                      </motion.div>
+
+
+                      </Col>
+  
+
                   
                 )
-            }
+              }
 
 
-          })
-          
-          }
-
-                      </Row>
-                      )
+            </Row>
+            )
         }
 
 

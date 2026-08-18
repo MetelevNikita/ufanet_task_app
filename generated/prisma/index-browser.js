@@ -154,6 +154,7 @@ exports.Prisma.TaskScalarFieldEnum = {
   status: 'status',
   stage: 'stage',
   comment: 'comment',
+  author_comment: 'author_comment',
   createAt: 'createAt'
 };
 

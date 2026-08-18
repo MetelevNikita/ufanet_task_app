@@ -230,10 +230,21 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     console.log('Проверочная отправка данных в ТГ')
 
+
+    try {
+
     const examination = await resultTgMessage(formData.tgId, 'Проверяем подписаны ли вы на бота Pr-tz.ru')
     console.log('EXAMP ', examination)
 
     if (!examination.success) {
+      return NextResponse.json({
+        success: false,
+        message: `Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)`
+      });
+    }
+
+    } catch (error) {
+      console.error('Ошибка, вероятно вы не подписаны на бота')
       return NextResponse.json({
         success: false,
         message: `Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)`

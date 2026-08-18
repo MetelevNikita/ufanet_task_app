@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { PrismaClient } from "@/../generated/prisma/client";
 
-
+import { getBot } from "@/telegramBot/telegramBot";
 // 
 
 
 const prisma = new PrismaClient()
+const telegramBot = await getBot()
 
 // 
 
@@ -45,9 +46,7 @@ export const POST = async (req: NextRequest) => {
     const resetLink = new URL(`${url}/auth/new_password`)
     resetLink.searchParams.set('id', findUser.id.toString())
 
-
-    const bot = globalThis._tgBot
-    bot.sendMessage(
+    telegramBot.sendMessage(
       telegramId,
       `Ссылка для сброса пароля\n\n<a href="${resetLink}">${resetLink}</a>`,
       {

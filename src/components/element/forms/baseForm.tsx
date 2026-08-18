@@ -1,4 +1,4 @@
-import { FC, useState, useMemo, useEffect } from 'react'
+import { FC, useState, useMemo, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
 // styles
@@ -340,6 +340,16 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const [formData, setFormData] = useState<any>({
   })
 
+  // отменяет предыдущий незавершённый запрос на отправку задачи (повторный сабмит, размонтирование)
+
+  const abortControllerRef = useRef<AbortController | null>(null)
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort()
+    }
+  }, [])
+
 
 
   useEffect(() => {
@@ -464,7 +474,12 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
 
       setModalInfoDownload(true)
 
-    
+      // отменяем предыдущий незавершённый запрос, если он ещё выполняется
+
+      abortControllerRef.current?.abort()
+      const abortController = new AbortController()
+      abortControllerRef.current = abortController
+
       const newData = {
         ...message,
         department: department,
@@ -474,16 +489,29 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
         },
       }
 
-      const result = await postTask(newData, department)
+      const result = await postTask(newData, department, abortController.signal)
       console.log(result)
 
+      // запрос отменён из-за повторного сабмита/размонтирования — молча выходим,
+      // ответ относится к устаревшему запросу
+
+      if (result?.aborted && !result?.timedOut) {
+        return
+      }
+
       setModalInfoDownload(false)
+
+      if (result?.timedOut) {
+        setModalMessage(result.message)
+        setModalTgBotError(true)
+        return
+      }
 
       if (result) {
         if (result.success === true) {
           setModalInfoDownload(false)
           setModalSubmitSuccess(true)
-          return 
+          return
         }
 
 
