@@ -75,25 +75,35 @@ export const POST = async (req: NextRequest) => {
 
     // send to user
 
-    await telegramBot.sendMessage(telegramId, '<b>Вы успешно прошли регистрацию на сайте pr-tz.ru</b>\n\nУведомление о получения разрешения на вход в систему придет в телеграм боте', {parse_mode: 'HTML'})
+    try {
+      await telegramBot.sendMessage(telegramId, '<b>Вы успешно прошли регистрацию на сайте pr-tz.ru</b>\n\nУведомление о получения разрешения на вход в систему придет в телеграм боте', {parse_mode: 'HTML'})
+    } catch (error) {
+      console.error('Ошибка, пользователь не подписан на телеграм бота')
+    }
+
+    
 
     // 
 
-    await telegramBot.sendMessage(
-      process.env.ADMIN_GROUP as string,
-      `<b>Заявка на регистрацию</b>\n\nНовый пользователь\n\n<b>Имя пользователя</b>\n${name} ${lastName}\n\n<b>Город</b>\n${branch}\n\n<b>TelegramId</b>\n${telegramId}\n\n<b>Почта</b>\n${email}\n\n<b>Имя пользователя на корпортаивном сайте</b>\n${loginCorp}\n\n<b>Дата регистрации</b>\n${new Date().toLocaleDateString('ru-RU')}`,
-      {
-        parse_mode: 'HTML',
-        reply_markup: {
-          inline_keyboard: [
-            [
-              { text: 'Подтвердить', callback_data: `${newUser.id}|CONFIRMED|user_agreed` },
-              { text: 'Отклонить', callback_data: `${newUser.id}|DELETE|user_disagreed` }
+    try {
+      await telegramBot.sendMessage(
+        process.env.ADMIN_GROUP as string,
+        `<b>Заявка на регистрацию</b>\n\nНовый пользователь\n\n<b>Имя пользователя</b>\n${name} ${lastName}\n\n<b>Город</b>\n${branch}\n\n<b>TelegramId</b>\n${telegramId}\n\n<b>Почта</b>\n${email}\n\n<b>Имя пользователя на корпортаивном сайте</b>\n${loginCorp}\n\n<b>Дата регистрации</b>\n${new Date().toLocaleDateString('ru-RU')}`,
+        {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: 'Подтвердить', callback_data: `${newUser.id}|CONFIRMED|user_agreed` },
+                { text: 'Отклонить', callback_data: `${newUser.id}|DELETE|user_disagreed` }
+              ]
             ]
-          ]
+          }
         }
-      }
-    )
+      )
+    } catch (error) {
+      console.error('Ошибка, пользователь не подписан на телеграм бота')
+    }
 
     return NextResponse.json({
         success: true,
