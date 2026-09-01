@@ -103,6 +103,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
   if (type === 'Адаптация и внесение изменений в макет') {
     const bodyYG =
       row('<strong>Название мероприятия / проекта / услуги:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Цель мероприятия / проекта / услуги:</strong><br>', data.target, '<br><br>') +
       row('<strong>Исходный файл: - </strong><br>', `Список`, '<br>') +
 
       createImageMessageList('yg', data.target_file) +
@@ -122,6 +123,7 @@ export const designMessage = async (department: string, data: any): Promise<{mes
 
     const bodyTG =
       row('Название мероприятия / проекта / услуги:', data.title, '\n') +
+      row('Цель мероприятия / проекта / услуги:', data.target, '\n') +
       row('Исходный файл:', 'Cписок', '\n') +
       createImageMessageList('tg', data.target_file) +
       row('Что нужно исправить?:', data.changes, '\n') +

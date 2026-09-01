@@ -177,6 +177,14 @@ export const typeSelectorArrDes = [
 			},
 			{
 				id: 2,
+				title: 'Цель мероприятия / проекта / услуги',
+				placeholder: 'Опишите цель',
+				typeField: 'text',
+				type: 'text',
+				name: 'target'
+			},
+			{
+				id: 3,
 				title: 'Прикрепить файл в исходном виде (не больше 3 изображений)',
 				placeholder: 'Загрузите исходник (PSD/AI/PDF и т.п.)',
 				typeField: 'file',
@@ -184,7 +192,7 @@ export const typeSelectorArrDes = [
 				name: 'target_file'
 			},
 			{
-				id: 3,
+				id: 4,
 				title: 'Что нужно исправить?',
 				placeholder: 'Опишите изменения, правки, адаптации',
 				typeField: 'area',
@@ -192,7 +200,7 @@ export const typeSelectorArrDes = [
 				name: 'changes'
 			},
 			{
-				id: 4,
+				id: 5,
 				title: 'Телеграм заказчика макета',
 				placeholder: 'Имя пользователя можно посмотреть в настройка telegram, например IvanIvanon (без @)',
 				typeField: 'text',
@@ -200,7 +208,7 @@ export const typeSelectorArrDes = [
 				name: 'client_tg'
 			},
 			{
-				id: 5,
+				id: 6,
 				title: 'Желаемая дата готовности макета',
 				placeholder: 'К какому сроку',
 				typeField: 'date',
