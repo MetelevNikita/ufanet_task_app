@@ -11,10 +11,10 @@ export const registerBot = async () => {
     return
   }
 
-  const { getBot } = await import('@/telegramBot/telegramBot')
+  const { startBotPolling } = await import('@/telegramBot/telegramBot')
 
   try {
-    await getBot(); // запускаем polling при старте сервера
+    await startBotPolling(); // запускаем polling при старте сервера
     console.log('[bot] started on server boot');
   } catch (e) {
     console.error('[bot] init error:', e);
@@ -27,6 +27,7 @@ export const getAllWebHooks = async () => {
   console.log('Registering yougile webhook instrumentation');
 
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
+  if (process.env.NODE_APP_INSTANCE && process.env.NODE_APP_INSTANCE !== '0') return;
 
   const youGileKey = process.env.YOGILE_KEY_INSTANCE as string;
 
@@ -40,6 +41,7 @@ export const getAllWebHooks = async () => {
 export const getYouGileWebHook = async () => {
 
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
+  if (process.env.NODE_APP_INSTANCE && process.env.NODE_APP_INSTANCE !== '0') return;
 
   const youGileKey = process.env.YOGILE_KEY_INSTANCE as string;
 

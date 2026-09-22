@@ -14,7 +14,7 @@ import logoUfanet from '@/../public/logo_ufanet/logo_full.svg'
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <Container className='vw-100 d-flex flex-column justify-content-center mt-5 mb-5'>
-      <Image src={logoUfanet} width={200} height={200} alt='logo'/>
+      <Image style={{display: 'flex', justifyContent: 'center'}} src={logoUfanet} width={200} height={200} alt='logo'/>
 
       <Row className='d-flex justify-content-center mt-4'>
         <Col md={8} className='d-flex justify-content-center mb-1' style={{padding: '0'}}>

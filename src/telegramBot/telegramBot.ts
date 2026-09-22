@@ -39,7 +39,7 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
 
     if (!responce.ok) {
       return {
-        succees: false,
+        success: false,
         message: `Ошибка отправки ответа от телеграмм в yougile: ${responce.statusText}`,
         data: null
       }
@@ -364,6 +364,7 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
 declare global {
   var _tgBot: TelegramBot;
   var _tgCreating: Promise<TelegramBot> | undefined;
+  var _tgPolling: boolean | undefined;
 }
 
 export {};
@@ -652,7 +653,7 @@ export const getBot = async () => {
 
       bot.on('callback_query', async (query) => {
 
-        await bot.answerCallbackQuery(query.id)
+        bot.answerCallbackQuery(query.id).catch(() => {}) // ponytail: ответ косметический, протухший query.id игнорируем
 
         try {
           
@@ -802,7 +803,7 @@ export const getBot = async () => {
 
               await bot.sendMessage(
                 telegramResencId,
-                `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "✅ Согласовано")\n\n Согласовано пользователем -  ${reconciliatorUser}\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+                `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "✅ Согласовано")\n\n Согласовано пользователем -  ${reconciliatorUser}\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}`,
                 {
                   reply_markup: {
                     inline_keyboard: [
@@ -815,14 +816,14 @@ export const getBot = async () => {
                 }
               )
 
-              await bot.editMessageText(`Заявка # ${cardFromDB.ygId} : ✅ получила предварительное согласование и отправлена на согласование в группу с Ольгой Николаевной Эделевой.\n\nАвтор сообщения # ${cardFromDB.tgId} # ${cardFromDB.fio} # \n\n Title: ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+              await bot.editMessageText(`Заявка # ${cardFromDB.ygId} : ✅ получила предварительное согласование и отправлена на согласование в группу с Ольгой Николаевной Эделевой.\n\nАвтор сообщения # ${cardFromDB.tgId} # ${cardFromDB.fio} # \n\n Title: ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
 
               await bot.sendMessage(
                 cardFromDB.tgId,
-                `№${cardFromDB.id} - ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\n\n${messageTG}\n\nСледите за изменениями в боте или на сайте pr-tz.ru Дата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+                `№${cardFromDB.id} - ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\n\n${messageTG}\n\nСледите за изменениями в боте или на сайте pr-tz.ru`,
               )
 
                 return {
@@ -841,7 +842,7 @@ export const getBot = async () => {
                 `Заявка # ${cardFromDB.id} ❌ Отклонена\n\n За дополнительной информацией обратитесь\n\n${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`
               )
 
-              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ❌ Отклонено - Отказ отправлен автору заявки.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ❌ Отклонено - Отказ отправлен автору заявки.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
@@ -860,7 +861,7 @@ export const getBot = async () => {
 
               await bot.sendMessage(
                 telegramResencId,
-                `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "⚠️ Ошибочно отправленана предварительное согласование")\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nПеремещена пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`,
+                `№${cardFromDB.id} Задача поступила из группы (Продвижения услуг компании "⚠️ Ошибочно отправленана предварительное согласование")\n\nЗадача ${cardFromDB.title}\n\nОтдел ${cardFromDB.department}\n\n\n${messageTG}\n\nПеремещена пользователем -  ${reconciliatorUser}`,
                 {
                   reply_markup: {
                     inline_keyboard: [
@@ -873,7 +874,7 @@ export const getBot = async () => {
                 }
               )
 
-              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ⚠️ Ошибочно отправлена на согласование в данную группу - переносим в основную группу.\n\nАвтор сообщения # ${cardFromDB.fio} #\n\nTitle: ${cardFromDB.title}\n\nПеремещена пользователем -  ${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`, {
+              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ⚠️ Ошибочно отправлена на согласование в данную группу - переносим в основную группу.\n\nАвтор сообщения # ${cardFromDB.fio} #\n\nTitle: ${cardFromDB.title}\n\nПеремещена пользователем -  ${reconciliatorUser}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
@@ -893,16 +894,23 @@ export const getBot = async () => {
 
       })
 
-      // если бот уже создается, ждем его создания и возвращаем тот же промис
-
-      await bot.startPolling();
-
-      // сохраняем бота в глобальную переменную, чтобы не создавать его заново
-
       globalThis._tgBot = bot;
       return bot;
     })();
   }
 
   return creatingBotCashe;
+}
+
+export const startBotPolling = async () => {
+  if (globalThis._tgPolling) return
+  globalThis._tgPolling = true
+
+  const bot = await getBot()
+
+  // сбрасываем накопленный за простой бэклог: его callback_query уже протухли
+  await (bot as any).deleteWebHook({ drop_pending_updates: true }).catch(() => {})
+
+  await bot.startPolling()
+  console.log('[bot] polling started, PID:', process.pid)
 }
