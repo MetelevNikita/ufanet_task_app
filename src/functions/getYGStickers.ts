@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const getYGStickers = async (key: string) => {
   try {
 
@@ -18,7 +22,7 @@ export const getYGStickers = async (key: string) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка получения стикеров из YG: ${error.message}`);
+      log.error('Ошибка получения стикеров', error);
       return null;
     }
     return null

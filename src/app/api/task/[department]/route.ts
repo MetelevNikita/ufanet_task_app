@@ -31,6 +31,9 @@ import { createDBTask } from "@/lib/createDBTask";
 // 
 
 import { createMessageTgYG } from "@/lib/createMessageTgYG";
+import { logger } from "@/lib/logger";
+
+const log = logger('task')
 
 
 
@@ -52,7 +55,6 @@ const createUploadFolder = (folder: string) => {
   // Создаем папку для текущей загрузки
   if (!fs.existsSync(currentFolder)) {
     fs.mkdirSync(currentFolder, { recursive: true });
-    console.log(`Создана папка для загрузки: Folder_${folderId}`);
   }
   
   return {
@@ -91,14 +93,13 @@ const writeFileData = async (
     // Сохраняем файл
     writeFileSync(filePath, buffer);
 
-    console.log(`Файл ${fileName} успешно загружен в папку ${folderName}`);
     
     // Возвращаем URL
     return `${url}/api/uploads/${department}/${folderName}/${fileName}`;
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Не удалось загрузить файл: ${error.message}`);
+      log.error('Не удалось сохранить файл', error, { folderName });
     }
     return null; // Возвращаем null при ошибке
   }
@@ -148,7 +149,7 @@ const createTGPhoto = async (department: string, data: any, descriptionTask: str
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.log(error.message)
+      log.error('Не удалось отправить фото в Telegram', error, { department })
       throw new Error(error.message);
     }
   }
@@ -173,7 +174,7 @@ async function resultTgMessage (tgId: string, message: string) {
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Проверочное сообщение не отпралено. Указан не верный Telegram Id или вы не подписались на бота ${error.message}`)
+      log.warn('Сообщение автору не доставлено — неверный Telegram id или нет подписки на бота', { tgId, error: error.message })
       return {
         success: false,
         message: `Проверочное сообщение не отпралено. Указан не верный Telegram Id или вы не подписались на бота`,
@@ -181,7 +182,7 @@ async function resultTgMessage (tgId: string, message: string) {
       }
     }
 
-    console.error(`Проверочное сообщение не отпралено. Указан не верный Telegram Id или вы не подписались на бота ${error}`)
+    log.warn('Сообщение автору не доставлено — неверный Telegram id или нет подписки на бота', { tgId, error: String(error) })
     return {
       success: false,
       message: `Проверочное сообщение не отпралено. Указан не верный Telegram Id или вы не подписались на бота`,
@@ -199,8 +200,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
 
     // 
-
-    console.log('Начинаем обработку данных')
 
     const contentLength = req.headers.get('content-length')
     const MAX_SIZE = 20 * 1024 * 1024
@@ -228,13 +227,12 @@ export const POST = async (req: Request, context: {params: {department: string}}
     const departmentLabel = currentDepartment.label
     const formData = await req.json()
 
-    console.log('Проверочная отправка данных в ТГ')
+    log.info('Новая задача', { department: departmentLabel, tgId: formData.tgId })
 
 
     try {
 
     const examination = await resultTgMessage(formData.tgId, 'Проверяем подписаны ли вы на бота Pr-tz.ru')
-    console.log('EXAMP ', examination)
 
     if (!examination.success) {
       return NextResponse.json({
@@ -244,7 +242,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     }
 
     } catch (error) {
-      console.error('Ошибка, вероятно вы не подписаны на бота')
+      log.error('Проверка подписки на бота упала', error, { tgId: formData.tgId })
       return NextResponse.json({
         success: false,
         message: `Ошибка проверки Telegram (возможно вы ввели неправильный Telegram id или не подписались на бота)`
@@ -264,7 +262,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
           if (!uploadFolderInfo) {
             uploadFolderInfo = createUploadFolder(currentDepartment.value);
-            console.log(`Папка создана: ${uploadFolderInfo.folderName}`);
           }
 
           const urls = await Promise.all(
@@ -284,7 +281,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
           // Фильтруем null значения (ошибки загрузки)
           const validUrls = urls.filter(url => url !== null);
           
-          console.log(`Загружено файлов для ${key}: ${validUrls.length} из ${value.length}`);
+          log.info('Файлы сохранены', { field: key, saved: validUrls.length, total: value.length });
           
           return [key, validUrls] as const;
 
@@ -339,7 +336,6 @@ export const POST = async (req: Request, context: {params: {department: string}}
     }
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
-    console.log('# Создаем в YouGile')
 
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
 
@@ -351,7 +347,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
     }
 
     const ygId = newTaskYougile.data.id
-    console.info(`Задача в YouGile Создана ${ygId}`)
+    log.ok('Задача создана в YouGile', { ygId })
         
     //
 
@@ -363,16 +359,14 @@ export const POST = async (req: Request, context: {params: {department: string}}
       }, { status: 500 });
     }
 
-    console.info(`Задача в БД Создана`)
+    log.ok('Задача создана в БД', { taskId: newDatabaseTask.data?.id })
     //
-    console.log('# Создаем в телеграм')
 
     let TelegramRes;
 
     if (departmentLabel === 'Отдел дизайна' && message.typeApproval.label === 'Продвижение услуг компании') {
 
       TelegramRes = await createTGsubTaskGroup(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id, formData.typeApproval.idTg)
-      console.log('TG ', TelegramRes)
 
       if (!TelegramRes.success) {
         return NextResponse.json({
@@ -381,19 +375,15 @@ export const POST = async (req: Request, context: {params: {department: string}}
         }, { status: 500 });
       }
 
-      console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
 
       const resultMessage = await resultTgMessage(formData.tgId, `Задача ${newDatabaseTask?.data?.title ?? ''} на сайте pr-tz.ru успешно создана и отправлена на предварительное согласование в отдела "Продвижение услуг компании"\n\n${messageTG}`)
-      console.log(resultMessage)
 
     } else {
 
       TelegramRes = await createTGTask(departmentLabel, messageTG, newDatabaseTask.data, formData.reconciliator.id, '')
 
-      console.info(`Задача в ТГ отправлена ${TelegramRes.toString()}`)
 
       const resultMessage = await resultTgMessage(formData.tgId, `Задача ${newDatabaseTask?.data?.title ?? ''} на сайте pr-tz.ru успешно создана\n\n${messageTG}`)
-      console.log(resultMessage)
 
       if (!TelegramRes.success) {
         return NextResponse.json({
@@ -405,6 +395,8 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
 
 
+    log.ok('Задача создана', { taskId: newDatabaseTask.data?.id, department: departmentLabel })
+
     return NextResponse.json({
       success: true,
       message: `Сообщение в отдел ${department} отправлено на согласование`
@@ -413,6 +405,7 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     
   } catch (error: Error | unknown) {
+    log.error('Задача не создана', error)
     if (error instanceof Error) {
       return NextResponse.json({
         success: false,

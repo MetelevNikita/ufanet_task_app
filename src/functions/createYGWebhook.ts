@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const createYGWebhook = async (key: string) => {
   try {
 
@@ -25,14 +29,7 @@ export const createYGWebhook = async (key: string) => {
     return data
     
   } catch (error: Error | unknown) {
-    if (error instanceof Error) {
-      console.error(
-        'Ошибка создания вебхука в YG: ',
-        error.message
-      );
-    }
-
-    console.error(error)
+    log.error('Ошибка создания вебхука', error)
     
   }
 }

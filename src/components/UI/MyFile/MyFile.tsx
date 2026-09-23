@@ -161,7 +161,6 @@ const MyFile: FC<MyFileProps> = ({ title, placeholder, onChange, name, data }) =
                                transfer.items.add(element)
                           });
 
-                          console.log(transfer)
                           
                           onChange({
                             target: {

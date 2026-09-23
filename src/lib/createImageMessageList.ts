@@ -1,7 +1,10 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('files')
+
 export function createImageMessageList (trigger: string, data: string[]) {
 
 
-  console.log('DATA FROM ARR ', data)
 
 
   try {
@@ -21,11 +24,10 @@ export function createImageMessageList (trigger: string, data: string[]) {
       }
     })
 
-    console.log(list.join(''))
     return list.join('')
 
   } catch (error) {
-    console.error(error)
+    log.error('Ошибка сборки списка файлов', error)
     return []
   }
 

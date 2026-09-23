@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('tasks')
+
 export const getTask = async () => {
   try {
 
@@ -24,7 +28,7 @@ export const getTask = async () => {
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка получения задач: ${error.message}`)
+      log.error('Ошибка получения задач', error)
 
       throw new Error(
         JSON.stringify({

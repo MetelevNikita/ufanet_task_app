@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const getYGUsersID = async (id: string, token: string) => {
   try {
 
@@ -10,7 +14,6 @@ export const getYGUsersID = async (id: string, token: string) => {
     })
 
     if (!responce.ok) {
-            console.error(`Ошибка получения пользователя из YG ${responce.statusText} - ${responce.status}`)
       throw new Error(
         `Ошибка получения пользователя из YG ${responce.statusText} - ${responce.status}`
       )
@@ -22,12 +25,12 @@ export const getYGUsersID = async (id: string, token: string) => {
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка получения пользователя из YG ${error.message}`)
+      log.error('Ошибка получения пользователя', error)
       return `Ошибка получения пользователя из YG ${error.message}`
     }
 
 
-    console.error(`Ошибка получения пользователя из YG ${error}`)
+    log.error('Ошибка получения пользователя', error)
     return `Ошибка получения пользователя из YG ${error}`
 
     

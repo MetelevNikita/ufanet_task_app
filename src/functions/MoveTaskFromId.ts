@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const MoveTaskFromId = async (key: string, id: string, columnId: string) => {
   try {
 
@@ -22,9 +26,9 @@ export const MoveTaskFromId = async (key: string, id: string, columnId: string) 
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error('Ошибка получения задачи из комании в YG: ', error.message);
+      log.error('Ошибка перемещения задачи', error);
       return null;
     }
-    console.error('Ошибка получения задачи из комании в YG: ', error);
+    log.error('Ошибка перемещения задачи', error);
   }
 }

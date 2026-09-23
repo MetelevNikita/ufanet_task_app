@@ -6,6 +6,10 @@ import { PrismaClient } from "@/../generated/prisma/client";
 
 
 import { getBot } from "@/telegramBot/telegramBot";
+import { escapeHtml } from "@/lib/escapeHtml";
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
 
 
 const prisma = new PrismaClient()
@@ -37,7 +41,6 @@ export const POST = async (req: NextRequest) => {
       }
     })
 
-    console.log(emailExist)
 
 
     if (emailExist || tgIdExist) {
@@ -78,7 +81,7 @@ export const POST = async (req: NextRequest) => {
     try {
       await telegramBot.sendMessage(telegramId, '<b>Вы успешно прошли регистрацию на сайте pr-tz.ru</b>\n\nУведомление о получения разрешения на вход в систему придет в телеграм боте', {parse_mode: 'HTML'})
     } catch (error) {
-      console.error('Ошибка, пользователь не подписан на телеграм бота')
+      log.warn('Приветствие не отправлено — пользователь не подписан на бота?', { telegramId, error: error instanceof Error ? error.message : String(error) })
     }
 
     
@@ -88,7 +91,7 @@ export const POST = async (req: NextRequest) => {
     try {
       await telegramBot.sendMessage(
         process.env.ADMIN_GROUP as string,
-        `<b>Заявка на регистрацию</b>\n\nНовый пользователь\n\n<b>Имя пользователя</b>\n${name} ${lastName}\n\n<b>Город</b>\n${branch}\n\n<b>TelegramId</b>\n${telegramId}\n\n<b>Почта</b>\n${email}\n\n<b>Имя пользователя на корпортаивном сайте</b>\n${loginCorp}\n\n<b>Дата регистрации</b>\n${new Date().toLocaleDateString('ru-RU')}`,
+        `<b>Заявка на регистрацию</b>\n\nНовый пользователь\n\n<b>Имя пользователя</b>\n${escapeHtml(name)} ${escapeHtml(lastName)}\n\n<b>Город</b>\n${escapeHtml(branch)}\n\n<b>TelegramId</b>\n${telegramId}\n\n<b>Почта</b>\n${escapeHtml(email)}\n\n<b>Имя пользователя на корпортаивном сайте</b>\n${escapeHtml(loginCorp)}\n\n<b>Дата регистрации</b>\n${new Date().toLocaleDateString('ru-RU')}`,
         {
           parse_mode: 'HTML',
           reply_markup: {
@@ -102,7 +105,7 @@ export const POST = async (req: NextRequest) => {
         }
       )
     } catch (error) {
-      console.error('Ошибка, пользователь не подписан на телеграм бота')
+      log.error('Заявка на регистрацию не отправлена в админ-группу', error, { userId: newUser.id })
     }
 
     return NextResponse.json({
@@ -116,7 +119,7 @@ export const POST = async (req: NextRequest) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка авторизации ${error.message}`)
+      log.error('Ошибка регистрации', error)
       return NextResponse.json({
         success: false,
         message: 'Ошибка автризации пользователя',

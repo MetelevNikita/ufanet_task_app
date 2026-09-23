@@ -19,6 +19,9 @@ import { BsArrowLeftCircle } from "react-icons/bs";
 
 import MyTextArea from '../MyTextArea/MyTextArea';
 import MyFile from '../MyFile/MyFile';
+import { logger } from "@/lib/logger";
+
+const log = logger('comment')
 
 
 
@@ -116,8 +119,6 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
 
   function taskOpen(task: {open: boolean, message: string, author_comment: string}) {
 
-    console.log('task open')
-    console.log(task)
 
     if (!task.hasOwnProperty('open')) return 'error'
     task.open = !task.open
@@ -128,7 +129,6 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
       ? [...filteredTask, ['author_comment', task.author_comment]]
       : filteredTask
 
-    console.log('TASK ', resultTaskFromComment)
 
     const formattedTask = resultTaskFromComment.map((item: any) => {
       if (typeof item[1] === 'object') {
@@ -155,7 +155,6 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
 
 
       const data = await response.json()
-      console.log(data)
 
 
       if (data || data.success) {
@@ -168,7 +167,7 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
       
       
     } catch (error) {
-      console.error('Ошибка отправки комментария')
+      log.error('Ошибка отправки комментария', error)
       alert('Ошибка отправки комментария')
       return null
     }
@@ -311,7 +310,6 @@ const SearchElement: FC<SearchElementProps> = ({ id, status, title, date, depart
                         }}
                         whileTap={{scale: 1.02 }}
                         onClick={() => {
-                          console.log('Comment is SEND')
                           if (commentMessage) {
                             sendCommentHandler(commentMessage)
                           } else {

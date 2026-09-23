@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const getYGTaskFromId = async (key: string, id: string) => {
   try {
 
@@ -22,12 +26,12 @@ export const getYGTaskFromId = async (key: string, id: string) => {
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка получения задачи по ID ${error.message}`)
+      log.error('Ошибка получения задачи по ID', error)
       return `Ошибка получения задачи по ID ${error.message}`
     }
 
 
-    console.error(`Ошибка получения задачи по ID ${error}`)
+    log.error('Ошибка получения задачи по ID', error)
     return `Ошибка получения задачи по ID ${error}`
 
     

@@ -11,6 +11,9 @@ import { createMessageTgYG } from '@/lib/createMessageTgYG';
 
 import { getYGTaskFromId } from '@/functions/getYGTaskFromId'
 import { editYGTaskFromId } from '@/functions/editYGTaskFromId'
+import { logger } from "@/lib/logger";
+
+const log = logger('tg')
 
 
 
@@ -54,7 +57,7 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error('Ошибка отправки ответа от телеграмм в yougile: ', error.message);
+      log.error('Ответ из Telegram не передан в YouGile', error);
       return {
         success: false,
         message: `Ошибка отправки ответа от телеграмм в yougile: ${error.message}`,
@@ -62,7 +65,7 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
       }
     }
 
-    console.error('Неизвестная ошибка отправки ответа от телеграмм в yougile');
+    log.error('Ответ из Telegram не передан в YouGile', error);
     return {
         success: false,
         message: `Ошибка отправки ответа от телеграмм в yougile: ${error}`,
@@ -83,7 +86,7 @@ const sendCommentMessageYG = async (text: string, ygTaskID: string) => {
     const data = await getYGTaskFromId(YG_KEY, ygTaskID)
 
     if (!data) {
-      console.error(`Ошибка получения задачи из yougile по ID`)
+      log.error('Задача YouGile не найдена', undefined, { ygTaskID })
       return {
               success: false,
               message: `Ошибка получения задачи из yougile по ID`,
@@ -109,7 +112,7 @@ const sendCommentMessageYG = async (text: string, ygTaskID: string) => {
     const editYGTask = await editYGTaskFromId(YG_KEY, ygTaskID, data.title, taskColumnId, taskDescription)
 
     if (!editYGTask || typeof editYGTask === 'string') {
-      console.error(`Ошибка изменения задачи из yougile по ID`)
+      log.error('Задача YouGile не изменена', undefined, { ygTaskID })
       return {
               success: false,
               message: `Ошибка изменения задачи из yougile по ID`,
@@ -128,7 +131,7 @@ const sendCommentMessageYG = async (text: string, ygTaskID: string) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error('Ошибка отправки ответа от телеграмм в yougile: ', error.message);
+      log.error('Комментарий из группы не передан в YouGile', error);
       return {
               success: false,
               message: `Ошибка изменения задачи из yougile по ID`,
@@ -137,7 +140,7 @@ const sendCommentMessageYG = async (text: string, ygTaskID: string) => {
             }
     }
 
-    console.error('Неизвестная ошибка отправки ответа от телеграмм в yougile');
+    log.error('Комментарий из группы не передан в YouGile', error);
     return {
             success: false,
             message: `Ошибка изменения задачи из yougile по ID`,
@@ -169,7 +172,7 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка создания комментария ${error.message}`)
+      log.error('Комментарий не сохранён в БД', error)
       return {
         success: false,
         message: `Ошибка создания комментария ${error.message}`
@@ -177,7 +180,7 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
     }
 
 
-      console.error(`Ошибка создания комментария ${error}`)
+      log.error('Комментарий не сохранён в БД', error)
       return {
         success: false,
         message: `Ошибка создания комментарий ${error}`
@@ -204,7 +207,7 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
       })
 
       if (!currentUser) {
-        console.error('Не найден пользователь в базе данных')
+        log.error('Пользователь для подтверждения не найден', undefined, { id })
         return 'Не найден пользователь в базе данных'
       }
 
@@ -230,14 +233,15 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
             }
         )
 
+        log.ok('Пользователь подтверждён', { id })
         return 'Сообщение отправлено'
 
       } else {
-        console.error('Ошибка отпраки')
+        log.error('Пользователь не подтверждён в БД', undefined, { id })
       }
 
     } catch (error) {
-      console.error(error)
+      log.error('Ошибка подтверждения пользователя', error, { id })
       return `Ошбика смены статуса регистрации пользваотеля`
     }
   }
@@ -254,7 +258,7 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
         })
 
         if (!checkUser) {
-          console.log(`Ошибка удаления пользователя`)
+          log.error('Пользователь для удаления не найден', undefined, { id })
           bot.sendMessage(chatId, 'Ошибка удаления пользователя')
           return `Ошбика удаления пользваотеля`
         }
@@ -277,10 +281,11 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
           }
         )
 
+        log.ok('Пользователь удалён', { id })
         return 'Сообщение удалено'
 
     } catch (error) {
-      console.error(error)
+      log.error('Ошибка удаления пользователя', error, { id })
       return `Ошбика удаления пользваотеля`
     }
 
@@ -299,7 +304,7 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
       })
 
       if (!checkUser) {
-        console.log(`Ошибка смены статуса пользователя`)
+        log.error('Пользователь для сброса не найден', undefined, { id })
         bot.sendMessage(chatId, 'Ошибка удаления пользователя')
         return
       }
@@ -315,7 +320,7 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
 
       if (!changeStatus) {
 
-        console.error('Ошибка смены статуса')
+        log.error('Статус пользователя не сброшен', undefined, { id })
         bot.sendMessage(query.message?.chat.id as number | string, `Ошибка смены статуса пользователя ${id}#${answer}, попробуйте позже`)
         return 'Сообщение изменено'
       }
@@ -335,7 +340,7 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
 
 
     } catch (error) {
-      console.error(error)
+      log.error('Ошибка сброса статуса пользователя', error, { id })
       return 'Ошибка из изменения'
     }
 
@@ -413,28 +418,29 @@ export const getBot = async () => {
 
       const bot = new TelegramBot(token as string, {
         polling: false,
-        request: telegramAgent ? ({ agent: telegramAgent } as any) : undefined,
+        // timeout: без него зависший прокси вешает sendMessage навсегда
+        request: ({ agent: telegramAgent, timeout: 15000 } as any),
       });
 
 
-      console.log('BOT INIT, PID:', process.pid);
+      log.info('Бот инициализирован', { pid: process.pid });
 
       // Статус
 
       bot.getMe()
         .then((botInfo) => {
-          console.log(`Бот подключен: @${botInfo.username}`)
+          log.ok(`Бот подключен: @${botInfo.username}`)
         })
         .catch((error) => {
-          console.error('Бот не подключился:', error)
+          log.error('Бот не подключился', error)
         })
 
       bot.on('polling_error', (error) => {
-        console.error('Polling error:', error.message)
+        log.error('Ошибка polling', error)
       })
 
       bot.on('error', (error) => {
-        console.error('Bot error:', error)
+        log.error('Ошибка бота', error)
       })
 
 
@@ -539,7 +545,6 @@ export const getBot = async () => {
                   }
 
                   if (text?.startsWith('Пользователь:')) {
-                    console.log('ИЩЕМ ПОЛЬЗОВАТЕЛЯ!!!! ', text )
 
 
                     const id = text.split(':')[1]
@@ -598,7 +603,7 @@ export const getBot = async () => {
               // 
 
               const sendToDB = await sendCommentMessageDB(currentTask.title, text as string)
-              console.info('Комментарий отправлен в Базу Данных')
+              log.ok('Комментарий из группы сохранён в БД', { ygId })
 
               // 
 
@@ -606,10 +611,10 @@ export const getBot = async () => {
               try {
 
                 await sendCommentMessageYG(text as string, ygId)
-                console.info('Комментарий отправлен в YouGile')
+                log.ok('Комментарий из группы отправлен в YouGile', { ygId })
                 
               } catch (error) {
-                console.error('Ошибка коммента в YouGILE')
+                log.error('Комментарий из группы не отправлен в YouGile', error, { ygId })
                 await bot.sendMessage(chatId, 'Ошибка! Комметарий не отправлен')
                 return
               }
@@ -642,7 +647,7 @@ export const getBot = async () => {
 
 
           } catch (error) {
-            console.error('Ошибка обработки message:', error)
+            log.error('Ошибка обработки сообщения', error)
           }
 
         })
@@ -669,7 +674,7 @@ export const getBot = async () => {
 
                 const groupId = query.message.chat.id
 
-                bot.sendMessage(groupId, 'Что бы удалить пользователя необходимо:\n\n1)Напишите в группу сообщение\n2) ВНИМАНИЕ формат сообщения "Пользователь:НОМЕР ПОЛЬЗОВАТЕЛЯ (номер был узказан в выводе сообщения)"\n3)Следующим сообщение придет ответ с данными о пользователе и кнопкой удалить\n3)Удаляете пользователя')
+                await bot.sendMessage(groupId, 'Что бы удалить пользователя необходимо:\n\n1)Напишите в группу сообщение\n2) ВНИМАНИЕ формат сообщения "Пользователь:НОМЕР ПОЛЬЗОВАТЕЛЯ (номер был узказан в выводе сообщения)"\n3)Следующим сообщение придет ответ с данными о пользователе и кнопкой удалить\n3)Удаляете пользователя')
 
                 return
               }
@@ -744,7 +749,7 @@ export const getBot = async () => {
 
             if (status === 'approve') {
 
-                console.log('Нажали approve')
+                log.info('Нажата кнопка approve', { cardId, by: reconciliatorUser })
 
                 const YGCARD = await sendAnswerMessage(status, cardFromDB.department, cardId)
 
@@ -772,7 +777,7 @@ export const getBot = async () => {
 
             if (status === 'reject') {
 
-                console.log('Нажали reject')
+                log.info('Нажата кнопка reject', { cardId, by: reconciliatorUser })
 
                 const YGCARD = await sendAnswerMessage(status, cardFromDB.department, cardId)
 
@@ -796,7 +801,7 @@ export const getBot = async () => {
             }
 
             if (status === 'approve_resend') {
-              console.log('send approve_resend')
+              log.info('Нажата кнопка approve_resend', { cardId, by: reconciliatorUser })
 
               const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
               const telegramResencId = cardFromDB.reconciliator.id
@@ -834,7 +839,7 @@ export const getBot = async () => {
             }
 
             if (status === 'reject_resend') {
-              console.log('send approve_resend')
+              log.info('Нажата кнопка reject_resend', { cardId, by: reconciliatorUser })
 
 
               await bot.sendMessage(
@@ -854,7 +859,7 @@ export const getBot = async () => {
             }
 
             if (status === 'wrong_group_resend') {
-              console.log('send approve_resend')
+              log.info('Нажата кнопка wrong_group_resend', { cardId, by: reconciliatorUser })
 
               const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
               const telegramResencId = cardFromDB.reconciliator.id
@@ -887,7 +892,7 @@ export const getBot = async () => {
           }
 
         } catch (error) {
-          console.error('Ошибка обработки callback_query:', error)
+          log.error('Ошибка обработки кнопки', error, { data: query.data })
           
           
         }
@@ -912,5 +917,5 @@ export const startBotPolling = async () => {
   await (bot as any).deleteWebHook({ drop_pending_updates: true }).catch(() => {})
 
   await bot.startPolling()
-  console.log('[bot] polling started, PID:', process.pid)
+  log.ok('Polling запущен', { pid: process.pid })
 }

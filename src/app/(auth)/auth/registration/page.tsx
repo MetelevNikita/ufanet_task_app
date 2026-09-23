@@ -19,6 +19,9 @@ import MySelect from '@/components/UI/MySelect/MySelect'
 // types
 
 import { MenuType } from '@/types/types'
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
 
 
 
@@ -113,7 +116,6 @@ const page: FC = () => {
 
       const idCheck = validTgId(user.telegramId ?? '')
 
-      console.log(idCheck)
       
       if (!idCheck) {
         setErrorAuth('Ошибка! неверно указан Telegram id')
@@ -122,7 +124,6 @@ const page: FC = () => {
       }
 
 
-      console.log(user.telegramId)
 
       // 
 
@@ -151,11 +152,11 @@ const page: FC = () => {
 
     } catch (error: Error | unknown) {
       if (error instanceof Error) {
-        console.error(`Ошибка ${error.message}`)
+        log.error('Ошибка регистрации', error)
         return `Ошибка`
       }
 
-      console.error(error)
+      log.error('Ошибка регистрации', error)
       return error
     }
   }

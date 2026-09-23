@@ -35,6 +35,9 @@ import { Context } from '@/utils/RootContext'
 // directions
 
 import directions from '@/database/direction.json'
+import { logger } from "@/lib/logger";
+
+const log = logger('tasks')
 
 
 
@@ -117,7 +120,7 @@ const page: FC = () => {
 
          
       } catch (error) {
-        console.error(error)
+        log.error('Не удалось загрузить задачи', error)
         return []
       }
 

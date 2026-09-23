@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/../generated/prisma/client";
+import { logger } from "@/lib/logger";
+
+const log = logger('comment')
 
 
 
@@ -14,11 +17,8 @@ export const POST = async (req: any, context: {params: {title: string}}) => {
 
     const { title, comment } = await req.json()
 
-    console.log('ДАНЫЕ С АПИ')
-    console.log({title, comment})
 
     const dateComment = `${new Date().toLocaleString()} - ${comment}`
-    console.log('DATA COMMENT ', dateComment)
 
     const findTask = await prisma.task.findFirst({
       where: {
@@ -26,7 +26,6 @@ export const POST = async (req: any, context: {params: {title: string}}) => {
       }
     })
 
-    console.log('TASK FROM API ', findTask)
 
     if (!findTask) {
       return NextResponse.json({
@@ -35,7 +34,6 @@ export const POST = async (req: any, context: {params: {title: string}}) => {
       })
     }
 
-    console.log(findTask.comment)
 
 
     const updateComment = await prisma.task.update({

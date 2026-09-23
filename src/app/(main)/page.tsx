@@ -44,6 +44,9 @@ import MyButton from '@/components/UI/MyButton/MyButton'
 
 import ModalInfo from '@/components/modals/ModalInfo/modalInfo'
 import { BsInfoCircle } from "react-icons/bs";
+import { logger } from "@/lib/logger";
+
+const log = logger('main')
 
 // menu
 
@@ -125,7 +128,7 @@ const page: FC = () => {
       }]
 
     } catch (error) {
-      console.log(error)
+      log.error('Не удалось загрузить стикеры', error)
       return []
     }
   }

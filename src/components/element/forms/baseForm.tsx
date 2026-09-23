@@ -39,6 +39,9 @@ import { typeSelectorArrDes } from '@/data/designData'
 import { typeSelectorArrMark } from '@/data/marketingData'
 import { typeSelectorArrPr } from '@/data/prData'
 import { s } from '@vitejs/plugin-rsc/index-CM9Mmb_C'
+import { logger } from "@/lib/logger";
+
+const log = logger('form')
 
 
 // class
@@ -384,7 +387,7 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
           })
           
         } catch (error) {
-          console.log(error)
+          log.error('Не удалось загрузить текущего пользователя', error)
           return {}
         }
       }
@@ -464,7 +467,6 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
       for (let field of currentField) {
         if (field.type === 'text' || field.type === 'area') {
           if (!message[field.name]) {
-            console.log('поле не найдено ', field.name)
             alert('Все поля должны быть заполнены')
             setIsImpty(true)
             return
@@ -490,7 +492,6 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
       }
 
       const result = await postTask(newData, department, abortController.signal)
-      console.log(result)
 
       // запрос отменён из-за повторного сабмита/размонтирования — молча выходим,
       // ответ относится к устаревшему запросу
@@ -547,7 +548,7 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
       
     } catch (error: Error | unknown) {
       if (error instanceof Error) {
-        console.error(error.message)
+        log.error('Ошибка отправки формы', error)
         throw new Error(error.message);
       }
     }

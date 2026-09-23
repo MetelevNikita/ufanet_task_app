@@ -14,6 +14,9 @@ import { Container, Row, Col } from 'react-bootstrap'
 
 import MyInput from '@/components/UI/MyInput/MyInput'
 import MyButton from '@/components/UI/MyButton/MyButton'
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
 
 
 const page: FC = () => {
@@ -81,11 +84,11 @@ const page: FC = () => {
       
     } catch (error: Error | unknown) {
       if (error instanceof Error) {
-        console.log(`Ошибка ${error.message}`)
+        log.error('Ошибка смены пароля', error)
         return `Ошибка`
       } 
 
-      console.error(error)
+      log.error('Ошибка смены пароля', error)
       return error
     }
   }

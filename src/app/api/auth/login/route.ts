@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { PrismaClient } from "@/../generated/prisma/client";
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
 
 
 const prisma = new PrismaClient()
@@ -80,7 +83,7 @@ export const POST = async (req: NextRequest) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка авторизации ${error.message}`)
+      log.error('Ошибка входа', error)
       return NextResponse.json({
         success: false,
         message: 'Ошибка автризации пользователя',

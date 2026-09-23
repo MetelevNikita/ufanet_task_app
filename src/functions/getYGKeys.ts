@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const getYGKeys = async (id: string) => {
   try {
 
@@ -22,9 +26,9 @@ export const getYGKeys = async (id: string) => {
     
   } catch (error) {
     if (error instanceof Error) {
-      console.error(`Ошибка получения ключей из YG: ${error.message}`);
+      log.error('Ошибка получения ключей', error);
       return null;
     }
-    console.error(`Ошибка получения ключей из YG ${error}`);
+    log.error('Ошибка получения ключей', error);
   }
 }

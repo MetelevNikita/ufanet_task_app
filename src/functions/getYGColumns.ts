@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const getYGColumns = async (key: string, boardId: string) => {
   try {
 
@@ -18,9 +22,9 @@ export const getYGColumns = async (key: string, boardId: string) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error('Ошибка получения колонок из комании в YG: ', error.message);
+      log.error('Ошибка получения колонок', error);
       return null;
     }
-    console.error('Ошибка получения колонок из комании в YG: ', error);
+    log.error('Ошибка получения колонок', error);
   }
 }

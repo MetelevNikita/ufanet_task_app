@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 // newDescription - это то, что нужно ДОБАВИТЬ к уже существующему описанию задачи,
 // а не полная замена. Старое описание подтягивается GET-запросом и сохраняется.
 export const editYGTaskFromId = async (key: string, id: string, title: string, columnId: any, newDescription: string) => {
@@ -19,9 +23,6 @@ export const editYGTaskFromId = async (key: string, id: string, title: string, c
         `[GET] Ошибка получения задачи из YG по ID ${currentTaskResponce.statusText} - ${currentTaskResponce.status} - ${errorBody}`
       )
     }
-
-    console.log('URL YG ', `https://ru.yougile.com/api-v2/tasks/${id}`)
-    console.log('FIND YG TASK ', currentTaskResponce)
 
     const currentTask = await currentTaskResponce.json()
     const previousDescription: string = currentTask?.description ?? ''
@@ -60,12 +61,12 @@ export const editYGTaskFromId = async (key: string, id: string, title: string, c
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка изменения задачи по ID ${error.message}`)
+      log.error('Ошибка изменения задачи', error, { id })
       return `Ошибка изменения задачи по ID ${error.message}`
     }
 
 
-    console.error(`Ошибка изменения задачи по ID ${error}`)
+    log.error('Ошибка изменения задачи', error, { id })
     return `Ошибка изменения задачи по ID ${error}`
 
     

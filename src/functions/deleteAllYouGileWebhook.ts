@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const deleteAllYouGileWebhook = async (key: string) => {
   try {
 
@@ -10,7 +14,7 @@ export const deleteAllYouGileWebhook = async (key: string) => {
     })
 
     const data = await responceAllHooks.json()
-    console.log('ТЕКУЩИЕ ВЕРСИИ WEBHOOK ', data)
+    log.info('Найдены вебхуки YouGile', { count: data?.length })
 
     for (const hook of data) {
 
@@ -37,8 +41,6 @@ export const deleteAllYouGileWebhook = async (key: string) => {
 
     
   } catch (error) {
-    console.log(
-      `Webhook ${error} не удален`,
-    )
+    log.error('Не удалось удалить вебхуки', error)
   }
 }

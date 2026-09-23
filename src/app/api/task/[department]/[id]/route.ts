@@ -4,11 +4,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { PrismaClient } from "@/../generated/prisma/client";
 import { getBot } from "@/telegramBot/telegramBot";
+import { escapeHtml } from "@/lib/escapeHtml";
 
 // fn
 
 import { getYGTaskFromId } from "@/functions/getYGTaskFromId";
 import { editYGTaskFromId } from "@/functions/editYGTaskFromId";
+import { logger } from "@/lib/logger";
+
+const log = logger('comment')
 
 // 
 
@@ -34,10 +38,10 @@ async function updateYouGileTaskHandler(ygKey: string, taskId: string, findTask:
 
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error('Не удалось добавить комментарий в задачу YouGile от автора')
+      log.error('Комментарий автора не добавлен в YouGile', error)
       return 
     } else {
-      console.error('Неизвестная ошибка Yougile')
+      log.error('Комментарий автора не добавлен в YouGile', error)
       return 
     }
     
@@ -161,13 +165,13 @@ export const PATCH = async (req: NextRequest, context: {params: {id: string}}) =
 
         const messageGroup =
           `<b>Новый комментарий от автора</b>\n\n` +
-          `Автор: ${findTask.fio}\n` +
-          `<b>Задача:</b> ${findTask.title}\n\n` +
-          `💬 <b>Комментарий:</b>\n<i>${author_comment}</i>\n\n` +
+          `Автор: ${escapeHtml(findTask.fio)}\n` +
+          `<b>Задача:</b> ${escapeHtml(findTask.title)}\n\n` +
+          `💬 <b>Комментарий:</b>\n<i>${escapeHtml(author_comment)}</i>\n\n` +
           `<b>Дата:</b> ${now}`
 
         const messageAuthor =
-          `✅ Комментарий к задаче <b>${findTask.title}</b> отправлен\n\n` +
+          `✅ Комментарий к задаче <b>${escapeHtml(findTask.title)}</b> отправлен\n\n` +
           `Он направлен в группу согласования, ожидайте ответа\n\n` +
           `<b>Дата:</b> ${now}`
 
@@ -181,7 +185,7 @@ export const PATCH = async (req: NextRequest, context: {params: {id: string}}) =
 
       } catch (error: Error | unknown) {
         if (error instanceof Error) {
-          console.error(`Ошибка отправки сообщения в Telegram ${error.message}`)
+          log.error('Комментарий автора не отправлен в Telegram', error, { taskId })
         }
       }
 
@@ -195,7 +199,7 @@ export const PATCH = async (req: NextRequest, context: {params: {id: string}}) =
         
       } catch (error: Error | unknown) {
         if (error instanceof Error) {
-          console.error(`Ошибка отправки сообщения в YouGile ${error.message}`)
+          log.error('Комментарий автора не отправлен в YouGile', error, { taskId })
         }
       }
 

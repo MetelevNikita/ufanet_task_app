@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/../generated/prisma/client";
+import { logger } from "@/lib/logger";
+
+const log = logger('users')
 
 
 const prisma = new PrismaClient()
@@ -35,7 +38,7 @@ export const GET = async () => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка авторизации ${error.message}`)
+      log.error('Ошибка получения пользователей', error)
       return NextResponse.json({
         success: false,
         message: 'Ошибка автризации пользователя',

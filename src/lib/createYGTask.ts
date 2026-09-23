@@ -5,18 +5,19 @@ import { getYGColumns } from "@/functions/getYGColumns";
 // 
 
 import { getYGStickers } from "@/functions/getYGStickers";
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
 
 
 export const createYGTask = async (department: string, data: any, descriptionTask: string) => {
   try {
 
-    console.log(descriptionTask)
-
     const yougileKey = process.env.NEXT_PUBLIC_YOGILE_KEY as string
     //
 
     if (!yougileKey) {
-      console.error('Не найдены ключ yougile')
+      log.error('Не задан ключ YouGile')
       return {
         success: false,
         message: `Не найдены ключ yougile`,
@@ -27,7 +28,7 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     const projects = await getYGProjects(yougileKey);
 
     if (!projects) {
-      console.error('Не найдены проекты в yougile')
+      log.error('Не получены проекты YouGile')
       return {
         success: false,
         message: `Не найдены проекты в yougile`,
@@ -40,8 +41,6 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     const currentProject = projects.content.find((project: {title: string}) => {
       return project.title === department
     })
-
-    console.log('current project ', currentProject)
 
     // 
 
@@ -59,7 +58,7 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     // 
 
     if (!inboxColumn) {
-      console.error(`Столбец Входящие не найден в доске ${department}`)
+      log.error('Колонка «Входящие» не найдена', undefined, { department })
       return {
         success: false,
         message: `Столбец Входящие не найден в доске ${department}`,
@@ -75,9 +74,7 @@ export const createYGTask = async (department: string, data: any, descriptionTas
     const statusSticker = stickers.content.find((item: {name: string}) => item.name === 'Статус') ?? {}
 
     if (!statusSticker) {
-      console.error(
-        'Стикер Статус не найден'
-      )
+      log.error('Стикер «Статус» не найден')
       return {
         success: false,
         message: `Стикер Статус не найден`,
@@ -108,7 +105,7 @@ export const createYGTask = async (department: string, data: any, descriptionTas
 
     if (!respoonceYouGile.ok) {
       if (respoonceYouGile.status === 400) {
-        console.error(`Ошибка создания задачи в YG ${respoonceYouGile.statusText} - ${respoonceYouGile.status}`)
+        log.error('YouGile отклонил создание задачи', undefined, { department, status: respoonceYouGile.status, statusText: respoonceYouGile.statusText })
         return {
           success: false,
           message: `Сообщение в Yougile не создано`,
@@ -126,14 +123,14 @@ export const createYGTask = async (department: string, data: any, descriptionTas
 
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.log(error.message)
+      log.error('Задача не создана в YouGile', error, { department })
       return {
         success: false,
         message: `Сообщение в Yougile не создано - ${error.message}`,
         data: null
       }
     }
-    console.log(error)
+    log.error('Задача не создана в YouGile', error, { department })
     return {
       success: false,
       message: `Сообщение в Yougile не создано - ${error}`,

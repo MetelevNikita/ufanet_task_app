@@ -16,6 +16,9 @@ import { motion } from 'motion/react'
 import MyInput from '@/components/UI/MyInput/MyInput'
 import MyButton from '@/components/UI/MyButton/MyButton'
 import MyCheckBox from '@/components/UI/MyCheckBox/MyCheckBox'
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
 
 const page: FC = () => {
 
@@ -41,13 +44,11 @@ const page: FC = () => {
 
       if (!user) {
         setErrorAuth('Поля не должны быть заполнены')
-        console.log('Поля пустые')
         return
       }
 
       if (!user.policy) {
         setErrorAuth('Согласитесь с обработкой персональных данных')
-        console.log('Поля пустые')
         return
       }
 
@@ -77,11 +78,11 @@ const page: FC = () => {
       
     } catch (error: Error | unknown) {
       if (error instanceof Error) {
-        console.log(`Ошибка ${error.message}`)
+        log.error('Ошибка входа', error)
         return `Ошибка`
       } 
 
-      console.error(error)
+      log.error('Ошибка входа', error)
       return error
     }
   }

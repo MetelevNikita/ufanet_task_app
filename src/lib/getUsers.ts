@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('users')
+
 export async function getUsers () {
   try {
 
@@ -18,7 +22,7 @@ export async function getUsers () {
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка получения пользователей: ${error.message}`)
+      log.error('Ошибка получения пользователей', error)
 
       throw new Error(
         JSON.stringify({

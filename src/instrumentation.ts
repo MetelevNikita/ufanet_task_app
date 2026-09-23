@@ -1,13 +1,14 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('boot')
 
 export const registerBot = async () => {
 
-  console.log('Registering telegram bot instrumentation');
-  console.log('NEXT_RUNTIME', process.env.NEXT_RUNTIME);
 
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
 
   if (process.env.NODE_APP_INSTANCE && process.env.NODE_APP_INSTANCE !== '0') {
-    console.log('Skip bot init: not instance 0')
+    log.info('Бот не запускаем — это не instance 0')
     return
   }
 
@@ -15,16 +16,14 @@ export const registerBot = async () => {
 
   try {
     await startBotPolling(); // запускаем polling при старте сервера
-    console.log('[bot] started on server boot');
   } catch (e) {
-    console.error('[bot] init error:', e);
+    log.error('Бот не запустился', e);
   }
 };
 
 
 
 export const getAllWebHooks = async () => {
-  console.log('Registering yougile webhook instrumentation');
 
   if (process.env.NEXT_RUNTIME !== 'nodejs') return;
   if (process.env.NODE_APP_INSTANCE && process.env.NODE_APP_INSTANCE !== '0') return;
@@ -48,7 +47,7 @@ export const getYouGileWebHook = async () => {
   const { createYGWebhook } = await import('@/functions/createYGWebhook')
 
   const webhook = await createYGWebhook(youGileKey)
-  console.log('Зарегестрированный Webhook Yougile ', webhook)
+  log.ok('Вебхук YouGile зарегистрирован', { id: webhook?.id })
 
 }
 
@@ -56,8 +55,6 @@ export const getYouGileWebHook = async () => {
 export const getYGData = async () => {
   try {
 
-    console.log('Registering yougile key');
-    console.log('NEXT_RUNTIME', process.env.NEXT_RUNTIME);
 
     if (process.env.NEXT_RUNTIME !== 'nodejs') return;
     const companyName = process.env.COMPANY_NAME as string
@@ -80,7 +77,6 @@ export const getYGData = async () => {
     companyKey = await getYGKeys(currentCompany.id);
     const key = companyKey[0].key
     if (!key) {
-      console.error(`Ключ для компании ${currentCompany.name} не найден в YouGile`)
       throw new Error(
         `Ключ для компании ${currentCompany.name} не найден в YouGile`
       )
@@ -88,12 +84,11 @@ export const getYGData = async () => {
 
 
     process.env.YOGILE_KEY_INSTANCE = key
-    console.log('Переменная серверная определена')
     process.env.NEXT_PUBLIC_YOGILE_KEY = key
-    console.log('Переменная публичная определена')
+    log.ok('Ключ YouGile получен')
 
   } catch (error) {
-    console.error(`Ошибка получения ключа Ypugile ${error}`)
+    log.error('Ключ YouGile не получен', error)
   }
 }
 
@@ -118,13 +113,9 @@ export const register = async () => {
     ])
 
 
-    console.log('Приложение запущено')
+    log.ok('Приложение запущено')
   } catch (error: Error | unknown) {
 
-    if (error instanceof Error) {
-      console.error(`Ошибка запуска функций при старте программы ${error.message}`)
-    } else {
-      console.error(`Неизвестная ошибка`)
-    }
+    log.error('Ошибка запуска', error)
   }
 }

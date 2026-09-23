@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const getDeskCompany = async (key: string) => {
   try {
 
@@ -18,9 +22,9 @@ export const getDeskCompany = async (key: string) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error('Ошибка получения досок из комании в YG: ', error.message);
+      log.error('Ошибка получения досок', error);
       return null;
     }
-    console.error('Ошибка получения досок из комании в YG: ', error);
+    log.error('Ошибка получения досок', error);
   }
 }

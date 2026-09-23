@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const createYGKey = async (id: string) => {
   try {
 
@@ -26,10 +30,10 @@ export const createYGKey = async (id: string) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка создания ключа в YG: ${error.message}`);
+      log.error('Ошибка создания ключа', error);
       return null;
     }
-    console.error(`Ошибка создания ключа в YG: ${error}`);
+    log.error('Ошибка создания ключа', error);
     return null
   }
 }

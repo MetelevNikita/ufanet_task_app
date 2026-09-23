@@ -16,6 +16,9 @@ import { MoveTaskFromId } from "@/functions/MoveTaskFromId";
 //
 
 import { getBot } from "@/telegramBot/telegramBot";
+import { logger } from "@/lib/logger";
+
+const log = logger('migration')
 
 // 
 
@@ -27,11 +30,8 @@ const prisma = new PrismaClient();
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
   try {
 
-    console.log('Передача карточки')
-
     const { id } = await params;
 
-    console.log('ID MIGRATION', id)
   
     // 
 
@@ -50,14 +50,14 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
 
     if (!getTask.ygId) {
-      console.error('Task is missing ygId:', getTask);
+      log.error('У задачи нет ygId', undefined, { id });
       return NextResponse.json(
         { message: 'Задача не имеет YouGile ID' },
         { status: 400 }
       );
     }
 
-    console.log('GET TASK FROM MIGRATION', getTask.title)
+    log.info('Смена статуса задачи', { id, status, title: getTask.title })
 
     const yougileKey = process.env.YOGILE_KEY_INSTANCE as string
 
@@ -93,7 +93,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     const correctColumns = column.id
 
 
-    console.log('correctColumns from APPROVE', correctColumns)
 
     if (!correctColumns) {
       return NextResponse.json(
@@ -111,7 +110,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     }
 
 
-    console.log('CARD IS MOVE ', moveTask)
 
       try {
 
@@ -120,16 +118,16 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
           `Статус вашей задачи под именем "${getTask.title}" изменен на Согласовано`,
         ).catch(error => {
           if (error.code === 'ETELEGRAM' && error.message.includes('403')) {
-            console.log(`Пользователь ${getTask.tgId} не подписан на бота - пропускаем уведомление`);
+            log.warn('Автор не подписан на бота — уведомление пропущено', { tgId: getTask.tgId });
             } else {
-            console.error('Другая ошибка Telegram:', error);
+            log.error('Уведомление автору не отправлено', error, { tgId: getTask.tgId });
           }
         });
 
 
       } catch (telegramError) {
 
-        console.error('Ошибка отправки сообщения в Telegram:', telegramError);
+        log.error('Уведомление автору не отправлено', telegramError, { tgId: getTask.tgId });
         return NextResponse.json({
           message: 'Ошибка отправки сообщения в Telegram ' + telegramError
         })
@@ -142,9 +140,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         { message: 'Ошибка перемещения задачи в YouGile ', moveTask },
       )
     }
-    console.log(`Задача ${getTask.title} перемещена в столбец Согласовано`)
+    log.ok('Задача перемещена в «Согласовано»', { id, title: getTask.title })
 
-    console.log('status', status)
 
     const changeTaskStatus = await prisma.task.update({
       where: {
@@ -192,7 +189,6 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       )
     }
 
-    console.log('CARD IS MOVE ', moveTask)
 
       try {
         
@@ -201,26 +197,25 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
           `Статус вашей задачи под именем "${getTask.title}" изменен на Отклонено`,
         ).catch(error => {
           if (error.code === 'ETELEGRAM' && error.message.includes('403')) {
-            console.log(`Пользователь ${getTask.tgId} не подписан на бота - пропускаем уведомление`);
+            log.warn('Автор не подписан на бота — уведомление пропущено', { tgId: getTask.tgId });
             } else {
-            console.error('Другая ошибка Telegram:', error);
+            log.error('Уведомление автору не отправлено', error, { tgId: getTask.tgId });
           }
         })
 
 
       } catch (telegramError) {
 
-        console.error('Ошибка отправки сообщения в Telegram:', telegramError);
+        log.error('Уведомление автору не отправлено', telegramError, { tgId: getTask.tgId });
         return NextResponse.json({
           message: 'Ошибка отправки сообщения в Telegram ' + telegramError
         })
 
       }
 
-    console.log(`Задача ${getTask.title} перемещена в столбец Отклонено`)
+    log.ok('Задача перемещена в «Отклонено»', { id, title: getTask.title })
 
 
-    console.log('status', status)
 
     const changeTaskStatus = await prisma.task.update({
       where: {

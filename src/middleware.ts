@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
 
 
 export async function middleware(request: NextRequest) {
@@ -34,11 +37,11 @@ export async function middleware(request: NextRequest) {
 
       const url = '/auth'
       if (err.name === 'TokenExpiredError') {
-        console.error('Срок действия токена истек')
+        log.info('Токен истёк — редирект на /auth')
         return NextResponse.redirect(new URL(url, request.url))
       }
 
-      console.error('ERR ', err)
+      log.warn('Невалидный токен — редирект на /auth', { error: err.message })
       return NextResponse.redirect(new URL(url, request.url))
     }
 

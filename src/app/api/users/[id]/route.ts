@@ -1,5 +1,8 @@
 import { NextResponse, NextRequest } from "next/server"
 import { PrismaClient } from "@/../generated/prisma/client";
+import { logger } from "@/lib/logger";
+
+const log = logger('users')
 
 
 const prisma = new PrismaClient()
@@ -10,7 +13,6 @@ export const DELETE = async (req: NextRequest, { params }: {params: {id: string}
 
 
     const { id } = await params
-    console.log('ID', id)
 
     const findUser = await prisma.user.findFirst({
       where: {
@@ -40,7 +42,7 @@ export const DELETE = async (req: NextRequest, { params }: {params: {id: string}
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка удаления ${error.message}`)
+      log.error('Ошибка удаления пользователя', error)
       return NextResponse.json({
         success: false,
         message: 'Ошибка удаления пользователя',

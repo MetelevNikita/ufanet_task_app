@@ -14,12 +14,10 @@ export const GET = async (req: Request, {params}: {params: any}) => {
 
 
     const currentFolder = path.join(process.cwd(), 'src', 'app', 'uploads', department, folder)
-    console.log(currentFolder)
 
     const fileImage = fs.readFileSync(path.join(currentFolder, file))
 
     const ext = path.extname(file).toLowerCase();
-    console.log(ext)
     let contentType = "application/octet-stream";
     if (ext === ".png") contentType = "image/png";
     if (ext === ".jpg" || ext === ".jpeg") contentType = "image/jpeg";

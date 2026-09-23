@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from 'next/server'
 import { cookies } from "next/headers";
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
 
 
 
@@ -20,7 +23,7 @@ export const GET = async (): Promise<NextResponse<{success: boolean, message: st
     } catch (error: Error | unknown) {
 
         if (error instanceof Error) {
-            console.error(`Error logout ${error.message}`)
+            log.error('Ошибка выхода', error)
             return NextResponse.json({
                 success: false,
                 message: `Ошибка очистки данных ${error.message}`,
@@ -28,7 +31,7 @@ export const GET = async (): Promise<NextResponse<{success: boolean, message: st
             })
         }
 
-        console.error(`Неизвестная ошибка ${error}`)
+        log.error('Ошибка выхода', error)
         return NextResponse.json({
             success: false,
             message: `Неизвестная оишбка ${error}`,

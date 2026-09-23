@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const getYGCompany = async () => {
 
   try {
@@ -23,9 +27,9 @@ export const getYGCompany = async () => {
       
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка получения списка компаний из YouGile: ${error.message}`);
+      log.error('Ошибка получения списка компаний', error);
       return null;
     }
-    console.error(`Ошибка получения списка компаний из YouGile: ${error}`);
+    log.error('Ошибка получения списка компаний', error);
   }
 }

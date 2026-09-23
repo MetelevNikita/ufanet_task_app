@@ -4,6 +4,9 @@ import { PrismaClient } from "@/../generated/prisma/client";
 // tg bot
 
 import { getBot } from '@/telegramBot/telegramBot'
+import { logger } from "@/lib/logger";
+
+const log = logger('webhook')
 
 // 
 
@@ -25,8 +28,7 @@ const changeStatusTaskDB = async (department: string, title: string, key: string
         }
       })
 
-      console.log(findTask) 
-
+  
       if (!findTask) {
           return {
             success: true,
@@ -98,7 +100,7 @@ async function getYouGileColumn (id: string, key: string): Promise<{success: boo
     })
 
     if (!response.ok) {
-      console.error(`Ошибка API Yougile ${response.statusText}`)
+      log.error('YouGile не вернул колонку', undefined, { id, status: response.status })
       return {
         success: false,
         message: `Ошибка API Yougile ${response.statusText}`,
@@ -118,7 +120,7 @@ async function getYouGileColumn (id: string, key: string): Promise<{success: boo
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка получения колонки YouGile ${error.message}`)
+      log.error('Ошибка получения колонки YouGile', error)
       return {
         success: false,
         message: `Ошибка получения колонки YouGile ${error.message}`,
@@ -126,7 +128,7 @@ async function getYouGileColumn (id: string, key: string): Promise<{success: boo
       }
     }
 
-      console.error(`Неизвестная ошибка ${error}`)
+      log.error('Ошибка получения колонки YouGile', error)
       return {
         success: false,
         message: `Неизвестная ошибка ${error}`,
@@ -149,7 +151,7 @@ async function getYouGileProject (id: string, key: string): Promise<{success: bo
     })
 
     if (!response.ok) {
-      console.error(`Ошибка API Yougile Projects ${response.statusText}`)
+      log.error('YouGile не вернул проект', undefined, { status: response.status })
       return {
         success: false,
         message: `Ошибка API Yougile Projects ${response.statusText}`,
@@ -168,7 +170,7 @@ async function getYouGileProject (id: string, key: string): Promise<{success: bo
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка получения проекта YouGile ${error.message}`)
+      log.error('Ошибка получения проекта YouGile', error)
       return {
         success: false,
         message: `Ошибка получения пороекта YouGile ${error.message}`,
@@ -176,7 +178,7 @@ async function getYouGileProject (id: string, key: string): Promise<{success: bo
       }
     }
 
-      console.error(`Неизвестная ошибка ${error}`)
+      log.error('Ошибка получения проекта YouGile', error)
       return {
         success: false,
         message: `Неизвестная ошибка ${error}`,
@@ -190,8 +192,6 @@ async function getYouGileProject (id: string, key: string): Promise<{success: bo
 async function stateStickerYouGile (stickerId: string, stateId: string, key: string): Promise<{success: boolean, message: string, data: any}> {
 
 
-  console.log(stickerId)
-  console.log(stateId)
 
 
   try {
@@ -204,7 +204,7 @@ async function stateStickerYouGile (stickerId: string, stateId: string, key: str
     })
 
     if (!response.ok) {
-      console.error(`Ошибка API Yougile stickers ${response.statusText}`)
+      log.error('YouGile не вернул стикер', undefined, { stickerId, stateId, status: response.status })
       return {
         success: false,
         message: `Ошибка API Yougile stickers ${response.statusText}`,
@@ -223,7 +223,7 @@ async function stateStickerYouGile (stickerId: string, stateId: string, key: str
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка получения стикеров YouGile ${error.message}`)
+      log.error('Ошибка получения стикера YouGile', error)
       return {
         success: false,
         message: `Ошибка получения стикеров YouGile ${error.message}`,
@@ -231,7 +231,7 @@ async function stateStickerYouGile (stickerId: string, stateId: string, key: str
       }
     }
 
-      console.error(`Неизвестная ошибка ${error}`)
+      log.error('Ошибка получения стикера YouGile', error)
       return {
         success: false,
         message: `Неизвестная ошибка ${error}`,
@@ -255,7 +255,7 @@ async function getSingleUser (id: string, key: string): Promise<{success: boolea
     })
 
     if (!response.ok) {
-      console.error(`Ошибка API Yougile user ${response.statusText}`)
+      log.error('YouGile не вернул пользователя', undefined, { status: response.status })
       return {
         success: false,
         name: null,
@@ -275,7 +275,7 @@ async function getSingleUser (id: string, key: string): Promise<{success: boolea
   } catch (error: Error | unknown) {
 
     if (error instanceof Error) {
-      console.error(`Ошибка получения пользователя YouGile ${error.message}`)
+      log.error('Ошибка получения пользователя YouGile', error)
       return {
         success: false,
         name: null,
@@ -283,7 +283,7 @@ async function getSingleUser (id: string, key: string): Promise<{success: boolea
       }
     }
 
-      console.error(`Неизвестная ошибка ${error}`)
+      log.error('Ошибка получения пользователя YouGile', error)
        return {
         success: false,
         name: null,
@@ -305,7 +305,6 @@ export const POST = async (req: NextRequest) => {
         
           // 
 
-          console.log('webhook work start')
 
           // 
 
@@ -316,10 +315,9 @@ export const POST = async (req: NextRequest) => {
 
           const matcher = description.match(regExp) ?? []
           const id = matcher?.[1] ?? null
-          console.log('ID ', id)
             
           if (!id) {
-            console.log(`TASK NOT CREATE FROM PR-TZ-APP`)
+            log.info('Задача создана не через pr-tz.ru — пропускаем', { event: body.event, title: body.payload?.title })
             return NextResponse.json({
               success: false,
               message: 'Сообщени не отправлено с сайта pr-tz.ru',
@@ -353,7 +351,7 @@ export const POST = async (req: NextRequest) => {
           if (body.event === 'task-moved') {
 
             if (columndYouGile.data === 'Входящие' || columndYouGile.data === 'Согласовано' || columndYouGile.data === 'Отклонено') {
-              console.log(`Задача попала ${title} в исключение`)
+              log.info('Колонка в исключениях — уведомление не нужно', { title, column: columndYouGile.data })
               return NextResponse.json({
                   success: false,
                   message: `Колонка ${columnId.data} при создании попадает в исключение`,
@@ -365,22 +363,19 @@ export const POST = async (req: NextRequest) => {
             // change from DB
 
             const changeDbStatus = await changeStatusTaskDB(projectYouGile.data, title, 'status', columndYouGile.data)
-            console.log('Статус колонки', changeDbStatus)
 
             // 
 
-            console.log(`Задача ${title} перемещена в новую колонку ${columndYouGile.data}`)
 
             message = `Статус Задачи изменен\n\nЗадача - ${title}\nПроект - ${projectYouGile.data}\n\nПеремещенва в колонку: ${columndYouGile.data}\n\nДата перемещения ${new Date().toLocaleDateString('RU-ru')}`
-            console.log("MESSAGE ", message)
 
             // send author 
 
             try {
               await bot.sendMessage(id, message)
-              console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
+              log.ok('Автор уведомлён: задача перемещена', { title, column: columndYouGile.data, tgId: id })
             } catch (error) {
-              console.error('Ошибка отправки сообщения в телеграм')
+              log.error('Уведомление автору не отправлено', error, { title, tgId: id })
             }
 
 
@@ -422,23 +417,20 @@ export const POST = async (req: NextRequest) => {
 
                   const changeStatusDB = await changeStatusTaskDB(projectYouGile.data, title, 'stage', newSticker.data)
 
-                  console.log('Статус стикера ', changeStatusDB)
 
                   // 
 
 
-                  console.log(`Задача ${title} получила новый стикер состояния - ${newSticker.data}`)
 
                   message = `Статус Задачи изменен\n\nЗадача - ${title}\nПроект - ${projectYouGile.data}\n\nСостояние задачи изменено на "${newSticker.data}"\n\nДата перемещения ${new Date().toLocaleDateString('RU-ru')}`
-                  console.log("MESSAGE ", message)
 
                   // 
 
                   try {
                     await bot.sendMessage(id, message)
-                    console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
+                    log.ok('Автор уведомлён: изменено состояние', { title, stage: newSticker.data, tgId: id })
                   } catch (error) {
-                    console.error('Ошибка отправки сообщения в телеграм')
+                    log.error('Уведомление автору не отправлено', error, { title, tgId: id })
                   }
 
 
@@ -463,18 +455,16 @@ export const POST = async (req: NextRequest) => {
                     return users
                   }))
 
-                  console.log(`Задача ${title} получила новых исполнителей - ${users.map((item) => `${item.name} - ${item.email}\n`).join('')}`)
 
                   message = `Исполнители изменены\n\nЗадача - ${title}\nПроект - ${projectYouGile.data}\n\nИсполнители\n\n${users.map((item) => `${item.name} - ${item.email}\n`).join('')}\n\nДата перемещения ${new Date().toLocaleDateString('RU-ru')}`
-                  console.log("MESSAGE ", message)
 
                   //
 
                   try {
                     await bot.sendMessage(id, message)
-                    console.info(`WEBHOOK FROM TASK ${title} IS DONE`)
+                    log.ok('Автор уведомлён: изменены исполнители', { title, tgId: id })
                   } catch (error) {
-                    console.error('Ошибка отправки сообщения в телеграм')
+                    log.error('Уведомление автору не отправлено', error, { title, tgId: id })
                   }
 
                   // 
@@ -506,7 +496,7 @@ export const POST = async (req: NextRequest) => {
       } catch (error: Error | unknown) {
         
         if (error instanceof Error) {
-                console.log(error.message)
+                log.error('Вебхук упал', error)
                 return NextResponse.json({
                   success: false,
                   message: `Вебхук завершен с ошибкой ${error.message}`,
@@ -514,7 +504,7 @@ export const POST = async (req: NextRequest) => {
                 })
         }
 
-              console.log(error)
+              log.error('Вебхук упал', error)
               return NextResponse.json({
                 success: false,
                 message: `Неизвестная ошибка ${error}`,

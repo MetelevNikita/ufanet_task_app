@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { PrismaClient } from "@/../generated/prisma/client";
 import bcrypt from 'bcrypt'
+import { getBot } from "@/telegramBot/telegramBot";
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
 
 
 // 
@@ -54,8 +58,13 @@ export const POST = async (req: NextRequest) => {
 
 
 
-    const bot = globalThis._tgBot
-    bot.sendMessage(findUser.telegramId, `Пароль пользователя ${findUser.id} ${findUser.name} успешно обновлен`)
+    // пароль уже сменён — сбой уведомления не должен превращаться в 500
+    try {
+      const bot = await getBot()
+      await bot.sendMessage(findUser.telegramId, `Пароль пользователя ${findUser.id} ${findUser.name} успешно обновлен`)
+    } catch (error) {
+      log.error('Уведомление о смене пароля не отправлено в Telegram', error, { userId: findUser.id })
+    }
 
     return NextResponse.json({
       success: true,
@@ -65,7 +74,7 @@ export const POST = async (req: NextRequest) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка сброса пороля ${error.message}`)
+      log.error('Ошибка смены пароля', error)
       return NextResponse.json({
         success: false,
         message: 'Ошибка сброса пороля',

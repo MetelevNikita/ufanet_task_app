@@ -30,7 +30,6 @@ const MyInput:FC<MyInputProps> = ({ type, title, placeholder, onChange, value, n
 
   if (error && isAString.length < 1) {
 
-    console.log('ПОЛЯ ПУСТОЕ ', name)
     errorField = {border: '2px solid red'}
   } else {
     errorField = {}

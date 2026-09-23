@@ -29,7 +29,6 @@ const MyDate: FC<MyDateProps> = ({ type, title, onChange, value, name, error = f
 
     if (error && isAString.length < 1) {
 
-        console.log('ПОЛЯ ПУСТОЕ ', name)
         errorField = {border: '2px solid red'}
     } else {
         errorField = {}

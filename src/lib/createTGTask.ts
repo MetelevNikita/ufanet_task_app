@@ -1,4 +1,7 @@
 import { getBot } from "@/telegramBot/telegramBot";
+import { logger } from "@/lib/logger";
+
+const log = logger('tg')
 
 // 
 
@@ -6,7 +9,6 @@ import { getBot } from "@/telegramBot/telegramBot";
 export const createTGTask = async (department: string, descriptionTask: string, taskDB: any, tgIdGroup: string, resendTgId: string) => {
   const buildCB = (status: string, cardId: string, resendTgId: string ) => `${status}|${cardId}|${resendTgId}`
 
-  console.log('WORK TG')
 
   try {
 
@@ -29,6 +31,8 @@ export const createTGTask = async (department: string, descriptionTask: string, 
       }
     )
 
+    log.ok('Задача отправлена в группу согласования', { taskId: id, chatId: tgIdGroup })
+
     return {
       success: true,
       message: `Сообщение отправлено`,
@@ -37,7 +41,7 @@ export const createTGTask = async (department: string, descriptionTask: string, 
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.log(error.message)
+      log.error('Не удалось отправить задачу в группу согласования', error, { taskId: taskDB.id, chatId: tgIdGroup })
       return {
         success: false,
         message: `Ошибка отправки сообщения в телеграм - ${error.message}`,

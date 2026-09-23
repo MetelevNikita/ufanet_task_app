@@ -3,6 +3,10 @@ import type { NextRequest } from "next/server";
 import { PrismaClient } from "@/../generated/prisma/client";
 
 import { getBot } from "@/telegramBot/telegramBot";
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
+
 // 
 
 
@@ -46,7 +50,7 @@ export const POST = async (req: NextRequest) => {
     const resetLink = new URL(`${url}/auth/new_password`)
     resetLink.searchParams.set('id', findUser.id.toString())
 
-    telegramBot.sendMessage(
+    await telegramBot.sendMessage(
       telegramId,
       `Ссылка для сброса пароля\n\n<a href="${resetLink}">${resetLink}</a>`,
       {
@@ -64,7 +68,7 @@ export const POST = async (req: NextRequest) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка сброса пороля ${error.message}`)
+      log.error('Ошибка отправки ссылки на сброс пароля', error)
       return NextResponse.json({
         success: false,
         message: 'Ошибка сброса пороля',

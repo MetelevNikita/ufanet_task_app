@@ -1,4 +1,7 @@
 import { PrismaClient } from "../../generated/prisma";
+import { logger } from "@/lib/logger";
+
+const log = logger('db')
 
 
 const prisma = new PrismaClient();
@@ -35,7 +38,7 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
     
 
     if (!task) {
-      console.error('Ошибка создания задачи в базе данных')
+      log.error('Задача не создана в БД')
       return {
         success: false,
         message: `Ошибка создания задачи в базе данных`,
@@ -51,7 +54,7 @@ export const createDBTask = async (ygId: string, department: string, data: any) 
 
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(error.message)
+      log.error('Ошибка создания задачи в БД', error)
       return {
         success: false,
         message: `Ошибка создания задачи в базе данных - ${error.message}`,

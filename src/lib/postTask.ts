@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('task')
+
 export const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -72,14 +76,13 @@ export const postTask = async (data: any, department: string, signal?: AbortSign
     }
 
     const dataTask = await responce.json();
-    console.log("DATA TASK ", dataTask)
     return dataTask
 
    
 
   } catch (error: Error | unknown) {
     if (error instanceof DOMException && error.name === 'TimeoutError') {
-      console.error(`Превышено время ожидания ответа сервера (${timeoutMs}мс)`)
+      log.error(`Сервер не ответил за ${timeoutMs} мс`)
       return {
         success: false,
         aborted: true,
@@ -89,7 +92,7 @@ export const postTask = async (data: any, department: string, signal?: AbortSign
     }
 
     if (error instanceof DOMException && error.name === 'AbortError') {
-      console.log('Запрос на добавление задачи отменён')
+      log.warn('Отправка задачи отменена')
       return {
         success: false,
         aborted: true,
@@ -98,7 +101,7 @@ export const postTask = async (data: any, department: string, signal?: AbortSign
     }
 
     if (error instanceof Error) {
-      console.error(`Ошибка при добавлении задачи: ${error.message}`)
+      log.error('Ошибка отправки задачи', error)
 
       return {
         success: false,
@@ -106,7 +109,7 @@ export const postTask = async (data: any, department: string, signal?: AbortSign
       }
     }
 
-      console.error(`Ошибка при добавлении задачи: ${error}`)
+      log.error('Ошибка отправки задачи', error)
       return {
         success: false,
         message: 'Ошибка при добавлении задачи',

@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('yougile')
+
 export const getYGProjects = async (key: string) => {
   try {
 
@@ -12,7 +16,7 @@ export const getYGProjects = async (key: string) => {
 
     if (!responce.ok) {
       if (responce.status === 401) {
-        console.error('Ошибка получения проектов из YG. Необходимо обновить ключи');
+        log.error('Ключ YouGile недействителен (401) — нужно обновить ключи');
         return null;
       } else {
         throw new Error(`Ошибка получения проектов из YG ${responce.statusText} - ${responce.status}`);
@@ -24,7 +28,7 @@ export const getYGProjects = async (key: string) => {
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
-      console.error(`Ошибка получения проектов из YG: ${error.message}`);
+      log.error('Ошибка получения проектов', error);
       return null;
     }
     return null

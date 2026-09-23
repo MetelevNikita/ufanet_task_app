@@ -1,3 +1,7 @@
+import { logger } from "@/lib/logger";
+
+const log = logger('auth')
+
 export async function logoutUser () {
     try {
 
@@ -9,17 +13,15 @@ export async function logoutUser () {
         })
 
         if (!response.ok) {
-            console.log(`Ошибка API при выходе пользователя ${response.status} - ${response.statusText}`)
             throw new Error("Ошибка API при выходе пользователя");
         }
 
         const data = await response.json()
-        console.log(data)
         return data
         
     } catch (error: Error | unknown) {
         if (error instanceof Error) {
-            console.error('Ошибка при выходе из пользователя')
+            log.error('Ошибка выхода из аккаунта', error)
             return null
         }
     }
