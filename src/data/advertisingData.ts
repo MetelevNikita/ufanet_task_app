@@ -60,8 +60,14 @@ export const typeSelectorArrAds = [
 					},
 					{
 						id: 6,
-						label: 'Визитка и наклейки ',
-						value: 'businessСards/stickers',
+						label: 'Визитки',
+						value: 'businessCards',
+						icon: ''
+					},
+					{
+						id: 7,
+						label: 'Наклейки',
+						value: 'stickers',
 						icon: ''
 					}
 				]
@@ -69,14 +75,10 @@ export const typeSelectorArrAds = [
 			{
 				id: 3,
 				title: 'На выбранные изделия в поле "Вид" через запятую укажиет количество',
-				placeholder: 'Афиша/листовка - 200, Визитка и наклейки - 100',
+				placeholder: 'Афиша/листовка - 200, Визитки - 100, Наклейки - 50',
 				typeField: 'area',
 				type: 'area',
-				name: 'view_qty',
-				showIf: {
-					field: 'view',
-					value: 'business_cards_stickers'
-				}
+				name: 'view_qty'
 			},
 			{
 				id: 4,
@@ -175,6 +177,18 @@ export const typeSelectorArrAds = [
 				typeField: 'date',
 				type: 'date',
 				name: 'deadline_making'
+			},
+			{
+				id: 10,
+				title: 'Нужен просчет стоимости',
+				placeholder: 'Выберите вариант',
+				typeField: 'selector',
+				type: 'selector',
+				name: 'need_estimate',
+				options: [
+					{ id: 1, label: 'Да', value: 'yes', icon: '' },
+					{ id: 2, label: 'Нет', value: 'no', icon: '' }
+				]
 			}
 		]
 	},
@@ -401,7 +415,7 @@ export const typeSelectorArrAds = [
 	/* 5) ТМЦ / реквизит */
 	{
 		id: 6,
-		label: 'Заявка на ТМЦ/реквизит',
+		label: 'Заявка на ВЫДАЧУ ТМЦ/реквизита',
 		value: 'props',
 		reconciliator: {
 			name: 'Реклама согласование',
@@ -467,6 +481,64 @@ export const typeSelectorArrAds = [
 			title: 'Реквизит со склада отдела рекламы',
 			link: ''
 		}
+	},
+
+	
+
+	/* 5.1) Возврат ТМЦ / реквизита / промо одежды */
+	{
+		id: 10,
+		label: 'Заявка на ВОЗВРАТ ТМЦ/реквизита/промо одежды',
+		value: 'return',
+		reconciliator: {
+			name: 'Реклама согласование',
+			id: groupId ?? null
+		},
+		field: [
+			{
+				id: 1,
+				title: 'Название проекта/мероприятия',
+				placeholder: 'Название',
+				typeField: 'text',
+				type: 'text',
+				name: 'title'
+			},
+			{
+				id: 2,
+				title: 'Что возвращаете и количество',
+				placeholder: 'Наименование, размер, шт',
+				typeField: 'area',
+				type: 'area',
+				name: 'what'
+			},
+			{
+				id: 3,
+				title: 'Примечание',
+				placeholder: 'Состояние, комплектность и т.п.',
+				typeField: 'area',
+				type: 'area',
+				name: 'note'
+			},
+			{
+				id: 4,
+				title: 'Дата возврата',
+				placeholder: 'Когда вернете',
+				typeField: 'date',
+				type: 'date',
+				name: 'deadline_return'
+			},
+			{
+				id: 5,
+				title: 'Время возврата',
+				placeholder: 'Время возврата',
+				typeField: 'selector',
+				name: 'time_slot',
+				options: [
+					{ id: 1, label: '11:00', value: '11:00', icon: '' },
+					{ id: 2, label: '15:00', value: '15:00', icon: '' }
+				]
+			}
+		]
 	},
 	/* 6) Сувениры с лого / подарки */
 	{
@@ -551,6 +623,18 @@ export const typeSelectorArrAds = [
 				typeField: 'date',
 				type: 'date',
 				name: 'deadline_merch'
+			},
+			{
+				id: 10,
+				title: 'Нужен просчет стоимости',
+				placeholder: 'Выберите вариант',
+				typeField: 'selector',
+				type: 'selector',
+				name: 'need_estimate',
+				options: [
+					{ id: 1, label: 'Да', value: 'yes', icon: '' },
+					{ id: 2, label: 'Нет', value: 'no', icon: '' }
+				]
 			}
 		],
 		general: {
@@ -561,7 +645,7 @@ export const typeSelectorArrAds = [
 	/* 7) Промо одежда */
 	{
 		id: 8,
-		label: 'Заявка на промо одежду',
+		label: 'Заявка на ВЫДАЧУ промо одежды',
 		value: 'promo',
 		reconciliator: {
 			name: 'Реклама согласование',
@@ -600,7 +684,7 @@ export const typeSelectorArrAds = [
 					},
 					{
 						id: 2,
-						label: 'Толстовка',
+						label: 'Толстовка оранжевая',
 						value: 'hoodie',
 						icon: ''
 					},
@@ -620,6 +704,12 @@ export const typeSelectorArrAds = [
 						id: 5,
 						label: 'Дождевик',
 						value: 'raincoat',
+						icon: ''
+					},
+					{
+						id: 6,
+						label: 'Поло белое',
+						value: 'polo_white',
 						icon: ''
 					}
 				]

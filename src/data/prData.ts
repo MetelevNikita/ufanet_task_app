@@ -254,6 +254,67 @@ export const typeSelectorArrPr = [
 			}
 		]
 	},
+	/* 4.1) Информирование */
+	{
+		id: 7,
+		label: 'Информирование',
+		value: 'informing',
+		reconciliator: {
+			name: 'PR согласование',
+			id: groupId
+		},
+		field: [
+			{
+				id: 1,
+				title: 'Название проекта',
+				placeholder: 'Укажите название',
+				typeField: 'text',
+				type: 'text',
+				name: 'title'
+			},
+			{
+				id: 2,
+				title: 'Описание проекта',
+				placeholder: 'Опишите проект',
+				typeField: 'area',
+				type: 'area',
+				name: 'description'
+			},
+			{
+				id: 3,
+				title: 'Цель информирования',
+				placeholder: 'Опишите цель',
+				typeField: 'area',
+				type: 'area',
+				name: 'goal'
+			},
+			{
+				id: 4,
+				title: 'Ключевая мысль, которую нужно донести до сотрудников',
+				placeholder: 'Ключевая мысль',
+				typeField: 'area',
+				type: 'area',
+				name: 'key_message'
+			},
+			{
+				id: 5,
+				title: 'Период информирования',
+				placeholder: 'Например: с 01.10 по 15.10',
+				typeField: 'text',
+				type: 'text',
+				name: 'period'
+			},
+			{
+				id: 6,
+				title: 'Комментарии',
+				placeholder: 'Необязательно',
+				typeField: 'area',
+				type: 'area',
+				name: 'comments',
+				optional: true
+			}
+		]
+	},
 	/* 5) Прочее */
 	{
 		id: 6,

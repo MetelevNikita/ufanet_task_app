@@ -446,8 +446,16 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
   const data = currentTypeSelectors(currentDepartment).find((type: any) => type.label === formData.type) as any
   const currentField = (!data) ? [] : data?.field
 
-  const submitMessage = async (message: any) => {
+  // поле с showIf показывается, только если в поле showIf.field выбран ответ showIf.value
+  const isVisible = (field: any) => !field.showIf || formData[field.showIf.field] === field.showIf.value
+  const visibleField = currentField.filter(isVisible)
+
+  const submitMessage = async (formMessage: any) => {
     try {
+
+      // значения скрытых полей (другая ветка ответа) не проверяем и не отправляем
+      const hiddenNames = currentField.filter((field: any) => !isVisible(field)).map((field: any) => field.name)
+      const message: any = Object.fromEntries(Object.entries(formMessage).filter(([key]) => !hiddenNames.includes(key)))
 
         if (Object.entries(message).length < 1) {
         alert('Все поля должны быть заполнены')
@@ -464,9 +472,10 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
 
 
 
-      for (let field of currentField) {
-        if (field.type === 'text' || field.type === 'area') {
-          if (!message[field.name]) {
+      for (let field of visibleField) {
+        if (!field.optional && (field.type === 'text' || field.type === 'area' || field.required)) {
+          // ?.length — пустой мультиселект ([]) тоже считается незаполненным
+          if (!message[field.name]?.length) {
             alert('Все поля должны быть заполнены')
             setIsImpty(true)
             return
@@ -622,7 +631,7 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
                   }
 
                   {
-                    currentField.map((field: any, index: number) => {
+                    visibleField.map((field: any, index: number) => {
 
                       return (
                         <Row className='d-flex flex-row justify-content-center align-items-center' key={index}>
@@ -656,18 +665,20 @@ const Form: FC<FormProps> = ({ departmentData, modalSuccess, modalError, modalIn
                                 case 'area':
                                   return new MyTextAreaField(field.title, field.placeholder, field.name).createTextArea(
                                     formData[field.name],
-                                    (e: any) => { setFormData({ ...formData, [field.name]: e.target.value }) }, isEmpty as boolean
+                                    (e: any) => { setFormData({ ...formData, [field.name]: e.target.value }) }, !field.optional && isEmpty as boolean
                                   );
                                 case 'text':
                                   return new MyField(field.title, field.placeholder, field.typeField, field.name).createFiled(
                                     formData[field.name],
-                                    (e: any) => { setFormData({ ...formData, [field.name]: e.target.value }) }, isEmpty as boolean
+                                    (e: any) => { setFormData({ ...formData, [field.name]: e.target.value }) }, !field.optional && isEmpty as boolean
                                   );
                                 case 'date':
                                   return new MyDateField(field.title, field.typeField, field.name, field.min).createFiled(
                                     formData[field.name],
                                     (e: any) => { setFormData({ ...formData, [field.name]: e.target.value }) }
                                   );
+                                case 'info':
+                                  return <div className={styles.tg_id_info}>{field.title}</div>;
                                 default:
                                   return (
                                     <div>

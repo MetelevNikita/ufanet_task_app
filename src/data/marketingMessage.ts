@@ -1,3 +1,5 @@
+import { createImageMessageList } from '@/lib/createImageMessageList'
+
 export const marketingMessage = async (
   department: string,
   data: any
@@ -25,6 +27,19 @@ export const marketingMessage = async (
   // Хелпер: вывести строку, если значение есть
   const row = (label: string, v?: any, br = '<br>') =>
     v ? `${label} ${v}${br}` : '';
+
+  // Список [подпись, значение] → текст; массив = ссылки на файлы
+  const rowsYG = (rows: [string, any][]) => rows.map(([label, v]) =>
+    Array.isArray(v)
+      ? (v.length ? `<strong>${label}</strong><br>${createImageMessageList('yg', v)}` : '')
+      : row(`<strong>${label}</strong><br>`, v, '<br><br>')
+  ).join('')
+
+  const rowsTG = (rows: [string, any][]) => rows.map(([label, v]) =>
+    Array.isArray(v)
+      ? (v.length ? `${label}\n${createImageMessageList('tg', v)}` : '')
+      : row(label, v, '\n')
+  ).join('')
 
   // Удобный нормализатор типа
   const type = (data.type || '').trim();
@@ -414,6 +429,99 @@ export const marketingMessage = async (
       row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
+  }
+
+  /* 11) ТЗ на Авито — строки зависят от ответа «Что хотите продвинуть?» */
+  if (type === 'ТЗ на Авито') {
+    // [подпись, значение]; файлы — массив ссылок
+    const common: [string, any][] = [
+      ['Название задачи:', data.title],
+      ['Суть задачи:', data.description],
+      ['Желаемая дата выполнения ТЗ:', data.deadline && new Date(data.deadline).toLocaleDateString('RU-ru')],
+      ['Что хотите продвинуть, опубликовать?:', data.avito_target],
+    ]
+
+    const byTarget: Record<string, [string, any][]> = {
+      'Услуга': [
+        ['Цель объявления:', data.service_goal],
+        ['Ссылка на сайт, лендинг, группу ВК:', data.service_link],
+        ['География размещения рекламы:', data.service_geo],
+        ['Кто ваш клиент?:', data.service_audience],
+        ['Какую боль / потребность закрывает продукт:', data.service_pain],
+        ['УТП:', data.service_usp],
+        ['Есть ли акции, скидки или подарки?:', data.service_promo],
+        ['Кто будет обрабатывать заявки?:', data.service_handler],
+        ['Ключевые слова/запросы:', data.service_keywords],
+        ['Материалы:', data.materials_file],
+        ['Примеры конкурентов или рекламных объявлений:', data.service_competitors],
+        ['Бюджет на рекламу в месяц:', data.service_budget],
+        ['Есть ли KPI (ожидаемые результаты)?:', data.service_kpi],
+        ['Период проведения кампании:', data.service_period],
+      ],
+      'Товар': [
+        ['Цель объявления:', data.product_goal],
+        ['Название товара:', data.product_name],
+        ['Описание товара:', data.product_description],
+        ['Артикул в 1С:', data.product_article],
+        ['Количество на складах:', data.product_stock],
+        ['Продажная цена, согласованная с ФАО:', data.product_price],
+        ['Фотографии товаров:', data.photos_file],
+        ['География показов:', data.product_geo],
+        ['Кто будет обрабатывать чат по товару?:', data.product_chat],
+        ['Кто будет отгружать товар? (Отдел):', data.product_shipping],
+        ['Бюджет:', data.product_budget],
+      ],
+      'Вакансия': [
+        ['Цель объявления:', data.vacancy_goal],
+        ['Бюджет, согласованный с Юлией Письменной:', data.vacancy_budget],
+        ['Описание вакансии:', data.vacancy_description],
+        ['Визуал к вакансии:', data.visual_file],
+        ['География размещения:', data.vacancy_geo],
+        ['Ссылка на сайт vkomandu:', data.vacancy_link],
+        ['Кто будет обрабатывать кандидатов:', data.vacancy_handler],
+        ['Период проведения кампании:', data.vacancy_period],
+      ],
+    }
+
+    const rows = [...common, ...(byTarget[data.avito_target] ?? []), ['Дополнительно:', data.extra] as [string, any]]
+
+    return { messageYG: headYG(rowsYG(rows)), messageTG: headTG(rowsTG(rows)) };
+  }
+
+  /* 12) ТЗ в геосервисы — строки зависят от ответа «Что необходимо сделать?» */
+  if (type === 'ТЗ в геосервисы') {
+    // мультиселекты склеиваем в строку, иначе rowsYG/rowsTG примут их за файлы
+    const join = (v: any) => (Array.isArray(v) ? v.join(', ') : v)
+
+    const common: [string, any][] = [
+      ['Название задачи:', data.title],
+      ['Суть задачи:', data.description],
+      ['Площадка:', join(data.geo_platforms)],
+      ['Цель задачи:', data.goal],
+      ['Желаемая дата выполнения ТЗ:', data.deadline && new Date(data.deadline).toLocaleDateString('RU-ru')],
+      ['Что необходимо сделать?:', data.geo_action],
+    ]
+
+    const byAction: Record<string, [string, any][]> = {
+      'Создать новую карточку': [
+        ['Полный адрес местонахождения офиса:', data.new_address],
+        ['Фотографии и видео офиса:', data.office_file],
+        ['Ссылка на сайт с тарифами:', data.new_tariffs_link],
+        ['Акции в посёлке для рекламы:', data.new_promo],
+      ],
+      'Внести изменения на старую': [
+        ['Что изменилось?:', join(data.change_what)],
+        ['Новый график работы и/или местоположение:', data.change_details],
+      ],
+      'Добавить рекламные материалы': [
+        ['Бюджет:', data.ads_budget],
+        ['Фотографии визуалов:', data.visuals_file],
+      ],
+    }
+
+    const rows = [...common, ...(byAction[data.geo_action] ?? []), ['Дополнительно:', data.extra] as [string, any]]
+
+    return { messageYG: headYG(rowsYG(rows)), messageTG: headTG(rowsTG(rows)) };
   }
 
   // Fallback

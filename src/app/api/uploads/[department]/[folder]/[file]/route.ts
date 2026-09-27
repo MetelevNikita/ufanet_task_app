@@ -29,6 +29,8 @@ export const GET = async (req: Request, {params}: {params: any}) => {
           status: 200,
           headers: {
             "Content-Type": contentType,
+            // при скачивании файл сохраняется под своим названием (кириллица через filename*)
+            "Content-Disposition": `inline; filename*=UTF-8''${encodeURIComponent(file)}`,
           },
         });
 

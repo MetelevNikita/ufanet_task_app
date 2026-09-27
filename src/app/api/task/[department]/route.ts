@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs, { writeFileSync } from "fs";
 import  { fileTypeFromBuffer }  from  'file-type' ;
 import path from "path";
+import { randomUUID } from "crypto";
 
 
 // directions db
@@ -66,14 +67,21 @@ const createUploadFolder = (folder: string) => {
 };
 
 
+// Исходное имя без расширения: без путей и запрещённых символов, не длиннее 100 символов
+const cleanBaseName = (name?: string) =>
+  path.parse(path.basename(name ?? '')).name
+    .replace(/[\\/:*?"<>|#%&{}$!'@+`=\x00-\x1f]/g, '')
+    .trim()
+    .slice(0, 100);
+
 const writeFileData = async (
-  data: string | null, 
-  url: string, 
+  data: string | null,
+  url: string,
   folderPath: string,  // Передаем полный путь к папке
   folderName: string,  // Имя папки для URL
   folderId: string,    // ID папки для имени файла
-  fileIndex?: number,
-  department?: string
+  department?: string,
+  originalName?: string
 ) => {
   try {
     if (!data) return null;
@@ -82,10 +90,9 @@ const writeFileData = async (
     const fileType = await fileTypeFromBuffer(buffer);
     if (!fileType) return null;
 
-    // Формируем имя файла
-    const fileName = fileIndex !== undefined 
-      ? `${folderId}_${fileIndex}.${fileType.ext}`
-      : `${folderId}.${fileType.ext}`;
+    // Формируем имя файла: исходное название + уникальный id, чтобы не было дублей
+    const baseName = cleanBaseName(originalName) || folderId;
+    const fileName = `${baseName}_${randomUUID().slice(0, 8)}.${fileType.ext}`;
 
     // Полный путь к файлу
     const filePath = path.join(folderPath, fileName);
@@ -95,7 +102,7 @@ const writeFileData = async (
 
     
     // Возвращаем URL
-    return `${url}/api/uploads/${department}/${folderName}/${fileName}`;
+    return `${url}/api/uploads/${department}/${folderName}/${encodeURIComponent(fileName)}`;
     
   } catch (error: Error | unknown) {
     if (error instanceof Error) {
@@ -265,15 +272,15 @@ export const POST = async (req: Request, context: {params: {department: string}}
           }
 
           const urls = await Promise.all(
-            value.map((item: any, index: number) =>
+            value.map((item: any) =>
               writeFileData(
                 (item?.base64 ?? String(item)) as string,
                 process.env.WEBHOOK_URL as string,
                 uploadFolderInfo!.folderPath,  // Передаем полный путь
                 uploadFolderInfo!.folderName,  // Передаем имя папки
                 uploadFolderInfo!.folderId,    // Передаем ID папки
-                index,
-                currentDepartment.value
+                currentDepartment.value,
+                item?.name
               )
             )
           );

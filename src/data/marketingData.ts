@@ -1450,5 +1450,551 @@ export const typeSelectorArrMark = [
 				name: 'deadline'
 			}
 		]
+	},
+	// 11) ТЗ на Авито — поля зависят от ответа «Что хотите продвинуть, опубликовать?» (showIf)
+	{
+		id: 12,
+		label: 'ТЗ на Авито',
+		value: 'avito',
+		reconciliator: {
+			name: 'Согласование Интернет маркетинг',
+			id: groupId
+		},
+		field: [
+			{
+				id: 1,
+				title: 'Название задачи',
+				placeholder: 'Например: «ТЗ Вакансия СИ Уфа»',
+				typeField: 'text',
+				type: 'text',
+				name: 'title'
+			},
+			{
+				id: 2,
+				title: 'Суть задачи, что нужно сделать своими словами',
+				placeholder: 'Например: «нужно опубликовать объявление с вакансией СИ на г. Уфа»',
+				typeField: 'area',
+				type: 'area',
+				name: 'description'
+			},
+			{
+				id: 3,
+				title: 'Желаемая дата выполнения ТЗ',
+				placeholder: 'Дата выполнения',
+				typeField: 'date',
+				type: 'date',
+				name: 'deadline'
+			},
+			{
+				id: 4,
+				title: 'Если вы устанавливаете срок реализации ТЗ менее 5 дней, необходимо обоснование срочности (потеря дохода, угроза репутации и т.д.). Срочность указывается для компании, не для вас лично.',
+				typeField: 'info',
+				type: 'info',
+				name: 'deadline_info'
+			},
+			{
+				id: 5,
+				title: 'Что хотите продвинуть, опубликовать?',
+				placeholder: 'Выберите вариант',
+				typeField: 'selector',
+				type: 'selector',
+				name: 'avito_target',
+				required: true,
+				options: [
+					{ id: 1, label: 'Услуга', value: 'service', icon: '' },
+					{ id: 2, label: 'Товар', value: 'product', icon: '' },
+					{ id: 3, label: 'Вакансия', value: 'vacancy', icon: '' }
+				]
+			},
+
+			// ТЗ на услугу
+			{
+				id: 6,
+				title: 'Цель объявления',
+				placeholder: 'Цель объявления',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_goal',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 7,
+				title: 'Ссылка на сайт, лендинг, группу ВК',
+				placeholder: 'Ссылка',
+				typeField: 'text',
+				type: 'text',
+				name: 'service_link',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 8,
+				title: 'География размещения рекламы',
+				placeholder: 'Города, районы',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_geo',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 9,
+				title: 'Кто ваш клиент?',
+				placeholder: 'Опишите целевую аудиторию максимально подробно: возраст, пол, соц. статус, род деятельности, доход, интересы, поведение, где чаще бывает онлайн',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_audience',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 10,
+				title: 'Какую боль / потребность закрывает продукт',
+				placeholder: 'Боль / потребность клиента',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_pain',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 11,
+				title: 'УТП',
+				placeholder: 'Например: «монтаж за 0 рублей», «домофон за 1000 рублей в месяц для ЮЛ», «доступ через приложение»',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_usp',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 12,
+				title: 'Есть ли акции, скидки или подарки?',
+				placeholder: 'Опишите или напишите «нет»',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_promo',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 13,
+				title: 'Кто будет обрабатывать заявки?',
+				placeholder: 'Выберите вариант',
+				typeField: 'selector',
+				type: 'selector',
+				name: 'service_handler',
+				showIf: { field: 'avito_target', value: 'Услуга' },
+				options: [
+					{ id: 1, label: 'ОТ', value: 'ot', icon: '' },
+					{ id: 2, label: 'МСМ', value: 'msm', icon: '' },
+					{ id: 3, label: 'СПК', value: 'spk', icon: '' },
+					{ id: 4, label: 'Другое', value: 'other', icon: '' }
+				]
+			},
+			{
+				id: 14,
+				title: 'Какие ключевые слова/запросы хотите использовать в продвижении?',
+				placeholder: 'Ключевые слова через запятую',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_keywords',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 15,
+				title: 'Материалы, если есть (без них запуск рекламы будет позже).',
+				placeholder: 'Загрузите материалы',
+				typeField: 'file',
+				type: 'file',
+				name: 'materials_file',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 16,
+				title: 'Примеры конкурентов или рекламных объявлений',
+				placeholder: 'Ссылки или описание',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_competitors',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 17,
+				title: 'Бюджет на рекламу в месяц',
+				placeholder: 'Минимальная сумма для публикации объявления — 10 000 ₽, в дальнейшем сумма может быть увеличена',
+				typeField: 'text',
+				type: 'text',
+				name: 'service_budget',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 18,
+				title: 'Есть ли KPI (ожидаемые результаты)?',
+				placeholder: 'Ожидаемые результаты',
+				typeField: 'area',
+				type: 'area',
+				name: 'service_kpi',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+			{
+				id: 19,
+				title: 'Период проведения кампании',
+				placeholder: 'Например: с 01.01.01 по 02.01.02',
+				typeField: 'text',
+				type: 'text',
+				name: 'service_period',
+				showIf: { field: 'avito_target', value: 'Услуга' }
+			},
+
+			// ТЗ на товар
+			{
+				id: 20,
+				title: 'Цель объявления',
+				placeholder: 'Цель объявления',
+				typeField: 'area',
+				type: 'area',
+				name: 'product_goal',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 21,
+				title: 'Название товара',
+				placeholder: 'Название товара',
+				typeField: 'text',
+				type: 'text',
+				name: 'product_name',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 22,
+				title: 'Описание товара',
+				placeholder: 'Например: технические характеристики, следы эксплуатации, комплектация, состояние (как новый / в хорошем состоянии / «убит»)',
+				typeField: 'area',
+				type: 'area',
+				name: 'product_description',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 23,
+				title: 'Артикул в 1С',
+				placeholder: 'Артикул',
+				typeField: 'text',
+				type: 'text',
+				name: 'product_article',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 24,
+				title: 'Количество на складах',
+				placeholder: 'Количество, шт',
+				typeField: 'text',
+				type: 'text',
+				name: 'product_stock',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 25,
+				title: 'Продажная цена, согласованная с ФАО',
+				placeholder: 'Цена, ₽',
+				typeField: 'text',
+				type: 'text',
+				name: 'product_price',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 26,
+				title: 'Фотографии товаров.',
+				placeholder: 'Не скачанные из интернета',
+				typeField: 'file',
+				type: 'file',
+				name: 'photos_file',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 27,
+				title: 'География показов (с разбивкой на города: Уфа, Стерлитамак, Йошкар-Ола)',
+				placeholder: 'Города',
+				typeField: 'area',
+				type: 'area',
+				name: 'product_geo',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 28,
+				title: 'Кто будет обрабатывать чат по товару?',
+				placeholder: 'ФИО, отдел',
+				typeField: 'text',
+				type: 'text',
+				name: 'product_chat',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 29,
+				title: 'Кто будет отгружать товар? (Отдел)',
+				placeholder: 'Отдел',
+				typeField: 'text',
+				type: 'text',
+				name: 'product_shipping',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+			{
+				id: 30,
+				title: 'Бюджет',
+				placeholder: 'Минимум 15 000 ₽ на одно объявление',
+				typeField: 'text',
+				type: 'text',
+				name: 'product_budget',
+				showIf: { field: 'avito_target', value: 'Товар' }
+			},
+
+			// ТЗ на вакансию
+			{
+				id: 31,
+				title: 'Цель объявления',
+				placeholder: 'Цель объявления',
+				typeField: 'area',
+				type: 'area',
+				name: 'vacancy_goal',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			},
+			{
+				id: 32,
+				title: 'Бюджет, согласованный с Юлией Письменной',
+				placeholder: 'Минимальная сумма для публикации — 1500 ₽, в дальнейшем сумма может быть увеличена. Перед отправкой ТЗ согласуйте размещение и бюджет с руководителем службы персонала',
+				typeField: 'text',
+				type: 'text',
+				name: 'vacancy_budget',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			},
+			{
+				id: 33,
+				title: 'Описание вакансии',
+				placeholder: 'Пример структуры: название должности и краткая суть роли; чем предстоит заниматься; ожидания от кандидата; что предлагает компания (график, доход, обучение, условия)',
+				typeField: 'area',
+				type: 'area',
+				name: 'vacancy_description',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			},
+			{
+				id: 34,
+				title: 'Визуал к вакансии.',
+				placeholder: 'Размер визуала — минимум 1920×1080',
+				typeField: 'file',
+				type: 'file',
+				name: 'visual_file',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			},
+			{
+				id: 35,
+				title: 'География размещения',
+				placeholder: '1 объявление = 1 город = 1 бюджет. Например: вакансия на Уфу — 1 объявление с бюджетом 1000 ₽. Вакансия на Уфу, Чекмагуш, Михайловку — уже 3 объявления, по одному на каждый город',
+				typeField: 'area',
+				type: 'area',
+				name: 'vacancy_geo',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			},
+			{
+				id: 36,
+				title: 'Ссылка на сайт vkomandu',
+				placeholder: 'Ссылка',
+				typeField: 'text',
+				type: 'text',
+				name: 'vacancy_link',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			},
+			{
+				id: 37,
+				title: 'Кто будет обрабатывать кандидатов',
+				placeholder: 'Например: HR-менеджер Ирина, 8 (999) 999-99-99',
+				typeField: 'text',
+				type: 'text',
+				name: 'vacancy_handler',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			},
+			{
+				id: 38,
+				title: 'Период проведения кампании',
+				placeholder: 'Например: с 01.01.01 по 02.01.02',
+				typeField: 'text',
+				type: 'text',
+				name: 'vacancy_period',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			},
+			{
+				id: 39,
+				title: 'ⓘ Обращаем внимание: на Авито есть возможность «купить резюме» (как на HH.ru). Рекомендуем пользоваться этой услугой в рамках холодного поиска.',
+				typeField: 'info',
+				type: 'info',
+				name: 'vacancy_info',
+				showIf: { field: 'avito_target', value: 'Вакансия' }
+			}
+		]
+	},
+	// 12) ТЗ в геосервисы — поля зависят от ответа «Что необходимо сделать?» (showIf)
+	{
+		id: 13,
+		label: 'ТЗ в геосервисы',
+		value: 'geo_services',
+		reconciliator: {
+			name: 'Согласование Интернет маркетинг',
+			id: groupId
+		},
+		field: [
+			{
+				id: 1,
+				title: 'Название задачи',
+				placeholder: 'Например: «ТЗ Геосервисы Уфы»',
+				typeField: 'text',
+				type: 'text',
+				name: 'title'
+			},
+			{
+				id: 2,
+				title: 'Суть задачи, что нужно сделать своими словами',
+				placeholder: 'Например: «Нужно добавить на карточки Уфы сторис, новость и фотографию об акции «Уфанет ТВ за 0 рублей»»',
+				typeField: 'area',
+				type: 'area',
+				name: 'description'
+			},
+			{
+				id: 3,
+				title: 'На какой площадке хотите запустить рекламу / внести изменения?',
+				placeholder: 'Выберите площадки',
+				typeField: 'selector_multi',
+				type: 'selector',
+				name: 'geo_platforms',
+				required: true,
+				options: [
+					{ id: 1, label: '2GIS', value: '2gis', icon: '' },
+					{ id: 2, label: 'Яндекс Карты', value: 'yandex', icon: '' },
+					{ id: 3, label: 'Google Business (проблемы в РФ)', value: 'google', icon: '' }
+				]
+			},
+			{
+				id: 4,
+				title: 'Обращаем ваше внимание, что Google для Бизнеса более не поддерживается в РФ: при внесении/добавлении информации на картах могут возникнуть трудности, и задача, связанная с работой в Google Картах, может быть НЕ выполнена.',
+				typeField: 'info',
+				type: 'info',
+				name: 'google_info'
+			},
+			{
+				id: 5,
+				title: 'Цель задачи',
+				placeholder: 'Цель задачи',
+				typeField: 'area',
+				type: 'area',
+				name: 'goal'
+			},
+			{
+				id: 6,
+				title: 'Желаемая дата выполнения ТЗ',
+				placeholder: 'Дата выполнения',
+				typeField: 'date',
+				type: 'date',
+				name: 'deadline'
+			},
+			{
+				id: 7,
+				title: 'Что необходимо сделать?',
+				placeholder: 'Выберите вариант',
+				typeField: 'selector',
+				type: 'selector',
+				name: 'geo_action',
+				required: true,
+				options: [
+					{ id: 1, label: 'Создать новую карточку', value: 'new', icon: '' },
+					{ id: 2, label: 'Внести изменения на старую', value: 'change', icon: '' },
+					{ id: 3, label: 'Добавить рекламные материалы', value: 'ads', icon: '' }
+				]
+			},
+
+			// Создать новую карточку
+			{
+				id: 8,
+				title: 'Напишите полный адрес местонахождения офиса',
+				placeholder: 'В случаях, когда офиса нет — напишите город',
+				typeField: 'text',
+				type: 'text',
+				name: 'new_address',
+				showIf: { field: 'geo_action', value: 'Создать новую карточку' }
+			},
+			{
+				id: 9,
+				title: 'Прикрепите фотографии и видео офиса (минимум 15 фото и 3 видео).',
+				placeholder: 'Фото и видео офиса',
+				typeField: 'file',
+				type: 'file',
+				name: 'office_file',
+				showIf: { field: 'geo_action', value: 'Создать новую карточку' }
+			},
+			{
+				id: 10,
+				title: 'Укажите ссылку на сайт с тарифами',
+				placeholder: 'Например: ufanet.ru/joshkar-ola/internet-v-kvartire/',
+				typeField: 'text',
+				type: 'text',
+				name: 'new_tariffs_link',
+				showIf: { field: 'geo_action', value: 'Создать новую карточку' }
+			},
+			{
+				id: 11,
+				title: 'Запущены ли акции в посёлке, какие можем отобразить на рекламе?',
+				placeholder: 'Какое торговое предложение можем отобразить?',
+				typeField: 'area',
+				type: 'area',
+				name: 'new_promo',
+				showIf: { field: 'geo_action', value: 'Создать новую карточку' }
+			},
+
+			// Внести изменения на старую
+			{
+				id: 12,
+				title: 'Что изменилось?',
+				placeholder: 'Выберите варианты',
+				typeField: 'selector_multi',
+				type: 'selector',
+				name: 'change_what',
+				required: true,
+				showIf: { field: 'geo_action', value: 'Внести изменения на старую' },
+				options: [
+					{ id: 1, label: 'График работы', value: 'schedule', icon: '' },
+					{ id: 2, label: 'Местоположение офиса', value: 'location', icon: '' },
+					{ id: 3, label: 'Офис закрылся', value: 'closed', icon: '' },
+					{ id: 4, label: 'Другое', value: 'other', icon: '' }
+				]
+			},
+			{
+				id: 13,
+				title: 'Какой новый график работы и/или местоположение',
+				placeholder: 'Например: «Новый график — с 9:00 до 20:00 пн-пт. Новое место — г. Уфа, ул. Пушкина д. Колотушкина» ИЛИ «Офис закрылся, просьба добавить информацию о закрытии на карты»',
+				typeField: 'area',
+				type: 'area',
+				name: 'change_details',
+				showIf: { field: 'geo_action', value: 'Внести изменения на старую' }
+			},
+			{
+				id: 14,
+				title: 'Точки удаляются с карт, только если офиса физически больше нет (переезд, закрытие и т.п.). Во всех остальных случаях добавляется информация о переходе на онлайн-обслуживание.',
+				typeField: 'info',
+				type: 'info',
+				name: 'change_info',
+				showIf: { field: 'geo_action', value: 'Внести изменения на старую' }
+			},
+
+			// Добавить рекламные материалы
+			{
+				id: 15,
+				title: 'Бюджет',
+				placeholder: 'Бюджет, ₽',
+				typeField: 'text',
+				type: 'text',
+				name: 'ads_budget',
+				showIf: { field: 'geo_action', value: 'Добавить рекламные материалы' }
+			},
+			{
+				id: 16,
+				title: 'Прикрепите фотографию визуалов.',
+				placeholder: 'Визуалы',
+				typeField: 'file',
+				type: 'file',
+				name: 'visuals_file',
+				showIf: { field: 'geo_action', value: 'Добавить рекламные материалы' }
+			}
+		]
 	}
 ]

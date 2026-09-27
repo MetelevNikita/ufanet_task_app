@@ -35,7 +35,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
   
     // 
 
-    const {status, department} = await req.json();
+    // silent: true — автору уже написал бот (reject_resend), своё уведомление не шлём
+    const {status, department, silent} = await req.json();
 
     let getTask = await prisma.task.findUnique({
         where: {
@@ -192,7 +193,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
       try {
         
-        await bot.sendMessage(
+        if (!silent) await bot.sendMessage(
           getTask.tgId,
           `Статус вашей задачи под именем "${getTask.title}" изменен на Отклонено`,
         ).catch(error => {

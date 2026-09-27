@@ -25,7 +25,7 @@ dotenv.config()
 
 // sendAnswerMessage
 
-const sendAnswerMessage = async (status: string, department: string, id: any) => {
+const sendAnswerMessage = async (status: string, department: string, id: any, silent = false) => {
   try {
 
     if (!process.env.API_URL) {
@@ -37,7 +37,7 @@ const sendAnswerMessage = async (status: string, department: string, id: any) =>
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ status, department }),
+      body: JSON.stringify({ status, department, silent }),
     })
 
     if (!responce.ok) {
@@ -222,10 +222,16 @@ const sendCommentMessageDB = async (title: string | number, message: string) => 
 
       if (updateUser) {
 
+        // .catch: если пользователь не подписан на бота — не падаем, админ-группа всё равно получит ответ
+        let userNotified = true
         await bot.sendMessage(currentUser.telegramId as string, `Пользователь id:${currentUser.id}#${currentUser.name} добавлен в систему\n\nВход разрешен\n\nПерезагрузите страницу входа`, {parse_mode: 'HTML'})
+          .catch((error) => {
+            userNotified = false
+            log.warn('Пользователь не получил подтверждение', { id, error: error.message })
+          })
 
         await bot.editMessageText(
-            `Пользователь id: ${currentUser.id}#${currentUser.name as string} авторизован и добавлен в базу данных\n\nДата обработки\n${new Date().toLocaleDateString('RU-ru')} - ${new Date().toLocaleTimeString('RU-ru')}`,
+            `Пользователь id: ${currentUser.id}#${currentUser.name as string} авторизован и добавлен в базу данных${userNotified ? '' : '\n\n⚠️ Пользователь не получил уведомление (не подписан на бота или неверный Telegram ID)'}\n\nДата обработки\n${new Date().toLocaleDateString('RU-ru')} - ${new Date().toLocaleTimeString('RU-ru')}`,
             {
               parse_mode: 'HTML',
               chat_id: query.message?.chat.id,
@@ -620,8 +626,16 @@ export const getBot = async () => {
               }
 
 
+              // .catch: комментарий уже сохранён в БД и YouGile — если автор не подписан на бота, сообщаем группе
+              let authorNotified = true
               const sendToTg = await bot.sendMessage(tgId, `КОММЕНТАРИЙ к Задаче - \n\n${currentTask.title}\n\n${text}`)
-              return await bot.sendMessage(chatId, 'ℹ️ Комментарий отмечен в задаче и направлен автору задачи')
+                .catch((error) => {
+                  authorNotified = false
+                  log.warn('Автор не получил комментарий', { tgId, error: error.message })
+                })
+              return await bot.sendMessage(chatId, authorNotified
+                ? 'ℹ️ Комментарий отмечен в задаче и направлен автору задачи'
+                : 'ℹ️ Комментарий отмечен в задаче. ⚠️ Автор его не получил (не подписан на бота)')
             }
 
             if (msg.text === '/start') {
@@ -829,7 +843,7 @@ export const getBot = async () => {
               await bot.sendMessage(
                 cardFromDB.tgId,
                 `№${cardFromDB.id} - ${cardFromDB.title}\n\nСогласовано пользователем -  ${reconciliatorUser}\n\n\n${messageTG}\n\nСледите за изменениями в боте или на сайте pr-tz.ru`,
-              )
+              ).catch((error) => log.warn('Автор не получил уведомление о согласовании', { tgId: cardFromDB.tgId, error: error.message }))
 
                 return {
                     success: true,
@@ -842,12 +856,29 @@ export const getBot = async () => {
               log.info('Нажата кнопка reject_resend', { cardId, by: reconciliatorUser })
 
 
+              // silent: автору пишем сами (с контактом согласующего), сервер своё уведомление не шлёт
+              const YGCARD = await sendAnswerMessage('reject', cardFromDB.department, cardId, true)
+
+                if (YGCARD.success === false ) {
+                  await bot.sendMessage(chatId, `Ошибка обработки карточки # Сервис YouGile не отвечает`)
+                  return {
+                    success: false,
+                    message: 'ERROR'
+                  }
+                }
+
+              // автору пишем только после того, как задача реально отклонена в YouGile
+              // .catch: если автор заблокировал бота — не падаем, группа всё равно получит «Отклонено»
+              let authorNotified = true
               await bot.sendMessage(
                 cardFromDB.tgId,
                 `Заявка # ${cardFromDB.id} ❌ Отклонена\n\n За дополнительной информацией обратитесь\n\n${reconciliatorUser}\n\nДата изменения ${new Date().toLocaleDateString('RU-ru')}`
-              )
+              ).catch((error) => {
+                authorNotified = false
+                log.warn('Автор не получил отказ', { tgId: cardFromDB.tgId, error: error.message })
+              })
 
-              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ❌ Отклонено - Отказ отправлен автору заявки.\n\nАвтор сообщения # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}`, {
+              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ❌ Отклонено - ${authorNotified ? 'Отказ отправлен автору заявки.' : '⚠️ Автор не получил уведомление (не подписан на бота).'}\n\nАвтор сообщения # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });

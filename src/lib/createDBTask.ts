@@ -10,7 +10,10 @@ const prisma = new PrismaClient();
 export const createDBTask = async (ygId: string, department: string, data: any) => {
   try {
 
-    const messageData = Object.entries(data).slice(7)
+    // поля шапки лежат в отдельных колонках; убираем их по имени, а не по позиции —
+    // порядок ключей зависит от того, в каком порядке пользователь заполнял форму
+    const headerKeys = ['fio', 'subdivision', 'tgId', 'branch', 'leader', 'type', 'title']
+    const messageData = Object.entries(data).filter(([key]) => !headerKeys.includes(key))
     const currentMessageOBJ = Object.fromEntries(messageData)
 
 

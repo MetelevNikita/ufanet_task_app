@@ -43,6 +43,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Файл макета:</strong><br>', `Список`, '<br><br>') +
       createImageMessageList('yg', data.maket_file) +
       row('<strong>Дата сдачи:</strong><br>', new Date(data.deadline_making).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Нужен просчет стоимости:</strong><br>', data.need_estimate, '<br><br>') +
       row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
     const bodyTG =
       row('Название:', data.title, '\n') +
@@ -55,6 +56,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       createImageMessageList('tg', data.maket_file) +
       row('Ососбенности макета:', data.note, '\n') +
       row('Дата сдачи:', data.deadline_making, '\n') +
+      row('Нужен просчет стоимости:', data.need_estimate, '\n') +
       row('Дополнительно:', data.extra, '\n');
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -150,7 +152,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
 
 
   // 6) ТМЦ/реквизит
-  if (type === 'Заявка на ТМЦ/реквизит' || data.value === 'props') {
+  if (type === 'Заявка на ВЫДАЧУ ТМЦ/реквизита' || data.value === 'props') {
     const bodyYG =
       row('<strong>Название проекта/мероприятия:</strong><br>', data.title, '<br><br>') +
       row('<strong>Где будет использоваться:</strong><br>', data.using, '<br><br>') +
@@ -188,6 +190,7 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('<strong>Количество:</strong><br>', data.qty, '<br><br>') +
       row('<strong>Дата мероприятия:</strong><br>', new Date(data.event).toLocaleDateString('RU-ru'), '<br><br>') +
       row('<strong>Сроки:</strong><br>', new Date(data.deadline_merch).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Нужен просчет стоимости:</strong><br>', data.need_estimate, '<br><br>') +
       row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
@@ -201,13 +204,14 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Количество:', data.qty, '\n') +
       row('Дата мероприятия:', data.event, '\n') +
       row('Сроки:', data.deadline_merch, '\n') +
+      row('Нужен просчет стоимости:', data.need_estimate, '\n') +
       row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
 
   // 8) Промо одежда
-  if (type === 'Заявка на промо одежду' || data.value === 'promo') {
+  if (type === 'Заявка на ВЫДАЧУ промо одежды' || data.value === 'promo') {
     const bodyYG =
       row('<strong>Название:</strong><br>', data.title, '<br><br>') +
       row('<strong>Описание:</strong><br>', data.description, '<br><br>') +
@@ -251,8 +255,29 @@ export const advertisingMessage = async (department: string, data: any): Promise
       row('Примечания:', data.notes, '\n') +
       row('Дата получения', data.deadline_marketplace, '\n') +
       row('Дополнительно:', data.extra, '\n');
-      
 
+
+
+    return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
+  }
+
+  // 10) Возврат ТМЦ/реквизита/промо одежды
+  if (type === 'Заявка на ВОЗВРАТ ТМЦ/реквизита/промо одежды' || data.value === 'return') {
+    const bodyYG =
+      row('<strong>Название проекта/мероприятия:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Что возвращаете и количество:</strong><br>', data.what, '<br><br>') +
+      row('<strong>Примечание:</strong><br>', data.note, '<br><br>') +
+      row('<strong>Дата возврата:</strong><br>', new Date(data.deadline_return).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Время возврата:</strong><br>', data.time_slot, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
+
+    const bodyTG =
+      row('Название проекта/мероприятия:', data.title, '\n') +
+      row('Что возвращаете и количество:', data.what, '\n') +
+      row('Примечание:', data.note, '\n') +
+      row('Дата возврата:', data.deadline_return, '\n') +
+      row('Время возврата:', data.time_slot, '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }

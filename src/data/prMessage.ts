@@ -39,7 +39,8 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('<strong>Цель проведения мероприятия:</strong><br>', data.goal, '<br><br>') +
       row('<strong>Что необходимо сделать:</strong><br>', data.todo, '<br><br>') +
       row('<strong>Дата мероприятия:</strong><br>', new Date(data.date_event_inside).toLocaleDateString('RU-ru'), '<br><br>') +
-      row('<strong>Место проведения мероприятия:</strong><br>', data.place, '<br><br>');
+      row('<strong>Место проведения мероприятия:</strong><br>', data.place, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
@@ -47,7 +48,8 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('Цель проведения мероприятия:', data.goal, '\n') +
       row('Что необходимо сделать:', data.todo, '\n') +
       row('Дата мероприятия:', new Date(data.date_event_inside).toLocaleDateString('RU-ru'), '\n') +
-      row('Место проведения мероприятия:', data.place, '\n');
+      row('Место проведения мероприятия:', data.place, '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -61,7 +63,8 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('<strong>Лидер мероприятия:</strong><br>', data.leader, '<br><br>') +
       row('<strong>Что необходимо сделать:</strong><br>', data.todo, '<br><br>') +
       row('<strong>Дата мероприятия:</strong><br>', new Date(data.date_event_outside).toLocaleDateString('RU-ru'), '<br><br>') +
-      row('<strong>Место проведения мероприятия:</strong><br>', data.place);
+      row('<strong>Место проведения мероприятия:</strong><br>', data.place, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
@@ -70,7 +73,8 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('Лидер мероприятия:', data.leader, '\n') +
       row('Что необходимо сделать:', data.todo, '\n') +
       row('Дата мероприятия:', new Date(data.date_event_outside).toLocaleDateString('RU-ru'), '\n') +
-      row('Место проведения мероприятия:', data.place, '\n');
+      row('Место проведения мероприятия:', data.place, '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -86,7 +90,8 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('<strong>Цель участия:</strong><br>', data.goal, '<br><br>') +
       row('<strong>Лидер выставки/поездки:</strong><br>', data.leader, '<br><br>') +
       row('<strong>Список участников:</strong><br>', data.participants, '<br><br>') +
-      row('<strong>Что необходимо сделать:</strong><br>', data.todo);
+      row('<strong>Что необходимо сделать:</strong><br>', data.todo, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
@@ -97,7 +102,31 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('Цель участия:', data.goal, '\n') +
       row('Лидер выставки/поездки:', data.leader, '\n') +
       row('Список участников:', data.participants, '\n') +
-      row('Что необходимо сделать:', data.todo, '\n');
+      row('Что необходимо сделать:', data.todo, '\n') +
+      row('Дополнительно:', data.extra, '\n');
+
+    return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
+  }
+
+  // 4.1) Информирование
+  if (type === 'Информирование') {
+    const bodyYG =
+      row('<strong>Название проекта:</strong><br>', data.title, '<br><br>') +
+      row('<strong>Описание проекта:</strong><br>', data.description, '<br><br>') +
+      row('<strong>Цель информирования:</strong><br>', data.goal, '<br><br>') +
+      row('<strong>Ключевая мысль, которую нужно донести до сотрудников:</strong><br>', data.key_message, '<br><br>') +
+      row('<strong>Период информирования:</strong><br>', data.period, '<br><br>') +
+      row('<strong>Комментарии:</strong><br>', data.comments, '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
+
+    const bodyTG =
+      row('Название проекта:', data.title, '\n') +
+      row('Описание проекта:', data.description, '\n') +
+      row('Цель информирования:', data.goal, '\n') +
+      row('Ключевая мысль, которую нужно донести до сотрудников:', data.key_message, '\n') +
+      row('Период информирования:', data.period, '\n') +
+      row('Комментарии:', data.comments, '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
@@ -108,13 +137,15 @@ export const prMessage = async (department: string, data: any): Promise<any> => 
       row('<strong>Название мероприятия:</strong><br>', data.title, '<br><br>') +
       row('<strong>Что необходимо сделать:</strong><br>', data.todo, '<br><br>') +
       row('<strong>Цель — для чего это нужно:</strong><br>', data.goal, '<br><br>') +
-      row('<strong>Дата мероприятия:</strong><br>', new Date(data.date_other_event).toLocaleDateString('RU-ru'), '<br><br>');
+      row('<strong>Дата мероприятия:</strong><br>', new Date(data.date_other_event).toLocaleDateString('RU-ru'), '<br><br>') +
+      row('<strong>Дополнительно:</strong><br>', data.extra, '<br><br>');
 
     const bodyTG =
       row('Название мероприятия:', data.title, '\n') +
       row('Что необходимо сделать:', data.todo, '\n') +
       row('Цель — для чего это нужно:', data.goal, '\n') +
-      row('Дата мероприятия:', new Date(data.date_other_event).toLocaleDateString('RU-ru'), '\n');
+      row('Дата мероприятия:', new Date(data.date_other_event).toLocaleDateString('RU-ru'), '\n') +
+      row('Дополнительно:', data.extra, '\n');
 
     return { messageYG: headYG(bodyYG), messageTG: headTG(bodyTG) };
   }
