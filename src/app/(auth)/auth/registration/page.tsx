@@ -106,6 +106,14 @@ const page: FC = () => {
     try {
       setDisabledBtn({disable: true, text: 'Отправка данных'})
 
+
+      user = {
+        ...user,
+        telegramId: user.telegramId.trim()
+      }
+
+
+
       // valid TG ID
 
       if (!user?.telegramId) {

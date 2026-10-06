@@ -1580,7 +1580,7 @@ export const typeSelectorArrMark = [
 				name: 'service_handler',
 				showIf: { field: 'avito_target', value: 'Услуга' },
 				options: [
-					{ id: 1, label: 'ОТ', value: 'ot', icon: '' },
+					{ id: 1, label: 'ОТМ', value: 'otm', icon: '' },
 					{ id: 2, label: 'МСМ', value: 'msm', icon: '' },
 					{ id: 3, label: 'СПК', value: 'spk', icon: '' },
 					{ id: 4, label: 'Другое', value: 'other', icon: '' }

@@ -344,6 +344,21 @@ export const POST = async (req: Request, context: {params: {department: string}}
 
     const {messageYG, messageTG} = await createMessageTgYG(departmentLabel, data)
 
+    // ===== ПРОВЕРКА ДЛИНЫ СООБЩЕНИЯ TG — НАЧАЛО =====
+    // Telegram sendMessage: максимум 4096 символов. Запас под префиксы
+    // (createTGTask, resultTgMessage, approve_resend в telegramBot.ts).
+    // Проверка стоит ДО YouGile и БД, чтобы не плодить задачи-сироты.
+    const TG_MESSAGE_LIMIT = 3500
+    const messageTGLength = messageTG?.length ?? 0
+    if (messageTGLength > TG_MESSAGE_LIMIT) {
+      log.warn('Текст задачи превышает лимит Telegram', { length: messageTGLength, limit: TG_MESSAGE_LIMIT, department: departmentLabel })
+      return NextResponse.json({
+        success: false,
+        message: `Текст задачи слишком длинный (${messageTGLength} из ${TG_MESSAGE_LIMIT} символов). Сократите описание.`
+      })
+    }
+    // ===== ПРОВЕРКА ДЛИНЫ СООБЩЕНИЯ TG — КОНЕЦ =====
+
     const newTaskYougile = await createYGTask(departmentLabel, data, messageYG)
 
     if (!newTaskYougile.success) {
