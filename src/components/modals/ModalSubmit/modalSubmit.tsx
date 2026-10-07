@@ -8,6 +8,7 @@ import styles from './modalSubmit.module.css'
 // components
 
 import MyButton from '@/components/UI/MyButton/MyButton'
+import { supportGroupUrl } from '@/data/support'
 
 
 interface ModalSubmitProps {
@@ -40,6 +41,12 @@ const ModalSubmit: FC<ModalSubmitProps> = ({ image, title, modalSuccess, modalEr
               <div className={styles.modal_submit_title}>{title}</div>
           </div>
 
+          {type === 'error' && (
+            <p className={styles.modal_submit_support}>
+              Если приложение не отвечает и не удаётся отправить заявку, напишите в{' '}
+              <a href={supportGroupUrl} target='_blank' rel='noopener noreferrer'>группу технической поддержки</a>.
+            </p>
+          )}
 
           <MyButton
             text={'Закрыть'}

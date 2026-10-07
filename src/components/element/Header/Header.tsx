@@ -30,6 +30,7 @@ import tgIcon from '@/../public/social_icon/tg.svg'
 // lib
 
 import { logoutUser } from '@/lib/logoutUser'
+import { supportGroupUrl } from '@/data/support'
 
 
 
@@ -38,7 +39,7 @@ const socialArr = [
     id: 1,
     title: 'telegram',
     icon: tgIcon,
-    link: 'https://t.me/MetelevNikita'
+    link: supportGroupUrl
   },
 
 ]

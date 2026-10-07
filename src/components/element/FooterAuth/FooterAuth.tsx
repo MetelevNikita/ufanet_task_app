@@ -17,6 +17,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 // style
 
 import styles from './FooterAuth.module.css'
+import { supportGroupUrl } from '@/data/support'
 
 
 
@@ -24,7 +25,7 @@ const FooterAuth = () => {
   return (
     <Row className='w-100'>
       <Col md={6} xs={12} className='d-flex justify-content-center  mt-4'>
-          <Link className={styles.info_block} target='_blank' href={'https://t.me/MetelevNikita'}>
+          <Link className={styles.info_block} target='_blank' rel='noopener noreferrer' href={supportGroupUrl}>
             <FaTelegram style={{color: '#fc9b32', width: '25px'}}/>
             <motion.div
               whileHover={{color: '#fc9b32'}}
