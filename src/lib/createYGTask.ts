@@ -71,7 +71,7 @@ export const createYGTask = async (department: string, data: any, descriptionTas
 
     const stickers = await getYGStickers(yougileKey)
 
-    const statusSticker = stickers.content.find((item: {name: string}) => item.name === 'Статус') ?? {}
+    const statusSticker = stickers?.content.find((item: {name: string}) => item.name === 'Статус')
 
     if (!statusSticker) {
       log.error('Стикер «Статус» не найден')
@@ -82,11 +82,28 @@ export const createYGTask = async (department: string, data: any, descriptionTas
       }
     }
 
-    const currentState = statusSticker.states.find((item: any) => item.name === 'не принято') ?? {}
+    const currentState = statusSticker.states.find((item: any) => item.name === 'не принято')
+
+    if (!currentState?.id) {
+      log.error('Состояние «не принято» стикера «Статус» не найдено', undefined, { department, stickerId: statusSticker.id })
+      return {
+        success: false,
+        message: 'Состояние «не принято» стикера «Статус» не найдено в YouGile',
+        data: null
+      }
+    }
 
     // 
 
-    const deadline = new Date(data.deadline).getTime()
+    const deadline = data.deadline ? new Date(data.deadline).getTime() : undefined
+
+    if (deadline !== undefined && !Number.isFinite(deadline)) {
+      return {
+        success: false,
+        message: 'Некорректная дата выполнения задачи',
+        data: null
+      }
+    }
 
     const respoonceYouGile = await fetch(`https://ru.yougile.com/api-v2/tasks`, {
       method: 'POST',
@@ -98,19 +115,18 @@ export const createYGTask = async (department: string, data: any, descriptionTas
         title: data.title,
         columnId: inboxColumn.id,
         description: descriptionTask,
-        deadline: (deadline) && {deadline: new Date(data.deadline).getTime()},
-        stickers: {[statusSticker.id]: [currentState.id]},
+        deadline: deadline === undefined ? undefined : { deadline },
+        stickers: {[statusSticker.id]: currentState.id},
       })
     })
 
     if (!respoonceYouGile.ok) {
-      if (respoonceYouGile.status === 400) {
-        log.error('YouGile отклонил создание задачи', undefined, { department, status: respoonceYouGile.status, statusText: respoonceYouGile.statusText })
-        return {
-          success: false,
-          message: `Сообщение в Yougile не создано`,
-          data: null
-        }
+      const responseBody = await respoonceYouGile.text()
+      log.error('YouGile отклонил создание задачи', undefined, { department, status: respoonceYouGile.status, statusText: respoonceYouGile.statusText, responseBody })
+      return {
+        success: false,
+        message: `Сообщение в Yougile не создано`,
+        data: null
       }
     }
 
