@@ -5,6 +5,7 @@ import { PrismaClient } from "@/../generated/prisma/client";
 
 import { getBot } from '@/telegramBot/telegramBot'
 import { logger } from "@/lib/logger";
+import { getYGStickers } from "@/functions/getYGStickers";
 
 const log = logger('webhook')
 
@@ -399,11 +400,13 @@ export const POST = async (req: NextRequest) => {
             // Стикеры
 
             if (body.payload.stickers) {
-                if (JSON.stringify(body.payload.stickers) !== JSON.stringify(body.prevData.stickers))  {
+                const stickers = await getYGStickers(yougileKey)
+                const statusSticker = stickers?.content.find((item: { id: string, name: string }) => item.name === 'Статус')
+                const stateId = statusSticker && body.payload.stickers[statusSticker.id]
+                if (stateId && stateId !== body.prevData?.stickers?.[statusSticker.id]) {
 
         
-                  const sticker = Object.entries(body.payload.stickers)[0]
-                  const newSticker = await stateStickerYouGile(sticker[0] as string, sticker[1] as string, yougileKey)
+                  const newSticker = await stateStickerYouGile(statusSticker.id, stateId, yougileKey)
 
                   if (!newSticker.success) {
                     return NextResponse.json({
