@@ -602,7 +602,6 @@ export const getBot = async () => {
               const currentTask = allUsers.find((item: {ygId: string}) => item.ygId == ygId)
               
               if (!currentTask) {
-                await bot.sendMessage(chatId, 'ОШИБКА! Не удалось получить данные о задаче из базы')
                 return
               }
 
@@ -878,7 +877,7 @@ export const getBot = async () => {
                 log.warn('Автор не получил отказ', { tgId: cardFromDB.tgId, error: error.message })
               })
 
-              await bot.editMessageText(`Заявка # ${cardFromDB.id} : ❌ Отклонено - ${authorNotified ? 'Отказ отправлен автору заявки.' : '⚠️ Автор не получил уведомление (не подписан на бота).'}\n\nАвтор сообщения # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}`, {
+              await bot.editMessageText(`Заявка # ${cardFromDB.ygId} : ❌ Отклонено - ${authorNotified ? 'Отказ отправлен автору заявки.' : '⚠️ Автор не получил уведомление (не подписан на бота).'}\n\nАвтор сообщения # ${cardFromDB.tgId} # ${cardFromDB.fio} # \n\nTitle: ${cardFromDB.title}\n\nОтклонено пользователем -  ${reconciliatorUser}`, {
                 chat_id: chatId,
                 message_id: messageId,
               });
